@@ -45,3 +45,12 @@ The MCP tool arguments also accept `provider`. A host that actually exposes a Ch
 ## Verification
 
 CI uses synthetic providers and mocked loopback HTTP only. A genuine installed Ollama model and a native ChatGPT connection are separate end-to-end verification gates. Model-generated drafts are structurally reviewed, not human-reviewed or source-verified.
+
+## G1.8.1 Markdown normalization
+
+Model-generated Markdown may begin with prose or be wrapped in one full Markdown
+fence. The local runtime removes the single enclosing Markdown fence, inserts
+a missing generator-specific H1, and appends a provenance section using actual
+line breaks. Existing size, NUL and structural checks remain mandatory.
+No retries or fallback requests are added. This normalization is deterministic;
+source verification and human review remain separate.
