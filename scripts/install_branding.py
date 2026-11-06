@@ -34,11 +34,15 @@ def install(archive: Path, root: Path) -> int:
             names = [i.filename for i in infos]
             if len(infos) > MAX_FILES or len(set(names)) != len(names):
                 raise ValueError("Too many files or duplicate ZIP paths")
+            if len({n.casefold() for n in names}) != len(names):
+                raise ValueError("Case-insensitive filename collision")
             if sum(i.file_size for i in infos) > MAX_BYTES:
                 raise ValueError("ZIP exceeds uncompressed size limit")
             for info in infos:
                 name = PurePosixPath(info.filename)
-                if not info.filename.startswith(PREFIX) or name.is_absolute() or ".." in name.parts or "\\" in info.filename:
+                if (not info.filename.startswith(PREFIX) or name.is_absolute()
+                        or ".." in name.parts or "\\" in info.filename
+                        or name.as_posix() != info.filename):
                     raise ValueError(f"Unsafe archive path: {info.filename}")
                 if (info.external_attr >> 16) & 0o170000 == 0o120000:
                     raise ValueError(f"Symlink ZIP entry: {info.filename}")
@@ -49,6 +53,13 @@ def install(archive: Path, root: Path) -> int:
             declared = manifest["files"]
             if not isinstance(declared, dict) or manifest["file_count"] != len(declared):
                 raise ValueError("Invalid manifest file count")
+            for key in declared:
+                normalized = PurePosixPath(key)
+                if (normalized.is_absolute() or ".." in normalized.parts or "\\" in key
+                        or normalized.as_posix() != key or not key):
+                    raise ValueError(f"Unsafe manifest path: {key}")
+            if len({k.casefold() for k in declared}) != len(declared):
+                raise ValueError("Case-insensitive manifest filename collision")
             expected = {PREFIX + key for key in declared} | {manifest_name}
             if set(names) != expected:
                 raise ValueError("Archive contents do not match manifest")
