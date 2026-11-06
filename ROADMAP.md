@@ -65,7 +65,7 @@ Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent
 3. **Intelligent UI:** The [response pattern library](intelligent-ui/response-patterns.md) documents content-first choices, fallback behavior and non-decorative controls. Verify each supported component in the actual target ChatGPT experience. **Status: Design complete; runtime unverified.**
 
 ## Phase 05 - Quality & Evaluation
-Verifier regression tests are now defined in [tests/test_quality_scripts.py](tests/test_quality_scripts.py) and wired into the [CI workflow](.github/workflows/docs-quality.yml). Test execution has not yet been confirmed.
+Verifier regression tests are now defined in [tests/test_quality_scripts.py](tests/test_quality_scripts.py) and wired into the [CI workflow](.github/workflows/docs-quality.yml). A [scoped local verifier run](quality/local-verifier-execution.md) passed 8/8 reconstructed-script unit tests and verified the supplied ZIP (56/56 manifest files). The exact committed checkout and GitHub Actions execution remain unverified.
 
 Automated documentation checks: [Markdown and metadata checker](scripts/check_docs.py) and [GitHub Actions workflow](.github/workflows/docs-quality.yml) now run on main pushes and pull requests. The workflow checks original branding hashes only once the manifest is published; a skipped asset check does not count as passed. Workflow execution results have not yet been confirmed.
 
