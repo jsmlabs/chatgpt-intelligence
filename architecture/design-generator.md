@@ -96,3 +96,10 @@ automation, subject to separate permission and acceptance requirements.
 [Generator roadmap](../GENERATOR-ROADMAP.md) |
 [Foundation](generator-foundation.md) |
 [IMAGE implementation](image-generator.md)
+
+## Related G2.3 color themes
+
+The [THEME generator](theme-generator.md) independently creates light/dark
+design tokens and checks selected color contrast pairs. G2.2's static HTML
+prototypes do not automatically consume or validate those tokens; a joined
+visual-system workflow remains future scope.

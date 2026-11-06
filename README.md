@@ -87,6 +87,15 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## THEME generator (G2.3)
+
+Generate deterministic light/dark JSON design tokens or CSS custom properties
+with measured WCAG 2.2 color-pair audits. No complete browser accessibility
+certification is implied.
+[THEME generator documentation](architecture/theme-generator.md).
+
+---
+
 ## DESIGN generator (G2.2)
 
 Create deterministic UI/UX specifications and static, responsive HTML

@@ -112,3 +112,12 @@ specifications or static HTML/CSS layout source. It requires `--allow-create`
 and never invokes a remote model, browser or filesystem export through MCP.
 The default tool set now contains 10 tools (11 when opt-in ComfyUI image
 inference is enabled). See [G2.2 DESIGN spec](design-generator.md).
+
+## G2.3 THEME MCP tool
+
+The additive `generate_theme` tool emits deterministic JSON design tokens
+or CSS light/dark custom properties alongside the enumerated WCAG 2.2
+contrast-pair checks. It requires `--allow-create`, has no network access
+or MCP filesystem export, and does not attest to full WCAG conformance.
+Default discovery now reports 11 tools (12 with opt-in ComfyUI image
+inference). See [G2.3 THEME specification](theme-generator.md).

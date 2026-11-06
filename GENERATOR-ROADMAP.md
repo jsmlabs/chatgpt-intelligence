@@ -10,7 +10,7 @@ classification: proposed-design
 
 > Extend the existing research and documentation reference project with a modular, evidence-aware workflow for generating, validating, revising, and exporting useful artifacts.
 
-**Status:** Active staged implementation. G0 contracts, G1 text generators, G1.8 local provider routing and G1.9 ChatGPT-client MCP handoff have been implemented. G2.1 provides an IMAGE *production-brief generator* only, not bitmap rendering. All other creative capabilities and external exports remain planned until individually verified. The original release gates remain in force.
+**Status:** Active staged implementation. G0 contracts, G1 text generators, G1.8 local provider routing and G1.9 ChatGPT-client MCP handoff have been implemented. G2.1 has a production brief, procedural PNG renderer and local ComfyUI adapter; G2.2 implements static DESIGN specifications and HTML; G2.3 implements THEME JSON/CSS generation and color-pair contrast auditing. Other creative capabilities and external exports remain planned until individually verified. The original release gates remain in force.
 
 ## Verified implementation matrix (2026-11-06)
 
@@ -349,3 +349,15 @@ tool returns in-memory text with provenance. The original
 Live browser/visual inspection, working interactions, a connected external
 product-design engine and independent accessibility certification remain
 **not run**. See [G2.2 implementation](architecture/design-generator.md).
+
+## G2.3 - THEME Generator implementation checkpoint (2026-11-06)
+
+A standalone dependency-free THEME runtime generates light/dark JSON tokens
+and CSS custom properties for four curated palettes or a validated custom
+hex accent. The W3C sRGB contrast formula checks normal text AA and selected
+non-text AA pairings, with an additional main-pair AAA measurement. Output
+is deterministic; unsupported or unsafe values fail closed. The CLI supports
+exclusive verified local exports and the additive `generate_theme` MCP tool
+returns in-memory source and audit metadata. No live browser audit or full
+WCAG compliance is claimed. See [G2.3 technical specification]
+(architecture/theme-generator.md).

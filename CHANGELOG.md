@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Added [G2.3 THEME generator](architecture/theme-generator.md) with JSON design tokens, CSS light/dark overrides, checked sRGB contrast ratios, four palettes, optional hex accent, CLI/MCP, and exclusive export; browser WCAG conformance remains unverified.
 - Added [G2.2 DESIGN Generator](architecture/design-generator.md) for structured Markdown design specifications and inert self-contained responsive HTML/CSS prototypes, with CLI/MCP entrypoints, validation and optional verified local export. Browser and functional acceptance remain open.
 - Added [G2.1.3 read-only ComfyUI preflight and opt-in real-image verifier](architecture/comfyui-live-acceptance.md), with synthetic tests and explicit live-acceptance boundaries.
 - Added [G2.1.2 explicit local ComfyUI image generation](architecture/image-generator.md), a fixed core-node workflow with checkpoint and PNG verification, optional CLI export, and opt-in MCP image tool. Live ComfyUI generation remains unverified.
