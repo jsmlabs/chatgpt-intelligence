@@ -54,3 +54,21 @@ a missing generator-specific H1, and appends a provenance section using actual
 line breaks. Existing size, NUL and structural checks remain mandatory.
 No retries or fallback requests are added. This normalization is deterministic;
 source verification and human review remain separate.
+
+## G1.8.2 - Fenced Markdown validation
+
+A user-reported live Ollama `CONCEPT` result on revision
+`7a93a81ad5ebbea007f5f5c00c94399f33c0abcf` returned a valid local
+concept and structural validation `passed`, but contained an **unclosed outer
+Markdown code fence**. The earlier validator did not detect the formatting defect.
+
+Now, the runtime unwraps a clearly delimited outer Markdown fence, and repairs
+an otherwise-unambiguous lone opening `markdown` fence at the beginning.
+Nested/ambiguous and unbalanced code fences fail structural validation rather
+than consuming the provenance section. Ordinary balanced code examples remain
+unchanged. No second model call, network action, or billable fallback is triggered.
+
+Evidence: user-provided PowerShell transcript in the project conversation,
+not independently retrieved machine logs. This is evidence for the earlier
+local `CONCEPT` generator only, not for G1.8.2 on the user's machine.
+`PROMPT` and `DOCUMENT` local live execution remain outstanding.

@@ -185,16 +185,52 @@ MODEL_TITLES = {"PROMPT": "Prompt Specification", "CONCEPT": "Concept Brief",
                 "DOCUMENT": "Document Draft"}
 
 
+def _markdown_fences_balanced(value: str) -> bool:
+    """Check block fence boundaries without interpreting inline backticks."""
+    opening: tuple[str, int] | None = None
+    for line in value.splitlines():
+        match = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if match is None:
+            continue
+        fence, suffix = match.groups()
+        if opening is None:
+            # Backtick fences may not contain a backtick in the info string.
+            if fence[0] == "`" and "`" in suffix:
+                continue
+            opening = (fence[0], len(fence))
+        elif (fence[0] == opening[0] and len(fence) >= opening[1]
+              and not suffix.strip()):
+            opening = None
+    return opening is None
+
+
+def _unwrap_model_fence(value: str) -> str:
+    """Unwrap an outer Markdown fence, including a lone unclosed opening line.
+
+    An unclosed wrapper is repaired only when it has no other fence markers:
+    otherwise code/content boundaries are ambiguous and fail validation.
+    """
+    lines = value.splitlines()
+    if len(lines) < 2 or not re.fullmatch(r" {0,3}`{3,}(?:markdown|md)?[ \t]*",
+                                          lines[0], re.I):
+        return value
+    if re.fullmatch(r" {0,3}`{3,}[ \t]*", lines[-1]):
+        inner = "\n".join(lines[1:-1]).strip()
+        if inner and _markdown_fences_balanced(inner):
+            return inner
+        return value
+    # The exact single opening wrapper seen in the live Ollama CONCEPT output.
+    if all(not re.match(r"^ {0,3}(`{3,}|~{3,})", line) for line in lines[1:]):
+        return "\n".join(lines[1:]).strip()
+    return value
+
+
 def _prepare_model_markdown(kind: str, value: str) -> str:
-    """Normalize enclosing Markdown wrappers; preserve strict content checks."""
+    """Normalize safe Markdown wrappers before strict structural validation."""
     content = value.strip()
     if not content:
         return content
-    # Unwrap only one complete fenced Markdown document.
-    opening = re.match(r"^```(?:markdown|md)?[ \t]*\r?\n", content, re.I)
-    if opening and re.search(r"\r?\n```$", content):
-        content = content[opening.end():]
-        content = re.sub(r"\r?\n```$", "", content).strip()
+    content = _unwrap_model_fence(content)
     if not re.match(r"^#\s+\S", content):
         content = "# " + MODEL_TITLES[kind] + "\n\n" + content
     return content
@@ -210,6 +246,8 @@ def _check_markdown(content: object) -> dict[str, bool]:
         "markdown_structure": isinstance(content, str) and content.startswith("# ") and
                               "## Provenance and limitations" in content,
         "no_nul": isinstance(content, str) and "\x00" not in content,
+        "balanced_code_fences": isinstance(content, str) and
+                                _markdown_fences_balanced(content),
     }
 
 

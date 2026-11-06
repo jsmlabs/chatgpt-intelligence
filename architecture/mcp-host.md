@@ -70,3 +70,10 @@ The process flags `--model-timeout 60` and `--model-max-output-tokens 4096` set 
 ## G1.8 provider routing
 
 The MCP tool schema now accepts optional `provider: template | ollama-local | chatgpt-host | openai-api`. Default stays offline `template`, and legacy `mode=model` still explicitly selects billable `openai-api`. Optional local Ollama requires `INTEL_OLLAMA_MODEL` and `--allow-external`, never `--allow-billable`. Standalone MCP cannot execute `chatgpt-host` without a trusted, verified injected adapter. See [provider routing](provider-routing.md).
+
+## G1.9 planning boundary
+
+The proposed ChatGPT client-host bridge is a **separate milestone**, not an
+implementation or availability claim for the `chatgpt-host` provider. See
+[host integration design](chatgpt-host-integration.md). Local MCP stdio
+transport alone is not proof of native ChatGPT connectivity.

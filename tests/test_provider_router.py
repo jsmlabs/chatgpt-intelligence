@@ -158,6 +158,69 @@ class ProviderRoutingTests(unittest.TestCase):
                 self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")
                 self.assertEqual(result["manifest"].state.value, "failed")
 
+
+    def test_open_outer_markdown_fence_from_live_concept_is_repaired(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "```markdown\n# AI-Native Dashboard Design - Draft\n\n"
+            "## I. Core Principles\n\n- Data-first architecture.",
+            "ollama-local", "gemma3:4b", "")
+        runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = runtime.execute(
+            "/INTEL GENERATE CONCEPT",
+            request={"objective": "Design a modern AI-native dashboard"},
+            authorization=LOCAL, provider="ollama-local")
+        self.assertTrue(result["ok"], result)
+        self.assertTrue(result["content"].startswith("# AI-Native Dashboard Design - Draft\n"))
+        self.assertNotIn("```markdown", result["content"])
+        self.assertIn("\n\n## Provenance and limitations\n\n", result["content"])
+        self.assertTrue(result["manifest"].validations["balanced_code_fences"])
+
+    def test_nested_or_unclosed_code_fences_fail_closed(self):
+        inputs = (
+            "# Draft\n\n```python\nprint('unsafe unfinished block')",
+            "```markdown\n# Draft\n\n```python\nprint('ambiguous')",
+            "# Draft\n\n~~~json\n{}",
+        )
+        for output in inputs:
+            with self.subTest(output=output[:24]):
+                local = Fake()
+                local.generate = lambda kind, brief, text=output: ModelOutput(
+                    text, "ollama-local", "fixture", "")
+                runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+                result = runtime.execute(
+                    "/INTEL GENERATE DOCUMENT",
+                    request={"objective": "Draft"}, authorization=LOCAL,
+                    provider="ollama-local")
+                self.assertFalse(result["ok"], result)
+                self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")
+                self.assertFalse(result["manifest"].validations["balanced_code_fences"])
+
+    def test_balanced_inner_code_fence_is_preserved(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "# Prompt\n\nExample:\n\n```python\nprint('ok')\n```",
+            "ollama-local", "fixture", "")
+        runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = runtime.execute(
+            "/INTEL GENERATE PROMPT", request={"objective": "Draft"},
+            authorization=LOCAL, provider="ollama-local")
+        self.assertTrue(result["ok"], result)
+        self.assertIn("```python\nprint('ok')\n```", result["content"])
+        self.assertTrue(result["manifest"].validations["balanced_code_fences"])
+
+    def test_closed_outer_markdown_with_inner_fences_does_not_get_corrupted(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "```markdown\n# Draft\n\n```python\nprint('code')\n```\n```",
+            "ollama-local", "fixture", "")
+        runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = runtime.execute(
+            "/INTEL GENERATE PROMPT", request={"objective": "Draft"},
+            authorization=LOCAL, provider="ollama-local")
+        self.assertFalse(result["ok"], result)
+        self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")
+
     def test_no_implicit_openai_from_cli(self):
         import os, subprocess, sys
         env = dict(os.environ)

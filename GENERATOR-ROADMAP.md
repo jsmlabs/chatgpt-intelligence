@@ -246,3 +246,16 @@ A local MCP stdio host with three bounded text tools, explicit startup grants an
 ## G1.7 model-hardening checkpoint (2026-11-06)
 
 Following a user-reported three-generator live `PASSED` on the preceding revision, model defaults and diagnostic categories were hardened with regression coverage. The preceding live result is external, user-supplied evidence; it does not prove that the hardened head passes live, or that a native ChatGPT client connected. Exact-head CI plus a subsequent separately authorized live run are required before claiming completion.
+
+## G1.8.2 evidence and G1.9 boundary (2026-11-06)
+
+A user-provided local Windows PowerShell transcript confirms a `gemma3:4b`
+`ollama-local` CONCEPT generation on commit
+`7a93a81ad5ebbea007f5f5c00c94399f33c0abcf`, with `llm_generation:
+host_reported` and `structural_validation: passed`. The output had an
+open outer `markdown` fence; the G1.8.2 change repairs or rejects
+such wrappers deterministically. This is reported external acceptance evidence,
+not a fresh live run against G1.8.2. Local PROMPT and DOCUMENT live runs remain
+unverified. A separate proposed [G1.9 ChatGPT-host feasibility milestone]
+(architecture/chatgpt-host-integration.md) must prove actual client support
+before `chatgpt-host` is marked operational.
