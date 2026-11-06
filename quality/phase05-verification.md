@@ -34,6 +34,16 @@ The user-supplied `chatgpt-intelligence-brand-v1.4-safe-import.zip` was validate
 
 **Boundary:** The isolated checkout was a test fixture, not a clone of the complete GitHub repository; the full original asset set has not yet been uploaded to GitHub.
 
+## Security hardening - 2026-11-06
+Two brand ZIP consumers now reject noncanonical paths (including repeated path separators) and case-insensitive filename collisions before writing. Four new regression cases cover malformed ZIP paths and casefold collisions in both the archive verifier and no-overwrite installer.
+
+GitHub Actions [run #22 for commit `be5a386`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806) completed successfully:
+- **16 unit tests: passed**.
+- **59 Markdown files, 346 relative links: zero errors**.
+- Branding remote-manifest check: **skipped** because `branding/v1.4/` remains unpublished.
+
+These new checks do not change the outstanding fresh-chat and binary-publication gates.
+
 ## Remaining Phase 05 gates
 - Publish the 57 original brand files to `branding/v1.4/` in GitHub, validate remote readback and inspect images.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
