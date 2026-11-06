@@ -44,7 +44,8 @@ def verify_png(data: bytes) -> tuple[int, int]:
     """Bounded PNG structural/CRC validation; not full pixel or safety review."""
     if not isinstance(data, bytes) or len(data) < 60 or len(data) > MAX_IMAGE or not data.startswith(PNG):
         raise IntelError("IMAGE_INVALID", "PNG missing or exceeds size limit")
-    offset, seen, dimensions, idat = 8, [], None, 0
+    offset, seen, dimensions, idat = 8, [], None, bytearray()
+    channels = 0
     while offset + 12 <= len(data):
         length = struct.unpack_from("!I", data, offset)[0]
         if length > MAX_IMAGE or offset + 12 + length > len(data):
@@ -65,13 +66,26 @@ def verify_png(data: bytes) -> tuple[int, int]:
                 or compression or filt or interlace):
                 raise IntelError("IMAGE_INVALID", "Unsupported PNG dimensions or format")
             dimensions = (width, height)
+            channels = 3 if color == 2 else 4
         elif kind == b"IDAT":
             if dimensions is None:
                 raise IntelError("IMAGE_INVALID", "Missing PNG header")
-            idat += length
+            idat.extend(payload)
         elif kind == b"IEND":
             if length or not idat or dimensions is None or offset + 12 != len(data):
                 raise IntelError("IMAGE_INVALID", "PNG terminator or pixel data invalid")
+            width, height = dimensions
+            stride = 1 + width * channels
+            expected = height * stride
+            try:
+                decompressor = zlib.decompressobj()
+                raw = decompressor.decompress(bytes(idat), expected + 1)
+            except zlib.error:
+                raise IntelError("IMAGE_INVALID", "PNG pixel stream invalid") from None
+            if (len(raw) != expected or not decompressor.eof or
+                    decompressor.unconsumed_tail or decompressor.unused_data or
+                    any(raw[pos] not in (0, 1, 2, 3, 4) for pos in range(0, expected, stride))):
+                raise IntelError("IMAGE_INVALID", "PNG pixels exceed limits or contain invalid filters")
             return dimensions
         elif kind[0] & 32 == 0:
             raise IntelError("IMAGE_INVALID", "Unknown critical PNG chunk")

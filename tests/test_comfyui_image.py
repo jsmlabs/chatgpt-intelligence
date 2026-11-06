@@ -16,7 +16,9 @@ from generators.comfyui_image import (
     ComfyImage, ComfyUIHost, _workflow, export_comfy_image, verify_png,
 )
 from generators.foundation import Authorization, IntelError, Permission
-from generators.image_render import render_abstract_png
+from generators.image_render import render_abstract_png, _chunk, PNG_SIGNATURE
+import struct
+import zlib
 from generators.mcp_server import MCPHost
 
 CREATE = Authorization(frozenset({Permission.CREATE}))
@@ -139,6 +141,25 @@ class ComfyUITests(unittest.TestCase):
             ComfyUIHost(checkpoint=MODEL, opener=fake).generate(
                 "test", authorization=LOCAL, width=384, height=384)
         self.assertEqual(cm.exception.code, "IMAGE_INVALID")
+
+    def test_compressed_pixel_data_checked(self):
+        valid = render_abstract_png("test")
+        # Keep chunks and CRC valid but replace IDAT with a truncated zlib stream.
+        start = 8 + 25
+        size = struct.unpack_from("!I", valid, start)[0]
+        end = start + 12 + size
+        damaged = valid[:start] + _chunk(b"IDAT", zlib.compress(b"short")) + valid[end:]
+        with self.assertRaises(IntelError) as err:
+            verify_png(damaged)
+        self.assertEqual(err.exception.code, "IMAGE_INVALID")
+
+        # Extra decompressed bytes must be rejected without allocating unbounded data.
+        width, height = 384, 384
+        raw = bytes([0]) + bytes(width * 3)
+        inflated = zlib.compress(raw * height + b"unexpected-extra")
+        oversized = valid[:start] + _chunk(b"IDAT", inflated) + valid[end:]
+        with self.assertRaises(IntelError):
+            verify_png(oversized)
 
     def test_no_redirects_and_proxy(self):
         opener = ComfyUIHost(checkpoint=MODEL).opener
