@@ -87,7 +87,7 @@ python -m generators prompt --objective "Draft a checklist" --authorize-create
 
 ## Forge Studio interoperability
 
-[Forge Studio 3.1.0 integration](integrations/forge-studio.md) documents the opt-in MCP stdio bridge to this repository, available ChatGPT connector handoff, security boundaries and independent verification. Neither plugin installs or authorizes the other automatically.
+[Forge Studio 3.3.0 integration](integrations/forge-studio.md) describes the optional MCP bridge and versioned workflow engine: static capability routing, explicit permissions, SQLite checkpoints, idempotency and failure recovery. Forge Studio and ChatGPT Intelligence remain independently installed and authorized; no local runtime, cloud provider or ChatGPT connector is enabled automatically.
 
 ---
 
