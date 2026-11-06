@@ -6,6 +6,7 @@ This file records meaningful documentation changes. A proposed design or documen
 ### Added
 - [Project Roadmap](ROADMAP.md) covering six documentation phases and acceptance criteria.
 - [Foundation Verification Record](quality/foundation-verification.md) for the scoped 21-file baseline audit.
+- [Architecture Verification Record](quality/architecture-verification.md) for the Phase 02 documentation checks.
 - Phase 02 specifications for [instruction conflicts](architecture/instruction-and-conflict-resolution.md), [information boundaries](architecture/context-and-information-boundaries.md), [Intelligent UI selection](architecture/intelligent-ui-decision-model.md), and [documentation contracts](architecture/documentation-contracts.md).
 - Beginner-friendly documentation foundation with seven core topic guides, templates, examples, and quality standards.
 - Version-aware compatibility guidance distinguishing verified product capabilities, proposed designs, and experimental observations.
