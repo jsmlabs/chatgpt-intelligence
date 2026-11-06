@@ -82,6 +82,10 @@ The [initial release-readiness review](quality/phase06-release-readiness.md) and
 
 **Acceptance:** Review findings explicitly documented in the [closeout record](quality/project-closeout.md) and [release-readiness report](quality/phase06-release-readiness.md). Formal release certification and any version tag remain deferred until separately authorized and verified.
 
+## Proposed generator ecosystem expansion
+
+A separate, forward-looking [Generator Ecosystem Roadmap](GENERATOR-ROADMAP.md) defines planned Prompt, Concept, Document, Image, Design, Theme, GIF/Motion and related artifact generators. It does not reopen or reclassify the completed documentation phases. The capabilities remain proposed until implemented and verified.
+
 ## Maintenance mode
 The six documentation phases are complete within their defined scope. Preserve the existing validation tooling, correct demonstrable defects, and refresh time-sensitive sources as needed. Do not add new test gates merely to prolong roadmap closure. The [strict release workflow](.github/workflows/release-readiness.yml) remains available for a separately authorized formal release.
 
