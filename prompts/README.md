@@ -22,6 +22,9 @@ How should a reusable prompt define scope and expected output?
 ## Practical guide
 - [prompt design](prompt-design.md) - step-by-step method, example, limitations, and acceptance criteria.
 
+## Reusable patterns
+- [Prompt Pattern Library](prompt-patterns.md) - grounded explanation, design comparison, research, UI and review.
+
 ## Ready-to-use activation instructions
 - [ChatGPT Intelligence /INTEL activation](activation-instructions.md) - a pasteable rule for a source-connected conversation.
 
