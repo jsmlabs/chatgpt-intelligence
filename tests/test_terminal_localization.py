@@ -22,7 +22,10 @@ class TerminalLocalization(unittest.TestCase):
     def run_cli(self,*args):
         out,err = io.StringIO(),io.StringIO()
         with redirect_stdout(out),redirect_stderr(err):
-            rc = intel.main(list(args))
+            try:
+                rc = intel.main(list(args))
+            except SystemExit as exc:
+                rc = exc.code if isinstance(exc.code, int) else 1
         return rc,out.getvalue(),err.getvalue()
 
     def test_catalog_coverage_and_fallback(self):
