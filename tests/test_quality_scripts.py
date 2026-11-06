@@ -90,5 +90,51 @@ class BrandingArchiveChecks(unittest.TestCase):
         self.assertEqual(self.checker.verify(self.make_zip(extra="branding/v1.4/../escape")), 1)
 
 
+
+class BrandingInstallChecks(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        (self.root / "branding").mkdir()
+        (self.root / "branding" / "README.md").write_text("integration", encoding="utf-8")
+        (self.root / "ROADMAP.md").write_text("roadmap", encoding="utf-8")
+        self.installer = load_script("install_branding")
+
+    def make_zip(self, *, mismatch=False):
+        data = b"asset"
+        manifest = {
+            "file_count": 1,
+            "files": {
+                "logos/mark.svg": {
+                    "size_bytes": len(data),
+                    "sha256": "0" * 64 if mismatch else hashlib.sha256(data).hexdigest(),
+                }
+            },
+        }
+        archive = self.root / "brand.zip"
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("branding/v1.4/MANIFEST.json", json.dumps(manifest))
+            z.writestr("branding/v1.4/logos/mark.svg", data)
+        return archive
+
+    def test_install_valid_package(self):
+        self.assertEqual(self.installer.install(self.make_zip(), self.root), 0)
+        self.assertEqual((self.root / "branding/v1.4/logos/mark.svg").read_bytes(), b"asset")
+
+    def test_reject_modified_package_without_writing(self):
+        self.assertEqual(self.installer.install(self.make_zip(mismatch=True), self.root), 1)
+        self.assertFalse((self.root / "branding/v1.4").exists())
+
+    def test_refuse_overwrite(self):
+        archive = self.make_zip()
+        (self.root / "branding/v1.4").mkdir()
+        self.assertEqual(self.installer.install(archive, self.root), 1)
+
+    def test_reject_unrelated_directory(self):
+        archive = self.make_zip()
+        (self.root / "ROADMAP.md").unlink()
+        self.assertEqual(self.installer.install(archive, self.root), 1)
+
 if __name__ == "__main__":
     unittest.main()
