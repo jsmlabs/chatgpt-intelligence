@@ -24,7 +24,8 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Live Intelligent UI and fallback | not-run | Design patterns documented and [fresh-chat runbook](intel-fresh-chat-runbook.md) available; runtime client verification not recorded |
 | Internal branding visual inspection | passed (limited) | [Contact sheet and light-banner inspection](branding-visual-inspection.md); does not satisfy complete visual sign-off |
 | Automated publication safety scan | passed (limited) | [111 tracked text files, zero high-confidence credential signatures](publication-safety-verification.md), not a comprehensive privacy audit |
-| Independent editorial and privacy review | not-run | Automated checks are not an independent external review |
+| Internal editorial/source review | completed (limited) | [Primary-source review](editorial-source-review.md) identifies a naming/trademark assessment need and records unresolved privacy/visual gaps |
+| Independent editorial and privacy review | not-run | Internal and automated checks are not independent external review |
 
 ## Critical interpretation
 - A passing documentation workflow does not establish native ChatGPT feature support, fresh-chat activation, or complete branding publication.
@@ -34,6 +35,9 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 
 ## Automated release gate
 A [strict structural release readiness checker](../scripts/check_release.py), [machine-readable evidence ledger](release-evidence.json), and [verification record](release-gate-verification.md) now exist. The strict command currently reports **four unmet conditions**. In routine development CI it runs in report-only mode; green CI is not release approval. The [manually triggered strict GitHub Actions workflow](../.github/workflows/release-readiness.yml) evaluates the release gate without creating a tag or publishing a release. Human attestation references must be independently inspected before any release.
+
+## Naming and public distribution risk
+The [scoped editorial review](editorial-source-review.md) identifies an open naming/trademark question under [OpenAI Design Guidelines](https://openai.com/brand/). The project's name should not be assumed cleared for a marketed app, plugin or product merely because it is used in a documentation repository. The project owner must make an informed naming decision after appropriate review; no automatic rename or release approval is implied.
 
 ## Release decision
 **Blocked for a complete Phase 06 release.** The repository is useful as scoped documentation, but the final release gate depends on observed fresh-chat tests, runtime UI assessment, comprehensive brand visual approval, and independent review. No version tag, release object or other publication action is authorized by this review alone.
