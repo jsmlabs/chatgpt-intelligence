@@ -26,7 +26,7 @@ Uploaded archive `chatgpt-intelligence-brand-final-v1.4(1).zip`. The verified co
 
 ## Suggested local checks
 ```bash
-python scripts/verify_branding.py branding
+python scripts/verify_branding.py branding/v1.4
 git status --short
 git diff --check
 git diff --cached --stat
