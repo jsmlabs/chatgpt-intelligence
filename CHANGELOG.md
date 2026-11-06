@@ -47,4 +47,5 @@ This file records meaningful documentation changes. A proposed design or documen
 - Linked roadmap and the updated architecture from the root README.
 
 ### Verified
+- [CI run `f7ea930`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208829270): 26 passing regression tests, 65 Markdown files, 407 relative links with zero errors, all 56 brand hashes verified; four release conditions remain open.
 - Re-read all 27 foundation and Phase 02 documents on `main`; all expected paths resolved. Checked 125 relative Markdown file links against the known document inventory; no missing file targets were found. External links and heading fragments remain outside this check.
