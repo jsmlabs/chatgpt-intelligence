@@ -209,7 +209,7 @@ class ProviderRoutingTests(unittest.TestCase):
         self.assertIn("```python\nprint('ok')\n```", result["content"])
         self.assertTrue(result["manifest"].validations["balanced_code_fences"])
 
-    def test_closed_outer_markdown_with_inner_fences_does_not_get_corrupted(self):
+    def test_closed_outer_markdown_with_inner_fences_is_preserved(self):
         local = Fake()
         local.generate = lambda kind, brief: ModelOutput(
             "```markdown\n# Draft\n\n```python\nprint('code')\n```\n```",
@@ -217,6 +217,20 @@ class ProviderRoutingTests(unittest.TestCase):
         runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
         result = runtime.execute(
             "/INTEL GENERATE PROMPT", request={"objective": "Draft"},
+            authorization=LOCAL, provider="ollama-local")
+        self.assertTrue(result["ok"], result)
+        self.assertTrue(result["content"].startswith("# Draft\n\n```python"))
+        self.assertIn("print('code')\n```\n\n## Provenance", result["content"])
+
+
+    def test_ambiguous_outer_markdown_fence_fails_closed(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "```markdown\n# Draft\n\n```python\nprint('unclosed inner')\n```",
+            "ollama-local", "fixture", "")
+        runtime = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = runtime.execute(
+            "/INTEL GENERATE DOCUMENT", request={"objective": "Draft"},
             authorization=LOCAL, provider="ollama-local")
         self.assertFalse(result["ok"], result)
         self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")

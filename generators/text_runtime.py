@@ -230,7 +230,10 @@ def _prepare_model_markdown(kind: str, value: str) -> str:
     content = value.strip()
     if not content:
         return content
-    content = _unwrap_model_fence(content)
+    normalized = _unwrap_model_fence(content)
+    if normalized == content and re.match(r"^ {0,3}```(?:markdown|md)?[ \t]*$", content.splitlines()[0], re.I):
+        raise IntelError("VALIDATION_FAILED", "Ambiguous outer Markdown code fence")
+    content = normalized
     if not re.match(r"^#\s+\S", content):
         content = "# " + MODEL_TITLES[kind] + "\n\n" + content
     return content
