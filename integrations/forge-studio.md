@@ -8,7 +8,7 @@ classification: experimental
 
 # Forge Studio integration
 
-ChatGPT Intelligence and [Forge Studio](https://chatgpt.com/plugins/Plugin_073c7872c6a4819184b4ee75669ab6ac) are independently versioned products. Forge Studio 3.1.0 provides an opt-in, bounded local MCP stdio bridge to the Intelligence generator host, plus a documented workflow for invoking an existing ChatGPT Intelligence connector.
+ChatGPT Intelligence and [Forge Studio](https://chatgpt.com/plugins/Plugin_073c7872c6a4819184b4ee75669ab6ac) are independently versioned products. Forge Studio 3.3.0 provides an opt-in, bounded local MCP stdio bridge and a separately authorized, deterministic workflow engine for orchestrating supported Intelligence tools. An existing ChatGPT Intelligence connector is an independent host integration.
 
 ## Ownership and integration boundary
 
@@ -65,3 +65,33 @@ python scripts/forge_intelligence.py /trusted/chatgpt-intelligence --execute --r
 ```
 
 See the published [Forge Studio plugin](https://chatgpt.com/plugins/Plugin_073c7872c6a4819184b4ee75669ab6ac) and its `references/bridge-reliability.md` for the detailed contract.
+
+## Forge Studio v3.3 - Unified Workflow Engine
+
+**Published and verified on 2026-11-06:** Forge Studio v3.3.0 is an additive release with 30 skills and five CLI entrypoints; the original Intelligence MCP host and permission model are unchanged. Release metadata and the workflow source, skill, contract and tests were read back from the Plugin Creator after publication.
+
+The workflow engine is intentionally narrow: a JSON schema-v1 contract with 1-32 ordered steps and a fixed action registry. It supports `core.echo`, `core.sha256`, and offline Intelligence `generate_prompt`, `generate_concept` and `generate_document` actions. Each external action checks the existing MCP bridge allowlist and actual discovery. Workflow-supplied content cannot create new actions or authorize them.
+
+- **Deterministic state:** `planned`, `running`, `succeeded`, `failed`, `blocked`, and `uncertain`. Dependencies must refer to earlier steps; model results never determine permissions.
+- **Durable checkpoints:** SQLite records the canonical workflow hash, run key, attempts and step outcomes. Reusing a run key for a different workflow is rejected.
+- **Idempotency and recovery:** successful steps do not re-execute for a given run key; a process-interrupted or failed external call is marked `uncertain` and is never blindly retried. Explicit `--retry-failed` only permits known deterministic local failures.
+- **Permission boundaries:** planning performs no execution or checkpoint writes; execution requires `--execute`, and Intelligence generation additionally requires a caller-granted `--grant create`. No arbitrary shell, deployment, paid model, or unrestricted ChatGPT connector proxy is installed.
+- **Verification:** 74/74 Forge Studio Python tests passed in the source package and independently after extracting the release ZIP. The five-CLI compatibility gate and the structural release gate passed, including 53 required files. This verifies the packaged runner and synthetic MCP adapter boundary, **not** an operator Windows deployment or distributed exactly-once execution.
+
+### Workflow sample
+
+Create `workflow.json` in an appropriate trusted working directory:
+
+```json
+{"schema":1,"name":"draft-and-digest","steps":[{"id":"draft","action":"intelligence.generate_prompt","input":"Design a narrow API contract"},{"id":"digest","action":"core.sha256","depends_on":["draft"],"from_step":"draft"}]}
+```
+
+With a complete trusted Forge Studio plugin checkout and Intelligence checkout, run:
+
+```sh
+python scripts/forge_workflow.py plan --workflow workflow.json --db state.sqlite --run-key sample
+python scripts/forge_workflow.py run --workflow workflow.json --db state.sqlite --run-key sample --execute --grant create --intelligence-root /trusted/chatgpt-intelligence
+python scripts/forge_workflow.py status --db state.sqlite --run-key sample
+```
+
+The `state.sqlite` checkpoint must live outside the plugin installation. A subprocess is **not** an isolation sandbox. Real cross-project execution on the operator's Windows machine and live ChatGPT host activation remain independent acceptance steps.
