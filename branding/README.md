@@ -17,6 +17,10 @@ The original package contains 56 manifest-listed payload files, plus its manifes
 
 The original package `README.md` belongs at `branding/v1.4/README.md`, **never at repository root or over this integration README**. All 57 original files retain exact relative names and bytes under `branding/v1.4/`. The design is intentionally ChatGPT-like, not an official OpenAI interface or official brand.
 
+## Historical source README notice
+
+The upstream package's original [`v1.4/README.md`](v1.4/README.md) still says that no files were committed or uploaded. That sentence describes the package **before** publication and is no longer current. This repository deliberately preserves all original v1.4 files byte-for-byte for manifest integrity; the authoritative publication record is the [2026-11-06 verification](../quality/branding-publication-verification.md). Do not change the archived source README merely to update this status.
+
 ## Branding vs. Intelligent UI
 These SVG/PNG/HTML assets establish a project visual identity. They do not change the native ChatGPT application's colors or components. `/INTEL UI` means selecting **available ChatGPT output components** based on information needs, not applying an HTML skin from this package.
 
