@@ -28,3 +28,6 @@ notes: Manual review pending
 
 ## Future work
 Develop repeatable scenarios for instruction conflicts, stale source material, memory limitations, and complex UI selection. A future benchmark should not imply automated execution until it is actually implemented.
+
+## Conversational end-to-end checks
+See the [INTEL End-to-End Test Plan](intel-end-to-end-tests.md). The listed scenarios are **not-run** until observed in the actual ChatGPT client. The repository documentation audit cannot substitute for those results.
