@@ -1,0 +1,25 @@
+name: Release Readiness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Check documentation
+        run: python scripts/check_docs.py --root .
+      - name: Enforce release evidence and branding checks
+        run: python scripts/check_release.py --root .
