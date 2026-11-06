@@ -24,6 +24,8 @@ __all__ += ["OpenAIResponsesHost", "ModelOutput"]
 from .ollama_host import OllamaLocalHost
 from .provider_router import ProviderRouter, PROVIDERS
 __all__ += ["OllamaLocalHost", "ProviderRouter", "PROVIDERS"]
+from .theme_runtime import ThemeRuntime, theme_capability, contrast_ratio
+__all__ += ["ThemeRuntime", "theme_capability", "contrast_ratio"]
 from .design_runtime import DesignRuntime, design_capability
 __all__ += ["DesignRuntime", "design_capability"]
 from .image_runtime import ImageRuntime, image_capability

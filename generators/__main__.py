@@ -15,11 +15,13 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
     parser.add_argument("--aspect-ratio", default="1:1")
     parser.add_argument("--palette", default="")
+    parser.add_argument("--preset", choices=["graphite", "ocean", "plum", "forest"], default="graphite")
+    parser.add_argument("--accent", default=None)
     parser.add_argument("--layout", choices=["dashboard", "landing", "form", "catalog"], default="dashboard")
     parser.add_argument("--responsive", choices=["mobile-first", "desktop-first"], default="mobile-first")
     parser.add_argument("--component", action="append", default=None)
@@ -61,6 +63,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "design":
         from .design_runtime import DesignRuntime
         selected_runtime = DesignRuntime()
+    if args.type == "theme":
+        from .theme_runtime import ThemeRuntime
+        selected_runtime = ThemeRuntime()
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
@@ -71,6 +76,10 @@ def main(argv: list[str] | None = None) -> int:
         request.update(layout=args.layout, responsive=args.responsive)
         if args.component is not None:
             request["components"] = args.component
+    if args.type == "theme":
+        request = {"objective": args.objective, "format": args.format, "preset": args.preset}
+        if args.accent is not None:
+            request["accent"] = args.accent
     result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request=request,

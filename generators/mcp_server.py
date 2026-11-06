@@ -20,6 +20,7 @@ from .text_runtime import TextRuntime
 from .host_drafts import submit_host_draft
 from .image_runtime import ImageRuntime
 from .design_runtime import DesignRuntime
+from .theme_runtime import ThemeRuntime
 from .image_render import render_image
 from .comfyui_image import ComfyUIHost
 
@@ -31,6 +32,7 @@ SUBMIT_TYPES = {"submit_prompt_draft": "PROMPT", "submit_concept_draft": "CONCEP
                 "submit_document_draft": "DOCUMENT"}
 IMAGE_TOOLS = ("generate_image_brief", "submit_image_brief")
 DESIGN_TOOL = "generate_design"
+THEME_TOOL = "generate_theme"
 RENDER_TOOL = "render_abstract_image"
 COMFY_TOOL = "generate_image_comfyui"
 DESCRIPTION = {
@@ -43,6 +45,7 @@ DESCRIPTION = {
     "generate_image_brief": "Generate a deterministic IMAGE production brief; no image file or model call.",
     "submit_image_brief": "Validate a client-written IMAGE production brief; no image file or model call.",
     "render_abstract_image": "Render a small, deterministic procedural geometric PNG. No AI prompt-to-image generation, no model API, no semantic subject rendering.",
+    "generate_theme": "Create deterministic light/dark JSON design tokens or CSS and audited WCAG 2.2 color-pair contrast results; no full accessibility certification.",
     "generate_design": "Generate deterministic UI/UX design brief or inert responsive HTML/CSS prototype; no browser/app execution.",
     "generate_image_comfyui": "Opt-in local semantic text-to-image generation via installed ComfyUI checkpoint and core nodes. Requires --allow-comfyui-image and CREATE. No cloud or partner nodes.",
 }
@@ -124,6 +127,19 @@ DESIGN_SCHEMA = {
 }
 
 
+THEME_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "objective": {"type": "string", "minLength": 1, "maxLength": 8192},
+        "preset": {"type": "string", "enum": ["graphite", "ocean", "plum", "forest"]},
+        "accent": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "format": {"type": "string", "enum": ["json", "css"]},
+    },
+    "required": ["objective"],
+    "additionalProperties": False,
+}
+
+
 COMFY_SCHEMA = {
     "type": "object",
     "properties": {
@@ -149,6 +165,7 @@ class MCPHost:
         self.runtime = TextRuntime(model_host=model_host, provider_router=provider_router)
         self.image_runtime = ImageRuntime()
         self.design_runtime = DesignRuntime()
+        self.theme_runtime = ThemeRuntime()
         self.allow_comfyui_image = bool(allow_comfyui_image)
         self.comfyui_host = comfyui_host or ComfyUIHost()
         self.initialized = False
@@ -179,7 +196,7 @@ class MCPHost:
             self.initialized = True
             return self._ok(request_id, {
                 "protocolVersion": version, "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.6.0"},
+                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.7.0"},
             })
         if not self.initialized:
             return self._error(request_id, -32002, "Initialize MCP connection first")
@@ -201,6 +218,10 @@ class MCPHost:
                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
                                  "idempotentHint": False, "openWorldHint": False}}
                 for name in IMAGE_TOOLS
+            ] + [{"name": THEME_TOOL, "description": DESCRIPTION[THEME_TOOL],
+                  "inputSchema": THEME_SCHEMA,
+                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
+                                  "idempotentHint": False, "openWorldHint": False}}
             ] + [{"name": DESIGN_TOOL, "description": DESCRIPTION[DESIGN_TOOL],
                   "inputSchema": DESIGN_SCHEMA,
                   "annotations": {"readOnlyHint": False, "destructiveHint": False,
@@ -216,7 +237,7 @@ class MCPHost:
                   if self.allow_comfyui_image else [])})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
-            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL and name != DESIGN_TOOL and not (self.allow_comfyui_image and name == COMFY_TOOL):
+            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL and name != DESIGN_TOOL and name != THEME_TOOL and not (self.allow_comfyui_image and name == COMFY_TOOL):
                 return self._error(request_id, -32602, "Unknown INTEL tool")
             if not isinstance(arguments, dict):
                 return self._error(request_id, -32602, "Tool arguments must be an object")
@@ -279,7 +300,12 @@ class MCPHost:
                                           "output_verified": False},
                     "isError": False,
                 })
-            if name == DESIGN_TOOL:
+            if name == THEME_TOOL:
+                if set(arguments) - set(THEME_SCHEMA["properties"]):
+                    return self._error(request_id, -32602, "Unknown THEME field")
+                result = self.theme_runtime.execute(
+                    "/INTEL GENERATE THEME", request=arguments, authorization=self.authorization)
+            elif name == DESIGN_TOOL:
                 if set(arguments) - set(DESIGN_SCHEMA["properties"]):
                     return self._error(request_id, -32602, "Unknown DESIGN field")
                 result = self.design_runtime.execute(
