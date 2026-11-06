@@ -1,6 +1,6 @@
 ---
 title: G1.8 Zero-Paid-Default Provider Routing
-status: implemented
+status: accepted
 version: 0.4.0
 updated: 2026-11-06
 ---
