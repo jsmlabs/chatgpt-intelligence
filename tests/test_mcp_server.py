@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import subprocess
 import sys
 import unittest
@@ -170,6 +171,25 @@ class MCPProcessTests(unittest.TestCase):
         self.assertFalse(replies[1]["result"]["isError"])
         self.assertIn("Prompt Specification", replies[1]["result"]["content"][0]["text"])
         self.assertEqual(replies[1]["result"]["structuredContent"]["state"], "reviewed")
+
+    def test_live_verifier_blocks_without_auth_or_credentials(self):
+        env = dict(os.environ)
+        env.pop("OPENAI_API_KEY", None)
+        env.pop("INTEL_OPENAI_MODEL", None)
+        for args, expected in [
+            ([], "explicit authorization required"),
+            (["--authorize-live-billable"], "model host not configured"),
+        ]:
+            with self.subTest(args=args):
+                outcome = subprocess.run(
+                    [sys.executable, "scripts/verify_model_live.py", *args],
+                    capture_output=True, text=True, timeout=10,
+                    check=False, env=env,
+                )
+                self.assertEqual(outcome.returncode, 2)
+                result = json.loads(outcome.stdout)
+                self.assertEqual(result["status"], "BLOCKED")
+                self.assertEqual(result["reason"], expected)
 
 
 if __name__ == "__main__":
