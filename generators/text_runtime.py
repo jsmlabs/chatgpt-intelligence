@@ -11,10 +11,11 @@ import hashlib
 import os
 from pathlib import Path
 import re
-from typing import Mapping
+from typing import Mapping, Protocol
 from uuid import uuid4
 
 from .artifacts import ArtifactManifest, ArtifactState, GenerationRequest
+from .model_host import ModelOutput
 from .foundation import (
     Adapter, Authorization, Coordinator, IntelError, Permission, Registry, State,
     default_registry, parse_command, safe_relative_path, verify_file,
@@ -232,16 +233,25 @@ def export_markdown(content: str, root: Path, name: str) -> tuple[str, str]:
             os.close(handle)
 
 
+class TextModelHost(Protocol):
+    @property
+    def configured(self) -> bool: ...
+
+    def generate(self, kind: str, brief: GenerationRequest) -> ModelOutput: ...
+
+
 class TextRuntime:
     """Local host implementation: validate -> authorize -> render -> review -> optional export."""
 
-    def __init__(self):
+    def __init__(self, *, model_host: TextModelHost | None = None):
+        self.model_host = model_host
         self.registry = text_registry()
         self.coordinator = Coordinator(registry=self.registry)
 
     def execute(self, raw: str, *, request: Mapping[str, object] | None = None,
                 authorization: Authorization | None = None, export_root: Path | None = None,
-                filename: str | None = None, previous: ArtifactManifest | None = None) -> dict:
+                filename: str | None = None, previous: ArtifactManifest | None = None,
+                mode: str = "template") -> dict:
         """A single synchronous execution; caller grants are not read from request text."""
         manifest: ArtifactManifest | None = None
         try:
@@ -252,7 +262,14 @@ class TextRuntime:
             if cap.command not in TEXT_TYPES:
                 return self.coordinator.dispatch(raw, authorization, request)
             brief = validate_request(cmd.argument, request)
-            (authorization or Authorization()).require(cap.permissions)
+            if mode not in {"template", "model"}:
+                raise IntelError("INVALID_REQUEST", "Mode must be template or model")
+            grants = authorization or Authorization()
+            grants.require(cap.permissions)
+            if mode == "model":
+                grants.require(frozenset({Permission.EXTERNAL, Permission.BILLABLE}))
+                if self.model_host is None or not self.model_host.configured:
+                    raise IntelError("MODEL_UNAVAILABLE", "No configured model runtime is connected")
             if (export_root is None) != (filename is None):
                 raise IntelError("INVALID_REQUEST", "Export requires root and filename together")
             if previous is not None:
@@ -271,27 +288,52 @@ class TextRuntime:
                     source_references=brief.sources, capability=cap.identifier,
                 )
             manifest.created_at = datetime.now(timezone.utc).isoformat()
-            manifest.provenance = {"producer": "local-deterministic-template",
-                                   "source_status": "unverified", "renderer_version": cap.version}
+            manifest.provenance = {"producer": "local-deterministic-template" if mode == "template"
+                                   else "model-host", "source_status": "unverified",
+                                   "renderer_version": cap.version}
             manifest.transition(ArtifactState.READY)
             manifest.transition(ArtifactState.GENERATING)
-            coordinator = Coordinator(
-                registry=self.registry,
-                adapters={cap.identifier: Adapter(cap.identifier, "text",
-                    lambda values: render_markdown(cap.command, brief))},
-            )
-            output = coordinator.dispatch(raw, authorization,
-                                          {"objective": brief.objective, "format": brief.output_format})
-            if not output["ok"]:
-                raise IntelError(output["error"]["code"], output["error"]["message"])
-            content = output["output"]
+            model_result: ModelOutput | None = None
+            if mode == "model":
+                try:
+                    model_result = self.model_host.generate(cap.command, brief)
+                except IntelError:
+                    raise
+                except Exception:
+                    raise IntelError("MODEL_REQUEST_FAILED", "Model host execution failed") from None
+                if not isinstance(model_result, ModelOutput):
+                    raise IntelError("MODEL_RESPONSE_INVALID", "Model host returned invalid result")
+                if not isinstance(model_result.content, str):
+                    raise IntelError("MODEL_RESPONSE_INVALID", "Model output must be text")
+                # Model text is untrusted. Append evidence labels deterministically.
+                content = (model_result.content.strip() +
+                    "\\n\\n## Provenance and limitations\\n\\n"
+                    "Model-produced draft; cited sources and factual claims were not independently "
+                    "verified. Structural review does not imply human approval.\\n")
+                manifest.provenance.update({
+                    "model_provider": model_result.provider,
+                    "model_name": model_result.model,
+                    "response_id": model_result.response_id,
+                })
+            else:
+                coordinator = Coordinator(
+                    registry=self.registry,
+                    adapters={cap.identifier: Adapter(cap.identifier, "text",
+                        lambda values: render_markdown(cap.command, brief))},
+                )
+                output = coordinator.dispatch(raw, authorization,
+                                              {"objective": brief.objective, "format": brief.output_format})
+                if not output["ok"]:
+                    raise IntelError(output["error"]["code"], output["error"]["message"])
+                content = output["output"]
             manifest.transition(ArtifactState.VALIDATING)
             manifest.validations = _check_markdown(content)
             if not all(manifest.validations.values()):
                 raise IntelError("VALIDATION_FAILED", "Generated Markdown failed structural checks")
             manifest.transition(ArtifactState.REVIEWED)
             evidence = {"structural_validation": "passed", "human_review": "not_run",
-                        "source_verification": "not_run", "llm_generation": "not_run"}
+                        "source_verification": "not_run",
+                        "llm_generation": "host_reported" if mode == "model" else "not_run"}
             if export_root is not None:
                 path, digest = export_markdown(content, export_root, filename)
                 manifest.record_verified_output(path, export_root)
