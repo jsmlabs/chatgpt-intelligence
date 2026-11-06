@@ -1,0 +1,231 @@
+{
+  "name": "ChatGPT Intelligence - Final Brand Assets",
+  "version": "1.4.0",
+  "file_count": 56,
+  "files": {
+    "BRAND-GUIDELINES.md": {
+      "size_bytes": 4730,
+      "sha256": "7db2d54d9d2bc6e989bf3f0fab12797673cf41cc69721164fba3e175a60ca06a"
+    },
+    "README.md": {
+      "size_bytes": 822,
+      "sha256": "bfd2172f3c9572dcc75c4b88b7afb449d79d4fb5dac92637cc522b75c9eda01b"
+    },
+    "asset-contact-sheet.png": {
+      "size_bytes": 209702,
+      "sha256": "0c12f03ea54c5b44bd232f02cd8696a67259700e4c27eb9b966ce4224afa35e4"
+    },
+    "banners/readme-hero-dark.png": {
+      "size_bytes": 33435,
+      "sha256": "0a3f9243ee892ccaa88cb90f299caa4a0613921a2415007b8430a895b3ca5813"
+    },
+    "banners/readme-hero-dark.svg": {
+      "size_bytes": 1092,
+      "sha256": "a1a42322a91e22c9d77eee8955c6b29249f6ad1edc14df3a625028af8b65a5c2"
+    },
+    "banners/readme-hero-light.png": {
+      "size_bytes": 33220,
+      "sha256": "e6a9235f6734b47d14178fa5038a772c4f867e1d47d4f13aaa3f3aacf2b3442d"
+    },
+    "banners/readme-hero-light.svg": {
+      "size_bytes": 1092,
+      "sha256": "09a4f17ca74a841a833350f16f4f8c98ed2279a2437afc3ee8b68707734088fa"
+    },
+    "design-system/theme-tokens.css": {
+      "size_bytes": 686,
+      "sha256": "05663faaa3d325245a464100535742d218f84b457ac8961e76e78711733e643b"
+    },
+    "design-system/tokens.json": {
+      "size_bytes": 644,
+      "sha256": "fe96b87001ece47d53387d9db6d990f6252de11e0aead4226de5bc22fcfa5586"
+    },
+    "icons/app-dark-1024.png": {
+      "size_bytes": 37299,
+      "sha256": "ea00bef0b40e56886f2e37b8eeb22a7f7307535035ff657f61418766f64a10da"
+    },
+    "icons/app-dark-1024.svg": {
+      "size_bytes": 584,
+      "sha256": "94c8d3d108089989008b3b4f0de792c76f4c8a5fc723bbdf7dda6a3ba82d0bc5"
+    },
+    "icons/app-dark-128.png": {
+      "size_bytes": 3794,
+      "sha256": "18c758f82fae80799f165e68bb63589db8d2e715203f5e5d9249dc816b1fe1b7"
+    },
+    "icons/app-dark-128.svg": {
+      "size_bytes": 584,
+      "sha256": "d6546dacec72aca768e3c4a846a0cb10b029ca1746e4633f12fb22aabba1ec64"
+    },
+    "icons/app-dark-16.png": {
+      "size_bytes": 488,
+      "sha256": "274579e273df1efe944ad5ba0e3d3e323942fb51f53332f69ce198b206d55b9b"
+    },
+    "icons/app-dark-16.svg": {
+      "size_bytes": 575,
+      "sha256": "bd80e7465e68c3f8da600143d5fe041fdd054bad6a4eb075a58a1dadd333f3c3"
+    },
+    "icons/app-dark-256.png": {
+      "size_bytes": 7847,
+      "sha256": "4e83c1c1d471ace8e2c3d2194216353317d1dc61fa6261c110b6bccc6e124805"
+    },
+    "icons/app-dark-256.svg": {
+      "size_bytes": 584,
+      "sha256": "61649dd9ad4ad15d7c07ddafb9c31b9c50b9a553c2b8158b18eadb1aedd92017"
+    },
+    "icons/app-dark-32.png": {
+      "size_bytes": 949,
+      "sha256": "5d17774545ce5168a90101988e2c24fd3a247862fdbcc7027be48c6c2dd4ee30"
+    },
+    "icons/app-dark-32.svg": {
+      "size_bytes": 575,
+      "sha256": "49a18218e324c8c4b54657fc6d83665b6c18489c343e4b1634434781a7151a08"
+    },
+    "icons/app-dark-512.png": {
+      "size_bytes": 16676,
+      "sha256": "9dc04f5653b07d78cbe3a2129f515c19d166693235954c922b609d85257de15f"
+    },
+    "icons/app-dark-512.svg": {
+      "size_bytes": 585,
+      "sha256": "f3694591caa362b3c35e0a902d9f6505640e2d5ed89d6bee19802faf23dfd9f1"
+    },
+    "icons/app-dark-64.png": {
+      "size_bytes": 1917,
+      "sha256": "784be149c76f0fd3751b0610e151f66294aad5bd687886912b1a837e3bb2f058"
+    },
+    "icons/app-dark-64.svg": {
+      "size_bytes": 576,
+      "sha256": "74ee585d2280fdd65cbe955bb7ae9994350b6b8639c2afce9c97db3970e83bbe"
+    },
+    "icons/app-light-1024.png": {
+      "size_bytes": 35314,
+      "sha256": "e55d40e727838cc54e38642de04637c46303ca02f7c2211ad529e04666a6f9e1"
+    },
+    "icons/app-light-1024.svg": {
+      "size_bytes": 584,
+      "sha256": "d424181809dcc49024c917da70bf2ea68e840096879dfe86fb1fea0cb852c84c"
+    },
+    "icons/app-light-128.png": {
+      "size_bytes": 3576,
+      "sha256": "06a4846369df60a5ad7b772fdad23585dac461430f9c04b791c83b16e2cca0c0"
+    },
+    "icons/app-light-128.svg": {
+      "size_bytes": 584,
+      "sha256": "6cfb34d0ae819b005e91f976d0ab54265e068b3b8451420d31b6ea2fe6f37224"
+    },
+    "icons/app-light-16.png": {
+      "size_bytes": 448,
+      "sha256": "b3f36eaa34c639e53996b4b1d07f8e2c09e5c6d5d945d5abe01e6803717538e1"
+    },
+    "icons/app-light-16.svg": {
+      "size_bytes": 575,
+      "sha256": "354b6ca584a2c3a87aa88f42b053d4167a2d62b7a1cf43e79ef90b9cfe0ff637"
+    },
+    "icons/app-light-256.png": {
+      "size_bytes": 7395,
+      "sha256": "168de8c35c447d293a2fa481466c483702829ed81533c8172ee601c61ff9badd"
+    },
+    "icons/app-light-256.svg": {
+      "size_bytes": 584,
+      "sha256": "cf8b5330a991234f622742ea2b3cb5d0d55bf46e1bd39ff3435e8156aa119cb0"
+    },
+    "icons/app-light-32.png": {
+      "size_bytes": 891,
+      "sha256": "38c23eed41004e16f153eaeb96b8baff2e48509f47356a2effa8fce934758ba7"
+    },
+    "icons/app-light-32.svg": {
+      "size_bytes": 575,
+      "sha256": "1f879b1eca0020e1027d5ab8f615a748415c0f00d528899e079e7df92a6c60e9"
+    },
+    "icons/app-light-512.png": {
+      "size_bytes": 15720,
+      "sha256": "053aafc369ec112cce40ff14657e21e55b6d8e94760b15b7ff47fe622bd16868"
+    },
+    "icons/app-light-512.svg": {
+      "size_bytes": 585,
+      "sha256": "06c677e8e3a74303385a8b2498df2440b960e849a8334f383d4a040a6fa352fb"
+    },
+    "icons/app-light-64.png": {
+      "size_bytes": 1851,
+      "sha256": "fadc9f1ac375bdb050943f645ba3fea28a75f5a04d054e280bceb62e2ab21d70"
+    },
+    "icons/app-light-64.svg": {
+      "size_bytes": 576,
+      "sha256": "166b1be885cb4313a4fa314128d7c625bbdd040b7f3fee4426bc219738928ae6"
+    },
+    "logos/lockup-dark.png": {
+      "size_bytes": 8593,
+      "sha256": "86734092eebfc988cb6a0bfa99cfe23894888fe8dc0bdf8a08cf7c3baf828795"
+    },
+    "logos/lockup-dark.svg": {
+      "size_bytes": 658,
+      "sha256": "02eb3b989e4c8e5fcd37ddcbc61fa53294f0dfdf1fed263069c6f169faa76946"
+    },
+    "logos/lockup-light.png": {
+      "size_bytes": 8862,
+      "sha256": "7496a13a8aa003167dbfe932baf366159081b20a16696125e401869c0629e074"
+    },
+    "logos/lockup-light.svg": {
+      "size_bytes": 658,
+      "sha256": "633a7656fe8bea80cf9e66d7f037029359a91d5b7b8543dd64784b62f9ce4988"
+    },
+    "logos/symbol-dark.png": {
+      "size_bytes": 3358,
+      "sha256": "2e4886dbb4e168ca3c82dd44c6c03418fa534a7a07171899e4b0fc2972ce71eb"
+    },
+    "logos/symbol-dark.svg": {
+      "size_bytes": 504,
+      "sha256": "659440091f2e6aa13072d21b594acad16c4b6053dfa7232da81272c2497fa7cf"
+    },
+    "logos/symbol-light.png": {
+      "size_bytes": 3381,
+      "sha256": "02bfb6af350c28108412fc3fbbd23d34d85240595a3de4aec2020d5f666980cf"
+    },
+    "logos/symbol-light.svg": {
+      "size_bytes": 504,
+      "sha256": "5b7310e3fd2406c8e95a2b6c162e8a6302ecfdec0139c4c687718b09cfdb50b5"
+    },
+    "logos/symbol-monochrome.png": {
+      "size_bytes": 3379,
+      "sha256": "4b419cfd29201f008cea25e4d9dd7687d8278da46db3ccc424d856abe5881cf3"
+    },
+    "logos/symbol-monochrome.svg": {
+      "size_bytes": 504,
+      "sha256": "6458ca564ab34e472037e550335ba6e3645b794547143689b8cc1ed8e9c01e27"
+    },
+    "logos/wordmark-dark.png": {
+      "size_bytes": 15521,
+      "sha256": "9d420e8d788ad2aa5bb1110cad8af0013bbd0532034898c7c58c2b3598ad3c37"
+    },
+    "logos/wordmark-dark.svg": {
+      "size_bytes": 794,
+      "sha256": "b41348fa9ee20b52cd12add8044ab0e0c07e8158bd6b948e37b2c7e19c31a128"
+    },
+    "logos/wordmark-light.png": {
+      "size_bytes": 15716,
+      "sha256": "2c882bf36e0283346f543994fb77e55e3bb03cc8a829859d0e5324dadfdf2080"
+    },
+    "logos/wordmark-light.svg": {
+      "size_bytes": 794,
+      "sha256": "aa2fdaddb606aa1c09d1fc6b7c7002492627fcc71580f3bca7430bf8e9cbe39b"
+    },
+    "preview/brand-showcase.html": {
+      "size_bytes": 4137,
+      "sha256": "76744bf6b092b96914cbfb6850e64c3d9cbed99f4b40e2e28f14f5b922ca21a6"
+    },
+    "social/github-social-dark.png": {
+      "size_bytes": 31302,
+      "sha256": "919c4934aef7ec605cc9ff8663383ae8f20405196ed96b48b640bab1425636f5"
+    },
+    "social/github-social-dark.svg": {
+      "size_bytes": 1213,
+      "sha256": "5a579371e9ec34b33d6ab3310b3d3c10a2991d93048bfcc308a2808be3bc1938"
+    },
+    "social/github-social-light.png": {
+      "size_bytes": 30924,
+      "sha256": "567f7857176e182dcc71b82d2edb08e43cd0587e45cc72984f27a4d3c409427f"
+    },
+    "social/github-social-light.svg": {
+      "size_bytes": 1213,
+      "sha256": "8277911f5f60bc0b967c17216a055e2933fbdccc885e7abb7bcff47046df97ff"
+    }
+  }
+}
