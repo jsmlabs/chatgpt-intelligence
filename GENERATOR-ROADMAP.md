@@ -375,3 +375,21 @@ No external model, publishing or trademark lookup is invoked.
 **Not certified:** legal distinctiveness, visual review, in-app
 rendering and live ChatGPT MCP acceptance. See
 [G2.4 BRAND technical specification](architecture/brand-generator.md).
+
+## G3.1 - GIF & Motion Generator checkpoint (2026-11-06)
+
+The local motion runtime generates ordered JSON storyboards and actual
+procedurally animated `image/gif` bytes (GIF89a) using deterministic
+`pulse`, `orbit` and `bounce` geometry, fixed 64-256px bounds,
+2-12 frames, 50-1000ms frame delays in 10ms steps, explicit finite or
+infinite loops, and palette presets reused from G2.3 THEME. It
+independently parses its own GIF output, validates LZW pixel data,
+frame count/timing/loop controls, and exclusively exports files
+with SHA-256 readback. The new `generate_motion` MCP tool returns a
+JSON storyboard or an in-memory `image/gif` content block.
+
+**Limitations:** This is a genuine but restricted GIF output, not
+semantic AI animation, video generation, free-form scene rendering,
+or a browser/player-based visual acceptance. Live ChatGPT animated
+GIF display remains unverified. See
+[G3.1 implementation](architecture/motion-generator.md).

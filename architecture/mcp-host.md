@@ -130,3 +130,16 @@ mark concept. Operator CREATE permission is required. No filesystem
 export, paid model or trademark verification occurs through MCP.
 Default tool discovery is now **12 tools**, or **13** with the separate
 ComfyUI opt-in. See [BRAND Generator](brand-generator.md).
+
+## G3.1 GIF & Motion MCP tool
+
+`generate_motion` accepts a bounded motion style, dimensions,
+frame count, delay, repeat count and palette. JSON returns an ordered
+storyboard; `gif` returns Base64 `image/gif` data inside an MCP
+image content block. The renderer validates the actual GIF LZW frames
+and loop extension before returning. The standard tool registry
+contains **13** tools (**14** when ComfyUI inference is enabled).
+MCP never exports files, never invokes a remote model, and requires
+trusted `--allow-create`. Animated rendering in a native client
+has not been attested.
+See [G3.1 Motion Generator](motion-generator.md).

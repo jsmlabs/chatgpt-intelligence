@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Added [G3.1 GIF & Motion Generator](architecture/motion-generator.md): offline JSON storyboards and verified procedural animated GIF89a with bounded frame count, duration, loop settings, CLI exports and additive MCP image/gif tool.
 - Added [G2.4 BRAND generator](architecture/brand-generator.md) for identity briefs, theme-backed JSON brand tokens, SVG mark directions, CLI/MCP and tested exclusive local export. Visual and trademark review remain open.
 - Added [G2.3 THEME generator](architecture/theme-generator.md) with JSON design tokens, CSS light/dark overrides, checked sRGB contrast ratios, four palettes, optional hex accent, CLI/MCP, and exclusive export; browser WCAG conformance remains unverified.
 - Added [G2.2 DESIGN Generator](architecture/design-generator.md) for structured Markdown design specifications and inert self-contained responsive HTML/CSS prototypes, with CLI/MCP entrypoints, validation and optional verified local export. Browser and functional acceptance remain open.

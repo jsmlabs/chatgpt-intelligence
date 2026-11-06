@@ -87,6 +87,15 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## GIF & Motion generator (G3.1)
+
+Generate deterministic JSON frame storyboards and real procedural animated
+GIF89a files with verified frame count, per-frame timing and loop metadata.
+No third-party dependencies, external model calls or video inference.
+[Motion generator documentation](architecture/motion-generator.md).
+
+---
+
 ## BRAND generator (G2.4)
 
 Deterministic brand briefs, G2.3-compatible JSON identity tokens, and static
