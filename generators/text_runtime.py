@@ -181,6 +181,23 @@ def render_markdown(kind: str, request: GenerationRequest) -> str:
             "not a researched or human-approved final deliverable.\n")
 
 
+MODEL_TITLES = {"PROMPT": "Prompt Specification", "CONCEPT": "Concept Brief",
+                "DOCUMENT": "Document Draft"}
+
+
+def _prepare_model_markdown(kind: str, value: str) -> str:
+    """Normalize enclosing Markdown wrappers; preserve strict content checks."""
+    content = value.strip()
+    # Unwrap only one complete fenced Markdown document.
+    opening = re.match(r"^```(?:markdown|md)?[ \t]*\r?\n", content, re.I)
+    if opening and re.search(r"\r?\n```$", content):
+        content = content[opening.end():]
+        content = re.sub(r"\r?\n```$", "", content).strip()
+    if not re.match(r"^#\s+\S", content):
+        content = "# " + MODEL_TITLES[kind] + "\n\n" + content
+    return content
+
+
 def _check_markdown(content: object) -> dict[str, bool]:
     try:
         size = len(content.encode("utf-8")) if isinstance(content, str) else 0
@@ -318,10 +335,10 @@ class TextRuntime:
                 if not isinstance(model_result.content, str):
                     raise IntelError("MODEL_RESPONSE_INVALID", "Model output must be text")
                 # Model text is untrusted. Append evidence labels deterministically.
-                content = (model_result.content.strip() +
-                    "\\n\\n## Provenance and limitations\\n\\n"
+                content = (_prepare_model_markdown(cap.command, model_result.content) +
+                    "\n\n## Provenance and limitations\n\n"
                     "Model-produced draft; cited sources and factual claims were not independently "
-                    "verified. Structural review does not imply human approval.\\n")
+                    "verified. Structural review does not imply human approval.\n")
                 manifest.provenance.update({
                     "model_provider": model_result.provider,
                     "model_name": model_result.model,
