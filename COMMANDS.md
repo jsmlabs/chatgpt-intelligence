@@ -66,3 +66,15 @@ The independent `/INTEL` convention concerns this **public documentation and UX 
 A Python command parser and contract dispatcher are implemented under [`generators/`](generators/__init__.py). The reference package is **not installed as a ChatGPT-native command**. Existing commands retain their documented purposes; `QUERY`, `RESEARCH`, `DESIGN`, `UI`, `REVIEW`, and `SOURCE` return `HOST_REQUIRED` from the standalone runtime because no ChatGPT host adapter is configured.
 
 `/INTEL GENERATE <TYPE>` recognizes `PROMPT`, `CONCEPT`, `DOCUMENT`, `IMAGE`, `DESIGN`, `THEME`, `BRAND`, `GIF`, `SLIDES`, `DIAGRAM`, `CHART`, `CODE`, `VIDEO`, `AUDIO`, `WORKFLOW`, and `PACK`. All 16 are **planned** and respond `CAPABILITY_UNAVAILABLE`; none produces an artifact yet. Format incompatibilities produce `UNSUPPORTED_FORMAT`. Unknown types produce `UNKNOWN_GENERATOR`. No command grants external actions. See [G0 runtime contracts](architecture/generator-foundation.md).
+
+## G1 local text MVP
+
+The [G1 local runtime](architecture/text-runtime.md) implements `/INTEL GENERATE PROMPT`, `CONCEPT`, and `DOCUMENT` as **deterministic Markdown templates** in Python. These are available from the local Python API and `python -m generators` CLI, not as native ChatGPT slash commands. The other 13 generator categories remain planned. Source references are never fetched automatically and no model-backed generation, PDF/DOCX export, or publishing is advertised.
+
+Example (no file output):
+
+```bash
+python -m generators prompt --objective "Create a secure code review prompt" --audience "Engineers" --authorize-create
+```
+
+`--authorize-create` is explicit local CLI authority; a prompt or source cannot supply this permission. Use `--export-root <existing-directory> --filename <new-name>.md` for verified exclusive Markdown file creation. Existing legacy commands are unchanged and still require a configured ChatGPT host for research/query execution.

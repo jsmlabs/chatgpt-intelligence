@@ -36,3 +36,7 @@ We aim for explanations anyone can follow, without sacrificing technical accurac
 - Use synthetic tests in `tests/test_generators.py`. A mock passing is not evidence that any external tool is operational.
 - Do not introduce provider endpoints, publishing, API keys or generated artifacts during G0.
 - [Runtime contract](architecture/generator-foundation.md) and [roadmap](GENERATOR-ROADMAP.md) are the sources of truth.
+
+## G1 developer workflow
+
+For text-generation changes, extend [the local runtime](architecture/text-runtime.md) and add cases to [G1 tests](tests/test_text_runtime.py). Preserve the G0 `Coordinator` contract, do not treat untrusted user content as authorization, and distinguish structural validation from human review or model verification. Check the exact commit in GitHub Actions before claiming CI passed. Do not add model providers without a verified host adapter and explicit side-effect permissions.

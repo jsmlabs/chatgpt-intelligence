@@ -231,3 +231,7 @@ Re-use existing domains for explanatory guidance:
 ## G0 implementation status (2026-11-06)
 
 The `generators/` Python reference runtime now implements deterministic parsing, the 16-entry planned registry, deny-by-default permission/tool contracts, and guarded artifact state transitions. **No creative generator, real provider adapter, native ChatGPT slash command, persistent artifact writer or external integration is available.** `/INTEL GENERATE <TYPE>` returns `CAPABILITY_UNAVAILABLE` for planned generators; legacy interactive operations still require a host integration. See [architecture](architecture/generator-foundation.md) and [tests](tests/test_generators.py). The original documentation project and its seven domains are unchanged. This implementation is not certification of G1.
+
+## G1 implementation checkpoint (2026-11-06)
+
+A local Python text-first runtime has been added for `PROMPT`, `CONCEPT`, and `DOCUMENT` with deterministic templates, request validation, explicit local creation permission, reviewed draft manifests, revisions and verified Markdown export. All other generators remain planned. This is a **local reference MVP**, not a model-backed ChatGPT native integration. Source verification and human editorial review remain not run. See [runtime architecture](architecture/text-runtime.md) and [G1 tests](tests/test_text_runtime.py). G1 external-tool and client acceptance criteria are **not yet certified**.

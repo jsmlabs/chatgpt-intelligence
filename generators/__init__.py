@@ -13,3 +13,7 @@ __all__ = [
     "parse_command", "safe_relative_path", "verify_file", "ArtifactManifest",
     "ArtifactState", "GenerationRequest",
 ]
+
+from .text_runtime import TextRuntime, text_registry, validate_request, render_markdown
+
+__all__ += ["TextRuntime", "text_registry", "validate_request", "render_markdown"]
