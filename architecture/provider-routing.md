@@ -109,3 +109,26 @@ user-reported as passed. A full three-generator live smoke test on a *single*
 G1.8.2 revision, independent content review and actual ChatGPT-host connection
 remain unverified. No separate OpenAI API call or billable grant was needed
 for the reported Ollama verifier.
+
+## Full three-generator local live acceptance (2026-11-06)
+
+The operator supplied another Windows PowerShell 5.1 terminal transcript after
+a fast-forward pull from `f5a9b67` to
+`94eb43de04a3ef8c0807afaf0889587567ac0bdd`. The transcript reports:
+
+```powershell
+$env:INTEL_OLLAMA_MODEL = "gemma3:4b"
+python -m scripts.verify_ollama_live --authorize-local-inference --types PROMPT CONCEPT DOCUMENT --model-timeout 120 --model-max-output-tokens 4096
+```
+
+- Report-level `status: PASSED`, `local_model_attempted: true`.
+- `PROMPT`, `CONCEPT` and `DOCUMENT`: each `status: PASSED`,
+  `provider: ollama-local`, `state: reviewed`,
+  `structurally_valid: true`, `balanced_code_fences: true`.
+- All three: `human_reviewed: false`, `source_verified: false`.
+
+**Evidence classification:** User-reported local end-to-end output, not an
+independently accessed host log. This supersedes the earlier open full-suite
+G1.8.2 live-acceptance item. No billable API grant was used by this verifier.
+A native ChatGPT-host integration, independent content review and the
+repository's existing release gates remain outstanding.
