@@ -18,3 +18,7 @@ New here? Start with the [project overview](README.md), then choose one of the [
 - **How do we check quality?** Go to [Quality](quality/quality-standards.md).
 
 This repository is documentation, **not** an installed ChatGPT plugin, an active memory synchronization service, or a model control system.
+
+## Optional local CLI setup
+
+If you are using the offline-first Python generator runtime, begin with `python intel.py setup` for a read-only preview, then run `python intel.py setup --apply` to initialize language preferences. Use `python intel.py config validate` and `python intel.py config show` to diagnose settings. On Windows, `intel.cmd` forwards the same commands. [Configuration and safe import/export](architecture/local-configuration.md).

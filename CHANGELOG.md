@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - phase 03 configuration and setup
+
+- Added versioned, allowlisted language preferences with CLI > environment > user file > default precedence, legacy language-only migration and explicit validation.
+- Added read-only setup preview, idempotent `setup --apply`, import preview/explicit apply, and exclusive secret-free configuration export.
+- Rejected unknown/secret fields, duplicate keys, unsafe symlinks, oversized payloads and invalid schema versions; added offline tests and recovery guidance.
+- Preserved generator and MCP permission contracts; no network, external provider calls or implicit installation.
+
 ## Unreleased - phase 02 terminal UI and localization
 
 - Added centralized dependency-free terminal renderer with semantic markers, width handling, Windows VT detection and plain-text fallback.
