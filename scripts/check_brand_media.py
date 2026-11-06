@@ -61,9 +61,15 @@ def svg_dimensions(data: bytes) -> tuple[int, int]:
     root = ET.fromstring(data)
     if root.tag != SVG_TAG:
         raise ValueError("invalid SVG root")
-    if any(element.tag == "{http://www.w3.org/2000/svg}script"
-           for element in root.iter()):
-        raise ValueError("embedded SVG script is prohibited")
+    for element in root.iter():
+        if element.tag == "{http://www.w3.org/2000/svg}script":
+            raise ValueError("embedded SVG script is prohibited")
+        for key, value in element.attrib.items():
+            local = key.rsplit("}", 1)[-1].lower()
+            if local.startswith("on"):
+                raise ValueError("SVG event-handler attribute is prohibited")
+            if local in {"href", "src"} and value.strip() and not value.strip().startswith("#"):
+                raise ValueError("external SVG resource reference is prohibited")
     try:
         return int(root.attrib["width"]), int(root.attrib["height"])
     except (KeyError, ValueError) as exc:
@@ -111,7 +117,10 @@ def verify(directory: Path) -> tuple[dict[str, int], list[str]]:
                 parser.feed(data.decode("utf-8"))
                 for ref in parser.paths:
                     url = urlsplit(ref)
-                    if url.scheme or ref.startswith("//") or not url.path:
+                    if url.scheme or ref.startswith("//"):
+                        errors.append(f"{name}: external or executable HTML resource: {ref}")
+                        continue
+                    if not url.path:
                         continue
                     target = (file.parent / unquote(url.path)).resolve()
                     if not target.is_relative_to(directory) or not target.is_file():
