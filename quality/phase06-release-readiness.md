@@ -30,6 +30,9 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 - Brand artwork is an independent project identity, not an official ChatGPT theme or interface.
 - Existing test results are commit-specific; do not automatically extend them to future changes.
 
+## Automated release gate
+A [strict structural release readiness checker](../scripts/check_release.py), [machine-readable evidence ledger](release-evidence.json), and [verification record](release-gate-verification.md) now exist. The strict command currently reports **five unmet conditions**. In routine development CI it runs in report-only mode; green CI is not release approval. Human attestation references must be independently inspected before any release.
+
 ## Release decision
 **Blocked for a complete Phase 06 release.** The repository is useful as scoped documentation, but the final release gate depends on missing asset publication, observed fresh-chat tests, runtime UI assessment and independent review. No version tag, release object or other publication action is authorized by this review alone.
 
