@@ -19,6 +19,8 @@ jobs:
           python-version: "3.11"
       - name: Run regression tests
         run: python -m unittest discover -s tests -v
+      - name: Scan tracked public text for credential signatures
+        run: python scripts/check_publication_safety.py --root .
       - name: Check documentation
         run: python scripts/check_docs.py --root .
       - name: Enforce release evidence and branding checks
