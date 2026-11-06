@@ -13,7 +13,7 @@ The original package includes 56 payload files recorded in its `MANIFEST.json`, 
 - `asset-contact-sheet.png` - design overview
 
 ## Publication status
-**The archive was validated locally, but binary files are not yet published to GitHub through this documentation connector.** Do not treat listed asset paths as published until directly verified on `main`.
+**The archive was validated locally. The brand guidelines and design tokens are published; the complete binary artwork is not yet published through this connector.** Do not treat listed asset paths as published until directly verified on `main`.
 
 The original package `README.md` must be stored here, **never replace the root repository README**. All assets should retain their exact relative names and bytes in this subdirectory. The design is intentionally ChatGPT-like, not an official OpenAI interface or official brand.
 
