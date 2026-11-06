@@ -9,7 +9,7 @@ classification: experimental
 # Phase 06 - Release Readiness Review
 
 ## Scope
-Pre-release review of the public documentation repository as of 2026-11-06. This record is not a release approval or a claim of independently verified ChatGPT activation.
+Scoped review of the public documentation repository as of 2026-11-06. The [documentation phase closeout](project-closeout.md) marks the *review deliverable* complete; this report retains the separate **formal release not approved** decision. It is not evidence of independently verified ChatGPT activation.
 
 ## Verified findings
 | Area | Status | Evidence and limitation |
@@ -40,9 +40,9 @@ A [strict structural release readiness checker](../scripts/check_release.py), [m
 The [scoped editorial review](editorial-source-review.md) identifies an open naming/trademark question under [OpenAI Design Guidelines](https://openai.com/brand/). The project's name should not be assumed cleared for a marketed app, plugin or product merely because it is used in a documentation repository. The project owner must make an informed naming decision after appropriate review; no automatic rename or release approval is implied.
 
 ## Release decision
-**Blocked for a complete Phase 06 release.** The repository is useful as scoped documentation, but the final release gate depends on observed fresh-chat tests, runtime UI assessment, comprehensive brand visual approval, and independent review. No version tag, release object or other publication action is authorized by this review alone.
+**Documentation review deliverable: complete (scoped). Formal product or tagged release: deferred / not approved.** The repository is useful as maintained public documentation, but a separately requested formal release would depend on observed fresh-chat tests, runtime UI assessment, comprehensive brand visual approval, and independent review. No version tag, release object or other publication action is authorized by this review alone.
 
-## Required next actions
+## Optional actions if a formal release is later requested
 1. **Completed:** Publish and verify the original 57 branding files, including the 56 manifest checks and published CI evidence. Comprehensive independent visual approval remains open.
 2. Execute the [12 fresh-chat cases](intel-end-to-end-tests.md) with exact source revision, evidence and outcome for each.
 3. Verify Intelligent UI presentation and fallback in the target ChatGPT client.
