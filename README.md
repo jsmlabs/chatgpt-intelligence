@@ -47,6 +47,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
+| [Local Verifier Execution](quality/local-verifier-execution.md) | Eight locally executed tests and explicit limitations |
 | [Automated Quality Checks](.github/workflows/docs-quality.yml) | Documentation CI and regression tests |
 | [Verifier Regression Tests](tests/test_quality_scripts.py) | Deterministic tests for link and archive verification |
 | [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
