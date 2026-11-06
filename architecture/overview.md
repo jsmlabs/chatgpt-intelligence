@@ -29,6 +29,10 @@ A readable map of how the project's **seven knowledge areas** connect. This is a
 6. [Documentation contracts](documentation-contracts.md) - naming, metadata, and ownership.
 7. [ChatGPT compatibility](chatgpt-compatibility.md) - version and evidence boundaries.
 
+## Conversational use
+- [Activation and source resolution](activation-and-source-resolution.md) - the proposed `/INTEL` contract and evidence gates.
+- [Command reference](../COMMANDS.md) - user-facing command grammar.
+
 ## Verification and delivery
 - [Quality standards](../quality/quality-standards.md)
 - [Foundation verification](../quality/foundation-verification.md)
