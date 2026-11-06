@@ -1,26 +1,57 @@
 #Requires -Version 5.1
 [CmdletBinding()]
 param(
-    [ValidateSet('Start','Status','Doctor','Test','Ollama')][string]$Action='Start',
+    [ValidateSet('Start','Status','Doctor','Test','Ollama','Locate')][string]$Action='Start',
     [string]$Profile='chatgpt-intelligence',
     [string]$TunnelClient=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 function ClientPath {
-    if ($TunnelClient) { $path=$TunnelClient }
-    elseif ($env:INTEL_TUNNEL_CLIENT) { $path=$env:INTEL_TUNNEL_CLIENT }
-    else {
-        $found=Get-Command tunnel-client.exe -ErrorAction SilentlyContinue
-        if ($found) { return $found.Source }
-        $found=Get-ChildItem -LiteralPath (Join-Path $env:USERPROFILE 'Downloads') -Filter tunnel-client.exe -Recurse -File -ErrorAction SilentlyContinue |
-          Where-Object { $_.FullName -match 'tunnel-client-v[0-9].*-windows-amd64' } |
-          Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($found) { return $found.FullName }
-        throw 'tunnel-client.exe not found. Download it or set INTEL_TUNNEL_CLIENT.'
+    $explicitPath = $null
+    if (-not [string]::IsNullOrWhiteSpace($TunnelClient)) {
+        $explicitPath = $TunnelClient
     }
-    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw 'Tunnel client executable not found.' }
-    return (Resolve-Path -LiteralPath $path).Path
+    elseif (-not [string]::IsNullOrWhiteSpace($env:INTEL_TUNNEL_CLIENT)) {
+        $explicitPath = $env:INTEL_TUNNEL_CLIENT
+    }
+    if ($explicitPath) {
+        if (-not (Test-Path -LiteralPath $explicitPath -PathType Leaf)) {
+            throw "Tunnel executable does not exist at: $explicitPath"
+        }
+        return (Resolve-Path -LiteralPath $explicitPath).Path
+    }
+
+    $command = Get-Command tunnel-client.exe -ErrorAction SilentlyContinue
+    if ($command -and (Test-Path -LiteralPath $command.Source -PathType Leaf)) {
+        return $command.Source
+    }
+
+    $downloads = Join-Path $env:USERPROFILE 'Downloads'
+    $specific = Join-Path $downloads 'tunnel-client-v0.0.19-windows-amd64\tunnel-client.exe'
+    if (Test-Path -LiteralPath $specific -PathType Leaf) {
+        return (Resolve-Path -LiteralPath $specific).Path
+    }
+
+    if (Test-Path -LiteralPath $downloads -PathType Container) {
+        $versions = @(Get-ChildItem -LiteralPath $downloads -Directory -Filter 'tunnel-client-v*-windows-amd64' -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending)
+        foreach ($dir in $versions) {
+            $candidate = Join-Path $dir.FullName 'tunnel-client.exe'
+            if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                return (Resolve-Path -LiteralPath $candidate).Path
+            }
+        }
+        $nested = @(Get-ChildItem -LiteralPath $downloads -File -Recurse -Filter 'tunnel-client.exe' -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending)
+        foreach ($file in $nested) {
+            if (Test-Path -LiteralPath $file.FullName -PathType Leaf) {
+                return $file.FullName
+            }
+        }
+    }
+
+    throw 'tunnel-client.exe not found. Use -Action Locate to diagnose or supply -TunnelClient with the full executable path.'
 }
 function IsHealthy([string]$endpoint,[string]$expected) {
     try {
@@ -51,6 +82,12 @@ $prior=Get-Location
 try {
     Set-Location -LiteralPath $root
     switch ($Action) {
+        'Locate' {
+            $located = ClientPath
+            Write-Host "Tunnel client: $located"
+            & $located --version
+            if ($LASTEXITCODE -ne 0) { throw "Tunnel executable failed with exit code $LASTEXITCODE" }
+        }
         'Status' {
             $live=IsHealthy '/healthz' 'live'
             $ready=IsHealthy '/readyz' 'ready'
