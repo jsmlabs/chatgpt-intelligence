@@ -26,10 +26,14 @@ sets the working directory to the repository root, runs `doctor` and starts
 the foreground tunnel client. Keep the terminal open, and press **Ctrl+C**
 to stop. No background service, scheduled task, or restart policy is created.
 
-**Runtime API key:** If `CONTROL_PLANE_API_KEY` is not already set, the
-launcher prompts with masked input and removes its temporary environment
-variable when the action ends. No key or tunnel ID is saved in repository
-files. For a custom executable path, pass `-TunnelClient "C:\path\tunnel-client.exe"`
+**Runtime API key:** The launcher first uses `CONTROL_PLANE_API_KEY` if
+already set. Otherwise it reads a single-line restricted runtime secret from
+`%USERPROFILE%\\Desktop\\tunnel-client\\key.txt` (or the Windows redirected
+Desktop equivalent). If the file is absent, it prompts with masked input.
+A malformed or empty existing file **blocks startup** rather than falling back
+silently. The secret is never printed or committed, and a temporary
+environment variable is removed when the action ends. No key or tunnel ID
+is saved in repository files. For a custom executable path, pass `-TunnelClient "C:\path\tunnel-client.exe"`
 or set `INTEL_TUNNEL_CLIENT`. Existing session credentials are preserved.
 Use a restricted Tunnels Read + Use runtime key, not an admin key.
 
@@ -46,3 +50,22 @@ API or tunnel. **Ollama** lists local models; it is not needed for ChatGPT's
 Prerequisite: the profile and private tunnel have already been configured as
 described in [ChatGPT MCP host integration](chatgpt-host-integration.md).
 The separate chatgpt-context tunnel is not modified.
+
+## Local key-file protection
+
+A plaintext key file is convenient but can be read by other principals with
+filesystem access, malware, and potentially desktop-sync/backup software.
+Use a **restricted Tunnels Read + Use key**, never an administrator or model
+API key. Do not include `key.txt` in this repository. Limit file permissions
+to the Windows user, for example from an elevated/trusted local terminal:
+
+```powershell
+$keyFile = Join-Path $env:USERPROFILE 'Desktop\tunnel-client\key.txt'
+icacls $keyFile
+```
+
+Review the listed ACL before modifying it. Prefer a credential manager or
+DPAPI-backed secret for stronger at-rest protection; the requested key-file
+mode deliberately uses plaintext. Key rotation still requires updating
+the local file. Keep the file to **one line**, containing only the full secret
+starting with `sk-`, without quotes or additional labels.
