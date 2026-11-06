@@ -14,6 +14,9 @@ Publish the complete original 56-file branded asset package and its manifest und
 ## Source
 Uploaded archive `chatgpt-intelligence-brand-final-v1.4(1).zip`. The verified collision-safe import archive stores the original package under `branding/v1.4/`. Earlier draft archives used `branding/` directly; do not extract those over the current checkout. The original manifest covers 56 files plus `MANIFEST.json`.
 
+## Current publication status
+The 57 original files have been published under `branding/v1.4/` and verified by exact Git blob comparison and a successful GitHub Actions manifest check. See [publication verification](../quality/branding-publication-verification.md). **Do not rerun the no-overwrite installer against a checkout that already contains `branding/v1.4/`.** The steps below apply only to a fresh checkout or a future reimport where the destination is genuinely absent.
+
 ## Controlled installation
 1. Inspect current `main` and preserve unrelated changes.
 2. Compare the existing `branding/README.md`, `BRAND-GUIDELINES.md`, and `design-system/` files with the original ZIP. Some were previously edited separately.
@@ -37,7 +40,7 @@ git diff --cached --stat
 **Important:** `git diff` alone does not verify local ZIP installation. Check actual file paths and hashes first. Previously passed checks should not be rerun without cause.
 
 ## Status
-Original archive and collision-safe import verification: **passed locally, 56/56 checks and 57 original files**. Installer and regression test cases: **published but not yet executed against the exact GitHub checkout**. Remote binary upload: **not completed**. Current GitHub text writes cannot substitute for binary publication. The branded HTML preview is a static demonstration, not a native ChatGPT theme.
+Original archive verification: **passed, 57/57 published files exactly match the source archive**. GitHub Actions manifest verification: **56/56 passed**. Installer regression tests: **passed in CI**. Local isolated importer validation: **passed**. The deployed repository contents were verified directly; the importer itself was not run against the complete existing checkout because it correctly refuses to overwrite an already present destination. The branded HTML preview is a static demonstration, not a native ChatGPT theme.
 
 ## Acceptance
 The final GitHub revision contains the original 57 files under `branding/v1.4/` with validated bytes, no unintended overwrites, documented attribution, and successful image/preview inspection.
