@@ -19,7 +19,7 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Relative Markdown links | passed | Same run: 59 Markdown files, 346 links, 0 errors |
 | Documentation CI after the security changes | passed | [GitHub Actions run for commit `be5a386`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806) completed successfully; later documentation-only commits need their own checks |
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
-| Branding assets on `main` | blocked | Git tree contains no `branding/v1.4/` entries; GitHub Actions correctly skips remote manifest check |
+| Branding assets on `main` | blocked | The latest observed tree contains only a one-byte `branding/v1.4/files` placeholder and no `MANIFEST.json`; GitHub Actions correctly skips remote manifest check |
 | Fresh-chat `/INTEL` activation | not-run | Activation instructions and source retrieval exist, but no fresh-chat execution evidence |
 | Live Intelligent UI and fallback | not-run | Design patterns documented; runtime client verification not recorded |
 | Independent editorial and privacy review | not-run | Internal documented checks are not an independent external review |
