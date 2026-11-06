@@ -34,3 +34,23 @@ This article presents an **original project method**, not a verified description
 
 ## Related reading
 [Compatibility](../architecture/chatgpt-compatibility.md) and [Context selection](../context-engineering/context-selection.md).
+
+## Memory versus preferences versus instructions
+| Item | Role | Example |
+| --- | --- | --- |
+| Current request | Task-specific user direction | "Explain this in depth" |
+| Preference | Potentially reusable style or behavior guidance | "Prefer short headings" |
+| Memory | Product-managed context that may be reused | A relevant prior project decision |
+| Repository note | Documentation only | A proposed memory consistency model |
+
+## Product boundary and user control
+Actual ChatGPT memory behavior and controls are product-managed. Do not assume an old per-item memory interface or that a repository commit changes a user's memory. For current controls, verify the applicable [OpenAI Help Center](https://help.openai.com/) memory guidance before publishing step-by-step instructions.
+
+## Example: a conflict
+Earlier preference: "Keep answers short." Current request: "Write a complete 10-page specification." The current request sets the task scope; the previous preference can still inform readability. A memory entry is not permission to publish private details.
+
+## Privacy review
+Before recording an example, remove real identities, medical details, credentials, and private conversation excerpts. Prefer fictional examples. Treat inferred user traits as hypotheses, not confirmed long-term facts.
+
+## Evaluation scenario
+Provide a past preference plus a newer conflicting request. A satisfactory response follows the present request, retains nonconflicting preferences, and does not claim to have changed underlying product memory.
