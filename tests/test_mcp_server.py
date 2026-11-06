@@ -175,6 +175,29 @@ class MCPProcessTests(unittest.TestCase):
         self.assertIn("Prompt Specification", replies[1]["result"]["content"][0]["text"])
         self.assertEqual(replies[1]["result"]["structuredContent"]["state"], "reviewed")
 
+    def test_real_stdio_host_submissions_without_paid_provider(self):
+        messages = [rpc("initialize")]
+        for index, name in enumerate(("submit_prompt_draft", "submit_concept_draft",
+                                      "submit_document_draft"), start=2):
+            messages.append(rpc("tools/call", request_id=index, params={
+                "name": name, "arguments": {
+                    "objective": "Draft a local test",
+                    "content": "# Host draft\n\n## Details\n\nLocal text."}}))
+        proc = subprocess.run(
+            [sys.executable, "-m", "generators.mcp_server", "--allow-create"],
+            input="\n".join(json.dumps(x) for x in messages) + "\n",
+            capture_output=True, text=True, timeout=10, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stderr, "")
+        records = [json.loads(x) for x in proc.stdout.splitlines()]
+        self.assertEqual(len(records), 4)
+        for record in records[1:]:
+            self.assertFalse(record["result"]["isError"], record)
+            details = record["result"]["structuredContent"]
+            self.assertEqual(details["state"], "reviewed")
+            self.assertEqual(details["verification"]["llm_generation"], "not_attested")
+            self.assertEqual(details["provenance"]["model_provider"], "not-attested")
+
     def test_live_verifier_blocks_without_auth_or_credentials(self):
         env = dict(os.environ)
         env.pop("OPENAI_API_KEY", None)

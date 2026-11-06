@@ -259,3 +259,13 @@ not a fresh live run against G1.8.2. Local PROMPT and DOCUMENT live runs remain
 unverified. A separate proposed [G1.9 ChatGPT-host feasibility milestone]
 (architecture/chatgpt-host-integration.md) must prove actual client support
 before `chatgpt-host` is marked operational.
+
+## G1.9 MCP host-handoff checkpoint (2026-11-06)
+
+Three additive MCP `submit_*_draft` tools accept client-authored Markdown,
+apply G0 permission and artifact contracts and return structurally reviewed
+in-memory content. Their provenance is not independently attested.
+The local stdio verifier exercises the transport without an external model
+or paid provider. Actual ChatGPT client plugin connection through a supported
+custom MCP setup/tunnel remains unverified. See
+[G1.9 integration](architecture/chatgpt-host-integration.md).

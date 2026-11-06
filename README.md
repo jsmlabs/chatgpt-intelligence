@@ -79,6 +79,17 @@ python -m generators prompt --objective "Draft a checklist" --authorize-create
 
 ---
 
+## ChatGPT client handoff (G1.9)
+
+The local MCP stdio host accepts client-authored Markdown via three
+`submit_*_draft` tools without an additional billable model API.
+Connecting a real ChatGPT client requires an authorized custom MCP plugin
+and Secure MCP Tunnel or remote endpoint; installation is not automatic.
+
+[ChatGPT host integration setup](architecture/chatgpt-host-integration.md)
+
+---
+
 ## Design principles
 
 The reference architecture follows a simple sequence:

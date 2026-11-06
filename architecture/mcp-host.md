@@ -77,3 +77,12 @@ The proposed ChatGPT client-host bridge is a **separate milestone**, not an
 implementation or availability claim for the `chatgpt-host` provider. See
 [host integration design](chatgpt-host-integration.md). Local MCP stdio
 transport alone is not proof of native ChatGPT connectivity.
+
+## G1.9 ChatGPT client-handoff tools
+
+Three additive stdio MCP tools `submit_prompt_draft`,
+`submit_concept_draft` and `submit_document_draft` validate drafts
+supplied by the calling client. They require a trusted `--allow-create`
+startup permission, use no model API and record `not-attested` model origin.
+The stdio maximum input line is now 128 KiB for bounded Markdown submissions.
+See [G1.9 handoff](chatgpt-host-integration.md).

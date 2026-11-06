@@ -108,7 +108,10 @@ class MCPHost:
                  "inputSchema": INPUT_SCHEMA} for name in TOOL_TYPES
             ] + [
                 {"name": name, "description": DESCRIPTION[name],
-                 "inputSchema": SUBMIT_SCHEMA} for name in SUBMIT_TYPES
+                 "inputSchema": SUBMIT_SCHEMA,
+                 "annotations": {"readOnlyHint": False, "destructiveHint": False,
+                                 "idempotentHint": False, "openWorldHint": False}}
+                for name in SUBMIT_TYPES
             ]})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
