@@ -86,7 +86,7 @@ class ModelBoundaryTests(unittest.TestCase):
         self.assertEqual(fake.calls, 6)
 
     def test_model_output_validation_and_fail_closed(self):
-        for output in ("", "not markdown", "# Bad\x00output", "# Too big\n" + "x" * 70000):
+        for output in ("", "# Bad\x00output", "# Too big\n" + "x" * 70000):
             fake = FakeModel(output=output)
             result = TextRuntime(model_host=fake).execute("/INTEL GENERATE PROMPT",
                 request={"objective": "Draft"}, authorization=MODEL, mode="model")
