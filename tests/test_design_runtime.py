@@ -74,7 +74,7 @@ class DesignTests(unittest.TestCase):
         result = self.runtime.execute("/INTEL GENERATE DESIGN",
              request={"objective": "dashboard"}, authorization=Authorization())
         self.assertEqual(result["error"]["code"], "PERMISSION_DENIED")
-         result = self.runtime.execute("/INTEL GENERATE DESIGN",
+        result = self.runtime.execute("/INTEL GENERATE DESIGN",
             request={"objective": "dashboard"}, authorization=CREATE, provider="openai-api")
         self.assertEqual(result["error"]["code"], "CAPABILITY_UNAVAILABLE")
 
