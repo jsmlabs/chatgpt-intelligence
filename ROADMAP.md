@@ -76,7 +76,7 @@ Initial deliverables: [response-pattern evaluation rubric](quality/pattern-evalu
 **Acceptance:** Test outcomes have evidence, dates, scope, and exact statuses; proposed evaluation methods are never reported as executed tests.
 
 ## Phase 06 - Review & Release
-The [initial release-readiness review](quality/phase06-release-readiness.md) and [release-gate verification](quality/release-gate-verification.md) document verified documentation CI, asset-publication gaps and unexecuted client acceptance cases. The strict release command is `python scripts/check_release.py --root .`; it currently reports five blockers. **Status: In progress; full release blocked.** Review navigation, clarity, source freshness, privacy, metadata, changelog, and release readiness.
+The [initial release-readiness review](quality/phase06-release-readiness.md) and [release-gate verification](quality/release-gate-verification.md) document verified documentation CI, asset-publication gaps and unexecuted client acceptance cases. The strict release command is `python scripts/check_release.py --root .`; it currently reports five blockers. A [manual Release Readiness workflow](.github/workflows/release-readiness.yml) enforces this strict check when explicitly dispatched; routine development CI remains independent. **Status: In progress; full release blocked.** Review navigation, clarity, source freshness, privacy, metadata, changelog, and release readiness.
 
 **Acceptance:** Review findings resolved or explicitly documented; a stable release only with authorization and appropriate verification.
 
