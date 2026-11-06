@@ -80,6 +80,32 @@ class BrandMediaChecks(unittest.TestCase):
         self.save()
         self.assertTrue(any("script" in issue for issue in MEDIA.verify(self.root)[1]))
 
+    def test_svg_event_handler_rejected(self):
+        self.assets["icons/icon.svg"] = (
+            b'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" '
+            b'onload="alert(1)"></svg>'
+        )
+        self.save()
+        self.assertTrue(any("event-handler" in issue for issue in MEDIA.verify(self.root)[1]))
+
+    def test_svg_external_resource_rejected(self):
+        self.assets["icons/icon.svg"] = (
+            b'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">'
+            b'<image href="https://example.test/payload.png"/></svg>'
+        )
+        self.save()
+        self.assertTrue(any("external SVG" in issue for issue in MEDIA.verify(self.root)[1]))
+
+    def test_html_remote_resource_rejected(self):
+        self.assets["showcase.html"] = b'<img src="https://example.test/external.png">'
+        self.save()
+        self.assertTrue(any("external or executable HTML" in issue for issue in MEDIA.verify(self.root)[1]))
+
+    def test_html_script_protocol_rejected(self):
+        self.assets["showcase.html"] = b'<img src="javascript:alert(1)">'
+        self.save()
+        self.assertTrue(any("external or executable HTML" in issue for issue in MEDIA.verify(self.root)[1]))
+
     def test_png_svg_dimension_mismatch(self):
         self.assets["icons/icon.png"] = png(width=32)
         self.save()
