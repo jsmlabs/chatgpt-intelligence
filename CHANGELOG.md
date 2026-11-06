@@ -4,6 +4,9 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Phase 04: [prompt patterns](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [INTEL conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
+- [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md) and [branding installation guide](guides/branding-integration.md).
+- [Brand manifest verification script](scripts/verify_branding.py) for exact local SHA-256 checks.
 - Documented the proposed [ChatGPT `/INTEL` activation convention](COMMANDS.md), source-resolution boundaries, setup guide, and paste-ready activation instructions.
 - Integrated [brand v1.4 guidance](branding/BRAND-GUIDELINES.md), [tokens](branding/design-system/tokens.json), [CSS variables](branding/design-system/theme-tokens.css), and explicit binary-publication status.
 - Expanded seven Phase 03 domain articles with practical workflows, examples, decision checklists, limitations, and evaluation exercises.
@@ -19,6 +22,8 @@ This file records meaningful documentation changes. A proposed design or documen
 - Version-aware compatibility guidance distinguishing verified product capabilities, proposed designs, and experimental observations.
 
 ### Changed
+- Recorded binary branding publication and fresh-chat activation as open verification gates, rather than completed integrations.
+- Advanced Phase 04 to completed documentation scope; Phase 05 evaluation remains pending.
 - Clarified that the repository supports an opt-in ChatGPT usage convention, not an automatically registered slash command or native theme.
 - Aligned Phase 03 roadmap status and README navigation with scoped completion.
 - Updated Intelligent UI reference to the accessible official GPT-6 model guide.
