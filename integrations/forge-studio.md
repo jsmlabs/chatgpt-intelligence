@@ -44,20 +44,24 @@ Forge Studio 3.1.0 ships an MCP bridge and synthetic subprocess protocol tests. 
 
 See [MCP host](../architecture/mcp-host.md), [host integration](../architecture/chatgpt-host-integration.md), and [source resolution](../architecture/activation-and-source-resolution.md).
 
-## Forge Studio v3.2 release candidate - live connectivity and reliability
+## Forge Studio v3.2 - published reliability upgrade
 
-**Status (2026-11-06):** v3.2 is a locally tested candidate, not a published Forge Studio release. The current published plugin remains v3.1.0 until all release gates pass.
+**Status (2026-11-06):** Forge Studio 3.2.0 is published and verified by plugin-release read-back. The existing 29 skill identities and four CLI entrypoints remain stable; the MCP client adds `--require-tool` as a backwards-compatible option.
 
-The candidate tightens the existing opt-in MCP client without adding remote, billable, ComfyUI or shell permissions:
+The improved bridge sends `notifications/initialized` before discovery, validates protocol IDs and the declared host identity, enforces bounded JSON frames, rejects duplicate/invalid tool inventories, and reports structured timeout, transport and capability failures. The local child process still requires explicit `--execute`, forwards only the `--allow-create` grant, and remains **not a sandbox**.
 
-- Sends `notifications/initialized` before tool discovery and validates MCP protocol, IDs, server identity and result structure.
-- Enforces bounded JSON arguments, frames and inventory; rejects duplicate tool declarations and unavailable tools.
-- Adds repeatable `--require-tool` fail-closed discovery checks and stable error codes for transport, protocol, timeout and permission-related failures.
-- Limits local subprocess duration to 1-120 seconds; no checkout code runs without `--execute`.
-- Keeps the ChatGPT connector path independent from the local stdio path and records evidence tiers distinctly.
+**Verification evidence:**
 
-**Actual evidence:** The v3.2 Forge Studio candidate passed its local 58-test suite, CLI compatibility and structural package checks. A connected ChatGPT Intelligence `generate_prompt` call returned a structurally validated offline draft, demonstrating that the tool was reachable in the invoking session. This is **not** proof of a Forge CLI subprocess executing the current GitHub checkout. The added `tests/test_forge_interop.py` invokes the real local Intelligence MCP host in GitHub CI with an offline template request and verifies that model mode without external/billable grants is denied.
+- Forge Studio: 58/58 local Python tests passed both in the working distribution and independently after extracting the release ZIP; CLI compatibility and structural release checks passed.
+- GitHub Intelligence: [Documentation Quality run 42291594097](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42291594097) completed successfully at commit `954410e9c70ee0af7e68b0287f69876815ab4699`, including the complete repository unittest suite, documentation, privacy scan and media checks.
+- Real Intelligence host: `tests/test_forge_interop.py` exercises a genuine local MCP process with handshake, discovery, an offline template artifact and a denied billable mode, as part of repository CI.
+- ChatGPT client: a connected `ChatGPT_Intelligence.generate_prompt` tool call succeeded in the integration conversation with `structural_validation: passed`. This confirms that individual connector call, not permanent tunnel availability or model-provenance attestation.
+- Plugin platform: current release `3.2.0`, 29 skills and revised CLI contract were read back after publication.
 
-**Release blocker:** GitHub Actions run [42291154597](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42291154597) failed in the complete regression suite because seven `tests/test_configuration_setup.py` cases failed. The log does not attribute those failures to the new MCP integration test, but a green whole-repository gate is absent. No overall passing CI or v3.2 production certification is claimed.
+**Remaining independent acceptance:** Forge Studio's own CLI has not been executed against a complete real Intelligence checkout inside the user's local operating system. No automatic remote installation, continuous service connectivity, unrestricted local code isolation or production security certification is claimed. Local operator acceptance can use:
 
-**Acceptance still required:** Fix and verify the seven configuration-CLI failures without weakening tests, re-run the full workflow on the final revision, execute the Forge CLI against an actual trusted checkout if operator access permits, then publish and read back the Forge Studio release. Preserve both projects' independent authorization and provenance boundaries.
+```sh
+python scripts/forge_intelligence.py /trusted/chatgpt-intelligence --execute --require-tool generate_prompt --tool generate_prompt --arguments '{"objective":"Offline local acceptance","provider":"template"}'
+```
+
+See the published [Forge Studio plugin](https://chatgpt.com/plugins/Plugin_073c7872c6a4819184b4ee75669ab6ac) and its `references/bridge-reliability.md` for the detailed contract.
