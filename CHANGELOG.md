@@ -4,6 +4,9 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Phase 03 initial practical guides in all seven core domains, linked from their topic entry pages.
+- Roadmap progress tracking for the seven-domain expansion.
+
 - [Project Roadmap](ROADMAP.md) covering six documentation phases and acceptance criteria.
 - [Foundation Verification Record](quality/foundation-verification.md) for the scoped 21-file baseline audit.
 - [Architecture Verification Record](quality/architecture-verification.md) for the Phase 02 documentation checks.
