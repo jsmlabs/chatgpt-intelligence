@@ -87,6 +87,14 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## ComfyUI local acceptance (G2.1.3)
+
+A read-only ComfyUI preflight and opt-in single-image verifier are available
+via `python -m scripts.verify_comfyui_live`. No model or ComfyUI installation
+is automated. [Windows setup and live acceptance](architecture/comfyui-live-acceptance.md).
+
+---
+
 ## Local semantic images (G2.1.2, opt-in)
 
 An optional, locally installed ComfyUI checkpoint can render semantic images

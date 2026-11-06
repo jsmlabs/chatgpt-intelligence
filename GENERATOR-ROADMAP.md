@@ -325,3 +325,13 @@ export tests are automated. No ComfyUI installation, model load, actual
 semantic generation or native ChatGPT tool call has been observed on the
 operator's Windows computer. The separate image-model live acceptance and
 editorial/rights checks remain open. [Spec](architecture/image-generator.md).
+
+## G2.1.3 - Local acceptance workflow (2026-11-06)
+
+A read-only ComfyUI checkpoint probe and explicitly authorized single-image
+acceptance verifier were added. The verifier reports READY, PASSED or BLOCKED,
+checks actual PNG integrity and exclusive local export, and does not invoke
+paid model APIs or install software. **No real ComfyUI model execution on the
+operator's PC has been observed.** The [Windows acceptance checklist]
+(architecture/comfyui-live-acceptance.md) documents installation prerequisites,
+operator verification and optional ChatGPT MCP activation.

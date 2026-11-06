@@ -174,8 +174,7 @@ the repository.
 - No guarantee that an arbitrary semantic prompt follows its intent; the
   model, prompt, seed and actual image should be independently reviewed.
 
-**Status:** ComfyUI adapter and MCP interface implemented; synthetic
-CI tests required; live local model and ChatGPT E2E **not run**.
+**Status:** ComfyUI adapter, MCP interface and a [G2.1.3 local acceptance verifier](comfyui-live-acceptance.md) implemented. Automated tests are synthetic; live local model and ChatGPT E2E **not run**.
 
 ## Deferred: other semantic image providers
 
