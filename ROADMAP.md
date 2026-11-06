@@ -22,7 +22,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 | --- | --- | --- |
 | 01 - Foundation & Verification | Verify initial documents and navigation | Complete (scoped) |
 | 02 - Core Architecture | Define shared concepts and decision models | Complete (documentation scope) |
-| 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | In progress |
+| 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | Complete (documentation scope) |
 | 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Planned |
 | 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | Planned |
 | 06 - Review & Release | Comprehensive editorial and compatibility review | Planned |
@@ -49,7 +49,7 @@ Expand [Research](research/README.md), [Concepts](concepts/README.md), [Prompts]
 
 **Acceptance:** Each domain has a beginner explanation, at least one substantial practical article, links to its sources where appropriate, and known limitations.
 
-**Progress (2026-11-06):** All seven areas now link to an initial practical guide: [Research](research/research-method.md), [Concepts](concepts/concept-development.md), [Prompts](prompts/prompt-design.md), [Knowledge](knowledge/source-quality.md), [Memory](memory/memory-lifecycle.md), [Context Engineering](context-engineering/context-selection.md), and [Intelligent UI](intelligent-ui/response-format-selection.md). These are proposed methods, not empirical proof of product behavior. Independent verification of product-specific citations, external links, and a complete domain editorial review remain open.
+**Completed (documentation scope, 2026-11-06):** All seven areas now link to an initial practical guide: [Research](research/research-method.md), [Concepts](concepts/concept-development.md), [Prompts](prompts/prompt-design.md), [Knowledge](knowledge/source-quality.md), [Memory](memory/memory-lifecycle.md), [Context Engineering](context-engineering/context-selection.md), and [Intelligent UI](intelligent-ui/response-format-selection.md). These are proposed methods, not empirical proof of product behavior. A [scoped Phase 03 verification](quality/knowledge-domain-verification.md) records the accessible articles and internal links. Comprehensive external link monitoring, product runtime tests, and independent editorial review remain open.
 
 ## Phase 04 - Patterns & Examples
 Produce reusable prompt templates, response patterns, intelligent UI examples, and good/bad comparisons.
