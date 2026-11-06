@@ -47,7 +47,8 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
-| [Local Verifier Execution](quality/local-verifier-execution.md) | Eight locally executed tests and explicit limitations |
+| [Local Verifier Execution](quality/local-verifier-execution.md) | Earlier scoped local tests and limitations |
+| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI: 12 tests, 330 Markdown links, and isolated brand installation |
 | [Automated Quality Checks](.github/workflows/docs-quality.yml) | Documentation CI and regression tests |
 | [Verifier Regression Tests](tests/test_quality_scripts.py) | Deterministic tests for link and archive verification |
 | [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
@@ -84,6 +85,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress.** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes; Phase 05 in progress.** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (12 tests, 330 checked relative links). Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
