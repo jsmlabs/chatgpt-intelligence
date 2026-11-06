@@ -19,6 +19,9 @@ Keep public examples synthetic. Describe source, relevance, correction, retentio
 ## Example question
 Which preferences are relevant, and how can a user correct them?
 
+## Practical guide
+- [memory lifecycle](memory-lifecycle.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
