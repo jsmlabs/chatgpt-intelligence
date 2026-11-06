@@ -34,3 +34,31 @@ This article presents an **original project method**, not a verified description
 
 ## Related reading
 [Source quality](../knowledge/source-quality.md) and [Evaluation guidelines](../quality/evaluation-guidelines.md).
+
+## Research record: practical checklist
+
+For a claim about a changing ChatGPT capability, capture:
+
+| Field | Example |
+| --- | --- |
+| Research question | Does a given model support visual answers in Chat? |
+| Product and surface | ChatGPT, web, Chat |
+| Model and plan | Record what was actually selected; do not guess |
+| Source | Exact official help article and relevant section |
+| Source reviewed | 2026-11-06 |
+| Observation | Documented description, not a personal runtime test |
+| Result | Source-supported, observed, inconclusive, or not-run |
+| Limitations | Rollout, client, plan, and workspace conditions |
+
+## Worked example: source-backed research
+**Question:** Does ChatGPT GPT-6 support Intelligent UI in Chat?
+
+**Source review:** The [GPT-6 Help Center article](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt) describes text, visuals, and interactive elements at eligible thinking levels, with availability and client restrictions (accessed 2026-11-06).
+
+**Conclusion:** The documentation supports a scoped product capability claim, not a guarantee that every user sees every component. **Runtime observation: not-run.**
+
+## Common mistakes
+- Treating a search snippet as equivalent to reading the source.
+- Reporting a feature as universally available after one successful example.
+- Calling a plan a successful test when no test was executed.
+- Quoting a source without accounting for its dates or scope.
