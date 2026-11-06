@@ -155,7 +155,7 @@ class ThemeTests(unittest.TestCase):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         tools = host.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]
-        self.assertEqual(len(tools), 12)
+        self.assertEqual(len(tools), 13)
         schema = next(x for x in tools if x["name"] == "generate_theme")["inputSchema"]
         self.assertEqual(schema["required"], ["objective"])
         for fmt in ("json", "css"):
