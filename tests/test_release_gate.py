@@ -55,6 +55,38 @@ class ReleaseGateTests(unittest.TestCase):
         errors = CHECKER.check(self.root)
         self.assertTrue(any("memory/README.md" in e for e in errors))
 
+    def test_claimed_fresh_chat_success_without_case_records_blocks(self):
+        self.evidence["fresh_chat_intel"] = {
+            "status": "passed",
+            "evidence": "https://github.com/jsmlabs/chatgpt-intelligence/issues/1",
+        }
+        self.save()
+        errors = CHECKER.check(self.root)
+        self.assertTrue(any("fresh_chat_intel case evidence:" in error for error in errors))
+
+    def test_claimed_fresh_chat_success_with_incomplete_case_records_blocks(self):
+        self.evidence["fresh_chat_intel"] = {
+            "status": "passed",
+            "evidence": "https://github.com/jsmlabs/chatgpt-intelligence/issues/1",
+        }
+        self.save()
+        (self.root / "quality/intel-e2e-results.json").write_text(
+            json.dumps({
+                "schema_version": 1,
+                "cases": [{
+                    "case_id": "E2E-01",
+                    "result": "passed",
+                    "tested_on": "2026-11-06",
+                    "surface": "fresh ChatGPT conversation",
+                    "source_revision": "a" * 40,
+                    "evidence": "https://github.com/jsmlabs/chatgpt-intelligence/issues/1",
+                }],
+            }),
+            encoding="utf-8",
+        )
+        errors = CHECKER.check(self.root)
+        self.assertTrue(any("E2E-12: missing case" in error for error in errors))
+
     def test_invalid_evidence_blocks(self):
         (self.root / "quality/release-evidence.json").write_text("{invalid", encoding="utf-8")
         errors = CHECKER.check(self.root)
