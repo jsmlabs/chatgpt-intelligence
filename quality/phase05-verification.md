@@ -55,6 +55,9 @@ A [reproducible fresh-chat execution runbook](intel-fresh-chat-runbook.md) speci
 
 [GitHub Actions run for commit `f7ea930`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208829270) **passed**: 26 regression tests, 65 Markdown files, 407 relative links with 0 errors, and 56/56 brand manifest hashes. The release checker correctly reports four remaining conditions. The 12 actual fresh-chat scenarios remain `not-run`.
 
+## Additional strict release and publication checks (2026-11-06)
+The brand manifest verifier now supports `--strict`, which rejects undeclared files in `branding/v1.4/` while preserving its earlier non-strict behavior. The strict mode runs in CI and the release gate. All release attestations now require an existing repository-relative file or a syntactically valid HTTPS evidence reference; human inspection remains necessary. A [scoped tracked-text credential scan](publication-safety-verification.md) is also implemented. [GitHub Actions](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42210670991) confirmed 46 passing tests, 410 relative links without errors, 56/56 brand hashes and 111 scanned text files with zero signature findings. Four client/review release gates remain open.
+
 ## Remaining Phase 05 gates
 - **Completed:** Publish the 57 original brand files to `branding/v1.4/`, validate exact remote bytes and inspect the contact sheet. Full independent visual sign-off is still a separate release gate.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
