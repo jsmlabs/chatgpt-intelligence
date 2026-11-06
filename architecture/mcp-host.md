@@ -143,3 +143,14 @@ MCP never exports files, never invokes a remote model, and requires
 trusted `--allow-create`. Animated rendering in a native client
 has not been attested.
 See [G3.1 Motion Generator](motion-generator.md).
+
+## G3.2 SLIDES MCP tool
+
+The additive `generate_slides` tool generates an ordered JSON
+storyboard or editable native PPTX Open XML archive. Binary PPTX is
+returned in-memory as `structuredContent.base64`, not as a saved
+file or a downloadable attachment. The default host advertises
+**14 tools** (**15** with the separately opted-in ComfyUI tool).
+CREATE permission remains required. No model/provider, filesystem
+write, external asset retrieval or slide-viewer validation is implied.
+See [G3.2 SLIDES implementation](slides-generator.md).

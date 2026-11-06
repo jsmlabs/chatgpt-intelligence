@@ -87,6 +87,16 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## SLIDES generator (G3.2)
+
+Create offline structured JSON slide storyboards and genuine editable PPTX
+presentations with four layout families and G2.3 theme colors.
+PPTX exports are structurally checked, read back and SHA-256 verified.
+Independent Microsoft PowerPoint/LibreOffice rendering is not attested.
+[SLIDES generator documentation](architecture/slides-generator.md).
+
+---
+
 ## GIF & Motion generator (G3.1)
 
 Generate deterministic JSON frame storyboards and real procedural animated

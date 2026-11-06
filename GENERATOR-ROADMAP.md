@@ -393,3 +393,19 @@ semantic AI animation, video generation, free-form scene rendering,
 or a browser/player-based visual acceptance. Live ChatGPT animated
 GIF display remains unverified. See
 [G3.1 implementation](architecture/motion-generator.md).
+
+## G3.2 - SLIDES Generator checkpoint (2026-11-06)
+
+The local dependency-free SLIDES runtime creates ordered JSON slide
+outlines and editable `pptx` PowerPoint Open XML files using fixed
+widescreen dimensions, four layout families, up to 12 slides, and
+G2.3 color tokens. The archive is verified by a strict OOXML-part,
+XML, slide-text, relationship and CRC verifier. A trusted local CLI
+may exclusively export and SHA-256/readback-verify files; the additive
+`generate_slides` MCP tool returns JSON or in-memory Base64 PPTX.
+
+The default storyboard contains placeholders rather than researched
+content. **Not certified:** opening in PowerPoint/LibreOffice,
+visual rendering/overflow, editorial review, accessibility, and
+live ChatGPT client attachment handoff. See
+[G3.2 technical specification](architecture/slides-generator.md).
