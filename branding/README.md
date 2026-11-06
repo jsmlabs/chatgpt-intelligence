@@ -24,3 +24,6 @@ These SVG/PNG/HTML assets establish a project visual identity. They do not chang
 The name `ChatGPT` is an OpenAI mark. The project's independent identity must not imply affiliation. Review the current [OpenAI brand guidelines](https://openai.com/brand/) before public product promotion.
 
 [Command reference](../COMMANDS.md) | [Activation guide](../guides/chatgpt-activation.md)
+
+## Complete installation and checks
+Follow the [branding installation guide](../guides/branding-integration.md) and the [manifest verifier](../scripts/verify_branding.py). The complete asset package is still pending a binary-capable GitHub upload. Do not represent the branding assets as fully published.
