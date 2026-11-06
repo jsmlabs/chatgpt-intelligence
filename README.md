@@ -59,6 +59,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Phase 05 Verification](quality/phase05-verification.md) | Verified CI and quality regression results |
 | [Branding Publication Verification](quality/branding-publication-verification.md) | 57/57 exact original assets and 56/56 GitHub SHA-256 checks |
 | [Branding Visual Inspection](quality/branding-visual-inspection.md) | Scoped contact-sheet and light-banner inspection, with remaining gaps |
+| [Branding Accessibility Sampling](quality/branding-accessibility-sampling.md) | PNG/SVG/HTML format checks and sampled WCAG contrast ratios |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
 | [Editorial Source Review](quality/editorial-source-review.md) | Primary-source findings, naming risk and unresolved review requirements |
 | [Publication Safety Verification](quality/publication-safety-verification.md) | Scoped tracked-text credential scan and explicit limitations |
@@ -100,6 +101,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (54 tests, 427 checked relative file/image references); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (61 tests, 447 checked relative file/image references); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
