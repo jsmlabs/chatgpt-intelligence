@@ -24,6 +24,8 @@ def verify(archive: Path) -> int:
             names = [info.filename for info in entries]
             if len(names) != len(set(names)):
                 raise ValueError("Duplicate ZIP paths")
+            if len({n.casefold() for n in names}) != len(names):
+                raise ValueError("Case-insensitive filename collision")
             if len(entries) > MAX_FILES:
                 raise ValueError("Too many ZIP entries")
             if sum(info.file_size for info in entries) > MAX_TOTAL_UNCOMPRESSED:
@@ -31,7 +33,8 @@ def verify(archive: Path) -> int:
             for info in entries:
                 name = PurePosixPath(info.filename)
                 if (not info.filename.startswith(PREFIX) or name.is_absolute()
-                        or ".." in name.parts or "\\" in info.filename):
+                        or ".." in name.parts or "\\" in info.filename
+                        or name.as_posix() != info.filename):
                     raise ValueError(f"Unsafe ZIP entry: {info.filename}")
                 if (info.external_attr >> 16) & 0o170000 == 0o120000:
                     raise ValueError(f"Symlink entry: {info.filename}")
@@ -43,6 +46,13 @@ def verify(archive: Path) -> int:
             files = manifest["files"]
             if not isinstance(files, dict) or manifest["file_count"] != len(files):
                 raise ValueError("Invalid manifest file count")
+            for path in files:
+                normalized = PurePosixPath(path)
+                if (not path or normalized.is_absolute() or ".." in normalized.parts
+                        or "\\" in path or normalized.as_posix() != path):
+                    raise ValueError(f"Unsafe manifest path: {path}")
+            if len({p.casefold() for p in files}) != len(files):
+                raise ValueError("Case-insensitive manifest filename collision")
             expected = {PREFIX + path for path in files} | {manifest_path}
             if set(names) != expected:
                 raise ValueError(f"ZIP path mismatch: missing={sorted(expected - set(names))}, extra={sorted(set(names) - expected)}")
