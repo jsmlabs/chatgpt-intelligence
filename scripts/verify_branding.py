@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Verify an extracted ChatGPT Intelligence brand package against MANIFEST.json.
 
-Usage: python scripts/verify_branding.py branding
+Usage: python scripts/verify_branding.py branding/v1.4 [--strict]
 Requires Python 3.10+ and standard library only.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import pathlib
 import sys
 
 
-def verify(directory: pathlib.Path) -> int:
+def verify(directory: pathlib.Path, strict: bool = False) -> int:
     base = directory.resolve()
     manifest_path = base / "MANIFEST.json"
     if not manifest_path.is_file():
@@ -56,15 +57,18 @@ def verify(directory: pathlib.Path) -> int:
         if size_ok and hash_ok:
             matching += 1
 
-    # A dedicated integration-status document can coexist with the supplied assets,
-    # but all manifest-listed assets must preserve their exact bytes.
+    # Optional strict mode is required for releases. Normal verification
+    # preserves backward compatibility for development checkouts.
     extra = sorted(
         p.relative_to(base).as_posix()
         for p in base.rglob("*")
-        if p.is_file() and p.resolve() not in expected
+        if (p.is_file() or p.is_symlink()) and p.resolve() not in expected
     )
     if extra:
-        print("NOTE: additional files not in manifest: " + ", ".join(extra))
+        if strict:
+            failures.append("undeclared files in brand package: " + ", ".join(extra))
+        else:
+            print("NOTE: additional files not in manifest: " + ", ".join(extra))
     for issue in failures:
         print("FAIL:", issue)
     print(f"Verified {matching} matching entries against {len(declared)} manifest entries")
@@ -75,7 +79,8 @@ def verify(directory: pathlib.Path) -> int:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python scripts/verify_branding.py <branding-directory>")
-        sys.exit(2)
-    sys.exit(verify(pathlib.Path(sys.argv[1])))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("directory", type=pathlib.Path)
+    parser.add_argument("--strict", action="store_true", help="Reject extra files in the package directory")
+    args = parser.parse_args()
+    sys.exit(verify(args.directory, strict=args.strict))
