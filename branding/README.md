@@ -25,7 +25,7 @@ The upstream package's original [`v1.4/README.md`](v1.4/README.md) still says th
 These SVG/PNG/HTML assets establish a project visual identity. They do not change the native ChatGPT application's colors or components. `/INTEL UI` means selecting **available ChatGPT output components** based on information needs, not applying an HTML skin from this package.
 
 ## Trademark
-The name `ChatGPT` is an OpenAI mark. The project's independent identity must not imply affiliation. Review the current [OpenAI brand guidelines](https://openai.com/brand/) before public product promotion.
+The name `ChatGPT` is an OpenAI mark. The project's independent identity must not imply affiliation. Review the current [OpenAI brand guidelines](https://openai.com/brand/) before public product promotion. The [scoped editorial review](../quality/editorial-source-review.md) records a concrete open naming/trademark decision point. The existing repository name is preserved pending a project-owner decision.
 
 [Command reference](../COMMANDS.md) | [Activation guide](../guides/chatgpt-activation.md)
 
