@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Added [G3.3 DIAGRAM generator](architecture/diagram-generator.md): bounded directed acyclic flowcharts and architecture graphs, JSON/Mermaid/SVG outputs, deterministic layout, validated node/edge references, local export and MCP/CLI integration. External viewer acceptance remains open.
 - Added [G3.2 SLIDES generator](architecture/slides-generator.md): deterministic JSON storyboard, editable native PPTX OOXML output, four layouts, G2.3 themes, bounded CLI/MCP inputs, package validation and exclusive verified export. Viewer and client acceptance remain open.
 - Added [G3.1 GIF & Motion Generator](architecture/motion-generator.md): offline JSON storyboards and verified procedural animated GIF89a with bounded frame count, duration, loop settings, CLI exports and additive MCP image/gif tool.
 - Added [G2.4 BRAND generator](architecture/brand-generator.md) for identity briefs, theme-backed JSON brand tokens, SVG mark directions, CLI/MCP and tested exclusive local export. Visual and trademark review remain open.

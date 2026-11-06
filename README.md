@@ -87,6 +87,15 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## DIAGRAM generator (G3.3)
+
+Generate deterministic graph JSON, Mermaid flowchart source and local
+standalone SVG diagrams with validated references, node types and
+topological layout. Browser/Mermaid CLI rendering is not yet certified.
+[DIAGRAM generator documentation](architecture/diagram-generator.md).
+
+---
+
 ## SLIDES generator (G3.2)
 
 Create offline structured JSON slide storyboards and genuine editable PPTX

@@ -154,3 +154,12 @@ file or a downloadable attachment. The default host advertises
 CREATE permission remains required. No model/provider, filesystem
 write, external asset retrieval or slide-viewer validation is implied.
 See [G3.2 SLIDES implementation](slides-generator.md).
+
+## G3.3 DIAGRAM MCP tool
+
+The additive `generate_diagram` tool returns validated DAG diagram
+source as JSON, Mermaid or SVG with deterministic layout and
+bounded node/edge schemas. No MCP filesystem write, network, model
+or diagram editor is invoked. CREATE permission remains mandatory.
+Default tool inventory is **15** tools or **16** with opt-in ComfyUI.
+See [DIAGRAM generator](diagram-generator.md).

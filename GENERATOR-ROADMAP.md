@@ -409,3 +409,17 @@ content. **Not certified:** opening in PowerPoint/LibreOffice,
 visual rendering/overflow, editorial review, accessibility, and
 live ChatGPT client attachment handoff. See
 [G3.2 technical specification](architecture/slides-generator.md).
+
+## G3.3 - DIAGRAM Generator checkpoint (2026-11-06)
+
+The dependency-free DIAGRAM runtime supports structured DAG diagrams
+for flowchart and architecture directions, node/edge validation,
+deterministic layered layouts, JSON contracts, Mermaid source, and
+standalone safe SVG output. The CLI exclusively exports verified
+`json`, `mmd`, or `svg` files; the additive `generate_diagram`
+MCP tool returns in-memory text and manifest evidence.
+
+Constraints: up to 16 nodes and 24 edges, no cycles, no arbitrary
+external assets/scripts, no diagram rendering model. Mermaid parser,
+independent SVG viewer and visual layout testing are **not run**.
+See [G3.3 technical specification](architecture/diagram-generator.md).
