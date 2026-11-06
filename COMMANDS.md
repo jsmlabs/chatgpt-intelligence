@@ -82,3 +82,7 @@ python -m generators prompt --objective "Create a secure code review prompt" --a
 ## G1.6 opt-in model runtime
 
 The Python CLI accepts `--mode model` for `PROMPT`, `CONCEPT` and `DOCUMENT` with `--authorize-create --authorize-external --authorize-billable`. The provider adapter requires `OPENAI_API_KEY` and `INTEL_OPENAI_MODEL` in a trusted process environment. Without them, it returns `MODEL_UNAVAILABLE`. Without the additional grants it returns `PERMISSION_DENIED`, before any network request. The deterministic template is still the default, with no network access. No live model integration or native ChatGPT command was verified by CI. See [G1.6 model host](architecture/model-host.md).
+
+## G1.7 Local MCP host
+
+An **executable local MCP stdio server** provides `generate_prompt`, `generate_concept` and `generate_document` through the existing Python `TextRuntime`. This is not a native ChatGPT slash command or proof of client installation. Start with `python -m generators.mcp_server --allow-create`; model mode also requires explicit external and billable startup permissions and separately configured API credentials. The default mode never calls an external provider. See [MCP host and live verification](architecture/mcp-host.md).

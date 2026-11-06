@@ -239,3 +239,7 @@ A local Python text-first runtime has been added for `PROMPT`, `CONCEPT`, and `D
 ## G1.6 implementation checkpoint (2026-11-06)
 
 An opt-in Python Responses API host adapter and injectable model-host contract have been added for the three G1 text generators. External and billable permissions are checked before execution; the original registry, G0 dispatcher and artifact lifecycle are unchanged. Synthetic transport tests are not evidence of live provider access. Current status: **integration code implemented; live provider/client verification not run**. See [model-host architecture](architecture/model-host.md).
+
+## G1.7 checkpoint (2026-11-06)
+
+A local MCP stdio host with three bounded text tools, explicit startup grants and isolated synthetic protocol tests has been implemented. The live-provider verifier `scripts/verify_model_live.py` requires environment-provided credentials plus explicit billable authorization and is intentionally excluded from CI. **Local MCP support is not native ChatGPT plugin installation.** A real authenticated model call and ChatGPT-client acceptance must be verified separately; no release gate is waived. [Integration guide](architecture/mcp-host.md).
