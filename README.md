@@ -48,8 +48,9 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
 | [Local Verifier Execution](quality/local-verifier-execution.md) | Earlier scoped local tests and limitations |
-| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI: 16 tests, 346 Markdown links, and isolated brand installation |
+| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI: 21 tests, 346 Markdown links, and isolated brand installation |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
+| [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
 | [Automated Quality Checks](.github/workflows/docs-quality.yml) | Documentation CI and regression tests |
 | [Verifier Regression Tests](tests/test_quality_scripts.py) | Deterministic tests for link and archive verification |
 | [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
@@ -86,6 +87,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (16 tests, 346 checked relative links). Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (21 tests, 346 checked relative links); the strict release gate reports five incomplete conditions. Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
