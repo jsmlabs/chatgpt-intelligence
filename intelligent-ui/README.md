@@ -22,6 +22,9 @@ Would a table materially improve this comparison?
 ## Practical guide
 - [response format selection](response-format-selection.md) - step-by-step method, example, limitations, and acceptance criteria.
 
+## Reusable response patterns
+- [Response Pattern Library](response-patterns.md) - when prose, tables, charts or interactions are useful.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
