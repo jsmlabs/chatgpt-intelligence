@@ -15,9 +15,9 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Area | Status | Evidence and limitation |
 | --- | --- | --- |
 | Repository identity and seven domain indexes | passed (scoped) | README and roadmap retain the exact project tagline and seven documented areas |
-| Automated tests | passed | [GitHub Actions run #21](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42203758400): 12 tests, all passing |
-| Relative Markdown links | passed | Same run: 57 Markdown files, 330 links, 0 errors |
-| Latest documentation CI after evidence updates | passed | [GitHub Actions run for commit `ee4d848c`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42204904237) completed successfully |
+| Automated tests | passed | [Hardened CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806): 16 tests, all passing |
+| Relative Markdown links | passed | Same run: 59 Markdown files, 346 links, 0 errors |
+| Documentation CI after the security changes | passed | [GitHub Actions run for commit `be5a386`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806) completed successfully; later documentation-only commits need their own checks |
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
 | Branding assets on `main` | blocked | Git tree contains no `branding/v1.4/` entries; GitHub Actions correctly skips remote manifest check |
 | Fresh-chat `/INTEL` activation | not-run | Activation instructions and source retrieval exist, but no fresh-chat execution evidence |
