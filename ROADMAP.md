@@ -67,11 +67,11 @@ Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent
 ## Phase 05 - Quality & Evaluation
 Twelve regression test cases (eight verifier cases and four installer cases) are now defined in [tests/test_quality_scripts.py](tests/test_quality_scripts.py) and wired into the [CI workflow](.github/workflows/docs-quality.yml). A [scoped local verifier run](quality/local-verifier-execution.md) passed 8/8 reconstructed-script unit tests and verified the supplied ZIP (56/56 manifest files). The exact committed checkout and GitHub Actions execution remain unverified.
 
-Automated documentation checks: [Markdown and metadata checker](scripts/check_docs.py) and [GitHub Actions workflow](.github/workflows/docs-quality.yml) now run on main pushes and pull requests. The workflow checks original branding hashes only once the manifest is published; a skipped asset check does not count as passed. Workflow execution results have not yet been confirmed.
+Automated documentation checks: [Markdown and metadata checker](scripts/check_docs.py) and [GitHub Actions workflow](.github/workflows/docs-quality.yml) now run on main pushes and pull requests. The workflow checks original branding hashes only once the manifest is published; a skipped asset check does not count as passed. GitHub Actions run #21 passed (12 tests, 57 Markdown files, 330 relative links, zero errors). Branding hash checks were skipped because the original assets were not present in GitHub.
 
 Initial deliverables: [response-pattern evaluation rubric](quality/pattern-evaluation.md), [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md), and [Phase 04 verification record](quality/phase04-verification.md). The next work is to execute cases on a connected ChatGPT client, record exact source revisions and observed outputs, and review the results.
 
-**Status: In progress.** An [existing-chat source retrieval smoke test](quality/intel-source-smoke-test.md) passed for five canonical GitHub files, with recorded blob SHAs. Fresh-chat command dispatch, Intelligent UI rendering and fallback behavior remain **not-run**.
+**Status: In progress.** Repository CI passed within the verified scope, and an isolated brand installation was verified (57 files, 56/56 hashes). An [existing-chat source retrieval smoke test](quality/intel-source-smoke-test.md) passed for five canonical GitHub files, with recorded blob SHAs. Fresh-chat command dispatch, Intelligent UI rendering and fallback behavior remain **not-run**.
 
 **Acceptance:** Test outcomes have evidence, dates, scope, and exact statuses; proposed evaluation methods are never reported as executed tests.
 
