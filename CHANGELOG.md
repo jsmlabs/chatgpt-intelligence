@@ -4,6 +4,8 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Expanded seven Phase 03 domain articles with practical workflows, examples, decision checklists, limitations, and evaluation exercises.
+- [Phase 03 Verification Record](quality/knowledge-domain-verification.md) documenting reviewed scope and remaining validation limits.
 - Phase 03 initial practical guides in all seven core domains, linked from their topic entry pages.
 - Roadmap progress tracking for the seven-domain expansion.
 
@@ -15,6 +17,8 @@ This file records meaningful documentation changes. A proposed design or documen
 - Version-aware compatibility guidance distinguishing verified product capabilities, proposed designs, and experimental observations.
 
 ### Changed
+- Aligned Phase 03 roadmap status and README navigation with scoped completion.
+- Updated Intelligent UI reference to the accessible official GPT-6 model guide.
 - Expanded [Architecture Overview](architecture/overview.md) to index shared specifications.
 - Linked roadmap and the updated architecture from the root README.
 
