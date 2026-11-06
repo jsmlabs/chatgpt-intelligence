@@ -90,6 +90,31 @@ class BrandingArchiveChecks(unittest.TestCase):
         self.assertEqual(self.checker.verify(self.make_zip(extra="branding/v1.4/../escape")), 1)
 
 
+    def test_noncanonical_zip_path_rejected(self):
+        archive = self.root / "noncanonical.zip"
+        data = b"asset"
+        manifest = {"file_count": 1, "files": {
+            "logos//mark.svg": {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+        }}
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("branding/v1.4/MANIFEST.json", json.dumps(manifest))
+            z.writestr("branding/v1.4/logos//mark.svg", data)
+        self.assertEqual(self.checker.verify(archive), 1)
+
+    def test_case_insensitive_collision_rejected(self):
+        archive = self.root / "case-collision.zip"
+        data = b"asset"
+        manifest = {"file_count": 2, "files": {
+            key: {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+            for key in ("logos/Mark.svg", "logos/mark.svg")
+        }}
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("branding/v1.4/MANIFEST.json", json.dumps(manifest))
+            for key in manifest["files"]:
+                z.writestr("branding/v1.4/" + key, data)
+        self.assertEqual(self.checker.verify(archive), 1)
+
+
 
 class BrandingInstallChecks(unittest.TestCase):
     def setUp(self):
@@ -135,6 +160,33 @@ class BrandingInstallChecks(unittest.TestCase):
         archive = self.make_zip()
         (self.root / "ROADMAP.md").unlink()
         self.assertEqual(self.installer.install(archive, self.root), 1)
+
+    def test_noncanonical_manifest_path_rejected(self):
+        data = b"asset"
+        archive = self.root / "noncanonical.zip"
+        manifest = {"file_count": 1, "files": {
+            "logos//mark.svg": {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+        }}
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("branding/v1.4/MANIFEST.json", json.dumps(manifest))
+            z.writestr("branding/v1.4/logos//mark.svg", data)
+        self.assertEqual(self.installer.install(archive, self.root), 1)
+        self.assertFalse((self.root / "branding/v1.4").exists())
+
+    def test_case_collision_rejected_without_writing(self):
+        data = b"asset"
+        archive = self.root / "collision.zip"
+        manifest = {"file_count": 2, "files": {
+            key: {"size_bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+            for key in ("logos/Mark.svg", "logos/mark.svg")
+        }}
+        with zipfile.ZipFile(archive, "w") as z:
+            z.writestr("branding/v1.4/MANIFEST.json", json.dumps(manifest))
+            for key in manifest["files"]:
+                z.writestr("branding/v1.4/" + key, data)
+        self.assertEqual(self.installer.install(archive, self.root), 1)
+        self.assertFalse((self.root / "branding/v1.4").exists())
+
 
 if __name__ == "__main__":
     unittest.main()
