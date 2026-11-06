@@ -45,6 +45,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Branding Integration](guides/branding-integration.md) | Safe manual asset import and hash verification |
 | [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
+| [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
 | [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
 | [Architecture](architecture/overview.md) | How the project's concepts fit together |
