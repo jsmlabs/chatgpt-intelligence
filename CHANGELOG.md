@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Hardened [INTEL E2E validation](scripts/verify_intel_e2e.py) with ISO dates, full commit SHAs, existing local evidence files or HTTPS references, and integration tests for strict release enforcement. [Verified GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42209415341) passed 33 tests.
 - Added [fresh-chat acceptance runbook](quality/intel-fresh-chat-runbook.md) with exact prompts for all twelve E2E cases, plus a [scoped branding visual inspection](quality/branding-visual-inspection.md). Preserved the immutable original brand package and clarified its historical publication note in the parent branding index.
 - Added [per-case `/INTEL` evidence validator](scripts/verify_intel_e2e.py) and [twelve initially not-run case records](quality/intel-e2e-results.json); strict release checker requires them if fresh-chat attestation is marked passed. [CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208022435) passed 26 tests.
 - Published all 57 original branding v1.4 files on `main`; [verified Git blob integrity](quality/branding-publication-verification.md) for 57/57 and manifest SHA-256 for 56/56 in GitHub Actions. Removed an unrelated newline-only placeholder; release blockers reduced from five to four.
