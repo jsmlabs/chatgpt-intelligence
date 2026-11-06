@@ -7,6 +7,7 @@ This file records meaningful documentation changes. A proposed design or documen
 - Phase 04: [prompt patterns](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [INTEL conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
 - [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md) and [branding installation guide](guides/branding-integration.md).
 - [Brand manifest verification script](scripts/verify_branding.py) for exact local SHA-256 checks.
+- [Phase 04 Verification Record](quality/phase04-verification.md) and [Phase 05 evaluation rubric](quality/pattern-evaluation.md).
 - Documented the proposed [ChatGPT `/INTEL` activation convention](COMMANDS.md), source-resolution boundaries, setup guide, and paste-ready activation instructions.
 - Integrated [brand v1.4 guidance](branding/BRAND-GUIDELINES.md), [tokens](branding/design-system/tokens.json), [CSS variables](branding/design-system/theme-tokens.css), and explicit binary-publication status.
 - Expanded seven Phase 03 domain articles with practical workflows, examples, decision checklists, limitations, and evaluation exercises.
