@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- [Fail-closed release gate](scripts/check_release.py), [release evidence ledger](quality/release-evidence.json), five regression tests and [verified CI report](quality/release-gate-verification.md). CI passed 21 tests and confirmed five release blockers.
 - Hardened ZIP verifier and installer against noncanonical paths and case-insensitive collisions. Four regression tests added; [16-test GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806) passed.
 - [Initial Phase 06 release-readiness review](quality/phase06-release-readiness.md) identifies verified CI evidence and outstanding branding, fresh-chat and runtime acceptance gates.
 - [Phase 05 verification record](quality/phase05-verification.md): GitHub Actions run #21 passed 12 regression tests and checked 330 links across 57 Markdown files; isolated brand import passed 56/56 hash checks. Remote branding remains unpublished.
