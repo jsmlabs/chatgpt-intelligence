@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check local Markdown links and project frontmatter without dependencies."""
+"""Check local Markdown links, images, HTML assets and frontmatter."""
 from __future__ import annotations
 
 import argparse
@@ -8,7 +8,8 @@ import re
 import sys
 from urllib.parse import unquote, urlsplit
 
-LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+HTML_ASSET = re.compile(r'\b(src|srcset)\s*=\s*"([^"]+)"', re.I)
 FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 STATUS = {"draft", "proposed", "accepted", "deprecated"}
 CLASSIFICATION = {"verified-capability", "proposed-design", "experimental"}
@@ -30,8 +31,15 @@ def audit(root: pathlib.Path) -> tuple[int, int, list[str]]:
                 errors.append(f"{rel}: invalid classification")
         # Strip fenced code blocks before checking prose links.
         prose = re.sub(r"(?ms)^\s*`{3}[^\n]*\n.*?^\s*`{3}\s*$", "", text)
-        for match in LINK.finditer(prose):
-            target = match.group(1).strip().split(" ", 1)[0].strip("<>")
+        targets = [match.group(1).strip().split(" ", 1)[0].strip("<>")
+                   for match in LINK.finditer(prose)]
+        for match in HTML_ASSET.finditer(prose):
+            kind, value = match.groups()
+            if kind.lower() == "srcset":
+                targets.extend(part.strip().split()[0] for part in value.split(",") if part.strip())
+            else:
+                targets.append(value.strip())
+        for target in targets:
             parsed = urlsplit(target)
             if parsed.scheme or target.startswith(("//", "mailto:", "#")):
                 continue
