@@ -270,6 +270,46 @@ def export_markdown(content: str, root: Path, name: str) -> tuple[str, str]:
     directory = root.resolve(strict=True)
     flags_dir = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0)
     flags_file = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
+    # Windows does not support dir_fd for os.open. Preserve exclusive creation
+    # and deny links/junctions along the relative output path before opening.
+    # POSIX retains descriptor-relative traversal to resist replacement races.
+    if os.name == "nt":
+        current = root
+        for part in parts[:-1]:
+            current = current / part
+            if current.is_symlink() or (hasattr(current, "is_junction") and current.is_junction()):
+                raise IntelError("INVALID_PATH", "Export path contains a linked directory")
+            if not current.is_dir():
+                raise IntelError("INVALID_PATH", "Export directory must already exist")
+        if hasattr(root, "is_junction") and root.is_junction():
+            raise IntelError("INVALID_PATH", "Export root cannot be a junction")
+        target = current / parts[-1]
+        if target.is_symlink() or (hasattr(target, "is_junction") and target.is_junction()):
+            raise IntelError("INVALID_PATH", "Export destination cannot be a link")
+        try:
+            payload = content.encode("utf-8")
+            fd_win = os.open(target, flags_file | getattr(os, "O_BINARY", 0), 0o600)
+            try:
+                with os.fdopen(fd_win, "wb") as output:
+                    output.write(payload)
+                    output.flush()
+                    os.fsync(output.fileno())
+            except BaseException:
+                try:
+                    target.unlink()
+                except OSError:
+                    pass
+                raise
+            actual = target.read_bytes()
+            digest = hashlib.sha256(payload).hexdigest()
+            if actual != payload or not verify_file(directory, relative):
+                raise IntelError("EXPORT_UNVERIFIED", "Export read-back differs from output")
+            return relative, digest
+        except FileExistsError:
+            raise IntelError("DESTINATION_EXISTS", "Refusing to overwrite an existing artifact") from None
+        except OSError:
+            raise IntelError("EXPORT_FAILED", "Local export failed") from None
+
     handles: list[int] = []
     try:
         fd = os.open(directory, flags_dir)

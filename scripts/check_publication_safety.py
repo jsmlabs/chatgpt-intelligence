@@ -50,7 +50,7 @@ def scan(paths: list[Path], root: Path) -> tuple[int, list[str]]:
         for label, pattern in PATTERNS.items():
             if pattern.search(content):
                 # Do not print the matching secret or its surrounding text.
-                issues.append(f"possible {label} in {path.relative_to(root)}")
+                issues.append(f"possible {label} in {resolved.relative_to(root)}")
     return examined, issues
 
 
