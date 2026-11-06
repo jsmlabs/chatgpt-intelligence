@@ -51,6 +51,9 @@ Expand [Research](research/README.md), [Concepts](concepts/README.md), [Prompts]
 
 **Completed (documentation scope, 2026-11-06):** All seven areas now link to an initial practical guide: [Research](research/research-method.md), [Concepts](concepts/concept-development.md), [Prompts](prompts/prompt-design.md), [Knowledge](knowledge/source-quality.md), [Memory](memory/memory-lifecycle.md), [Context Engineering](context-engineering/context-selection.md), and [Intelligent UI](intelligent-ui/response-format-selection.md). These are proposed methods, not empirical proof of product behavior. A [scoped Phase 03 verification](quality/knowledge-domain-verification.md) records the accessible articles and internal links. Comprehensive external link monitoring, product runtime tests, and independent editorial review remain open.
 
+## ChatGPT activation and branding integration
+The [command convention](COMMANDS.md), [source resolution design](architecture/activation-and-source-resolution.md), [activation guide](guides/chatgpt-activation.md) and [prompt instructions](prompts/activation-instructions.md) establish a proposed `/INTEL` workflow. Its actual operation requires both applicable instructions and a connected, working source. The attached brand v1.4 package is [validated but only partially published](branding/README.md): text guidance/tokens are present, and binary artwork remains pending manual or binary-capable upload. Neither activation nor visual integration has been independently tested as an installed native ChatGPT feature.
+
 ## Phase 04 - Patterns & Examples
 Produce reusable prompt templates, response patterns, intelligent UI examples, and good/bad comparisons.
 
