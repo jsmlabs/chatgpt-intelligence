@@ -42,7 +42,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
 | [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
 | [Branding](branding/README.md) | Original v1.4 package, tokens, and integration status |
-| [Branding Integration](guides/branding-integration.md) | Safe manual asset import and hash verification |
+| [Branding Integration](guides/branding-integration.md) | Safe installer, import and hash verification |
 | [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
