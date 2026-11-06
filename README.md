@@ -99,6 +99,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (46 tests, 410 checked relative links); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (54 tests, 427 checked relative file/image references); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
