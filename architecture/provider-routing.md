@@ -71,7 +71,7 @@ unchanged. No second model call, network action, or billable fallback is trigger
 Evidence: user-provided PowerShell transcript in the project conversation,
 not independently retrieved machine logs. This is evidence for the earlier
 local `CONCEPT` generator only, not for G1.8.2 on the user's machine.
-`PROMPT` and `DOCUMENT` local live execution remain outstanding.
+`PROMPT` and `DOCUMENT` were subsequently executed successfully on G1.8.2, as recorded below.
 
 ## Local PROMPT/DOCUMENT smoke test
 
@@ -88,3 +88,24 @@ each of `PROMPT` and `DOCUMENT`, and reports provider, artifact state,
 structural validity, fence balance, and independent review flags. No raw
 model-generated text is printed, and no outcome is marked passed until
 the verifier actually runs. Optional `--types` includes `CONCEPT`.
+
+## User-reported Ollama live acceptance (2026-11-06)
+
+Source of evidence: Windows PowerShell 5.1 terminal transcript supplied by the
+operator in the project conversation. This is **user-reported live evidence**,
+not provider logs independently retrieved by the repository maintainers.
+
+- Repository revision: `f5a9b67341e2a7e2b6e72c3d2768f5c29508799e` (operator ran `git rev-parse HEAD`).
+- Ollama model: `gemma3:4b` (operator configured `INTEL_OLLAMA_MODEL`).
+- Invocation: `python -m scripts.verify_ollama_live --authorize-local-inference --model-timeout 120 --model-max-output-tokens 4096`.
+- Report-level status: `PASSED`, `local_model_attempted: true`.
+- `PROMPT`: `PASSED`, provider `ollama-local`, state `reviewed`, `structurally_valid: true`, `balanced_code_fences: true`.
+- `DOCUMENT`: `PASSED`, provider `ollama-local`, state `reviewed`, `structurally_valid: true`, `balanced_code_fences: true`.
+- Both: `human_reviewed: false` and `source_verified: false`.
+- `CONCEPT`: earlier user-reported local live pass was on revision `7a93a81ad5ebbea007f5f5c00c94399f33c0abcf`, **not** the current G1.8.2 revision; the earlier output exposed an outer code-fence formatting issue that G1.8.2 addresses.
+
+**Acceptance scope:** Local `PROMPT` and `DOCUMENT` inference on G1.8.2 is
+user-reported as passed. A full three-generator live smoke test on a *single*
+G1.8.2 revision, independent content review and actual ChatGPT-host connection
+remain unverified. No separate OpenAI API call or billable grant was needed
+for the reported Ollama verifier.
