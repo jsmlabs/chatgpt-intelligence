@@ -72,3 +72,19 @@ Evidence: user-provided PowerShell transcript in the project conversation,
 not independently retrieved machine logs. This is evidence for the earlier
 local `CONCEPT` generator only, not for G1.8.2 on the user's machine.
 `PROMPT` and `DOCUMENT` local live execution remain outstanding.
+
+## Local PROMPT/DOCUMENT smoke test
+
+Run from the repository root on a machine with a running Ollama daemon
+and a downloaded model. This verifier **never uses** the OpenAI API:
+
+```powershell
+$env:INTEL_OLLAMA_MODEL = "gemma3:4b"
+python -m scripts.verify_ollama_live --authorize-local-inference
+```
+
+The opt-in verifier checks Ollama reachability, runs one local inference for
+each of `PROMPT` and `DOCUMENT`, and reports provider, artifact state,
+structural validity, fence balance, and independent review flags. No raw
+model-generated text is printed, and no outcome is marked passed until
+the verifier actually runs. Optional `--types` includes `CONCEPT`.
