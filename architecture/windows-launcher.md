@@ -72,3 +72,7 @@ DPAPI-backed secret for stronger at-rest protection; the requested key-file
 mode deliberately uses plaintext. Key rotation still requires updating
 the local file. Keep the file to **one line**, containing only the full secret
 starting with `sk-`, without quotes or additional labels.
+
+## Opt-in managed lifecycle
+
+`intel.cmd start --managed` starts a Windows tunnel through the Python supervisor. `intel.cmd status` queries its authenticated loopback control endpoint; `intel.cmd stop` and `intel.cmd restart` act only on CLI-owned instances. The legacy `intel.cmd start` remains a foreground PowerShell launch for backwards compatibility. Managed mode requires an explicit `CONTROL_PLANE_API_KEY` environment variable and preconfigured tunnel executable/profile; no silent prompting or key-file read. See [local CLI lifecycle reference](../LOCAL_CLI.md).

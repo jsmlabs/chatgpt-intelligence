@@ -60,3 +60,20 @@ Legacy `python -m generators ...` continues working. `intel.cmd` now forwards in
 ## Safe configuration and setup (Phase 03)
 
 See [Local Configuration and Setup](architecture/local-configuration.md) for the schema, source precedence, migration, import/export guarantees and recovery guidance. `intel --language de config show` temporarily selects German; `INTEL_LANGUAGE` overrides persisted preferences but not the explicit CLI flag. Configuration accepts only `schema_version` and `language` - no credentials. `config import PATH` previews a validated import; add `--apply` to authorize the write. `config export PATH` creates a new sanitized file, never overwrites. `setup` previews; `setup --apply` performs idempotent initialization. The existing local generator and MCP permission models are unchanged.
+
+## Lifecycle management (Phase 04)
+
+The original `intel start` still invokes the legacy Windows PowerShell tunnel **in the foreground**; stop it with Ctrl+C. Managed mode is **opt-in**:
+
+```text
+intel start --managed
+intel status
+intel stop
+intel restart
+```
+
+Managed mode currently supports **Windows tunnels only**. Set `CONTROL_PLANE_API_KEY` explicitly in the invoking terminal, provide an existing `%APPDATA%\\tunnel-client\\chatgpt-intelligence.yaml`, and make `tunnel-client.exe` available on PATH or via `INTEL_TUNNEL_CLIENT`. For other profiles use `INTEL_TUNNEL_PROFILE`. No key file is automatically read and no remote service is invoked without the explicit start/restart command.
+
+A private runtime record stores a 256-bit random control nonce, supervisor PID and loopback-only control port in the user config directory. This is **runtime state**, never configuration export. `status` authenticates the supervisor over loopback, rather than interpreting a PID or port as proof of ownership. `stop` and `restart` refuse an unverified record. They never kill a PID from disk, a foreign listener on 8080, a user-started tunnel or an MCP server. The supervisor only signals its own direct `tunnel-client.exe` child (gracefully first, termination fallback). If the supervisor itself is forcibly killed, child cleanup is not guaranteed; inspect processes before manually repairing stale state.
+
+`python -m generators.mcp_server` remains a stdio server owned by its invoking ChatGPT/MCP host. There is no detached MCP service or automatic restart; generator calls are independent. `intel stop` affects only the CLI-managed tunnel. The local status command does not claim ChatGPT connectivity, profile identity or tunnel readiness merely from port occupancy. An existing runtime record with failed authentication blocks new managed startup and requires manual inspection; it is never silently overwritten or used as a PID-kill target.

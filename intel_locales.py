@@ -2,6 +2,17 @@
 from __future__ import annotations
 
 EN = {
+"stop":"Stop","restart":"Restart",
+"desc.stop":"Stop CLI-managed tunnel only","desc.restart":"Restart CLI-managed tunnel only",
+"runtime_usage":"Usage: intel start [--managed] | intel stop | intel restart",
+"runtime_error":"Tunnel lifecycle blocked: {reason}",
+"mcp_lifecycle":"MCP lifecycle","managed_tunnel":"Managed tunnel",
+"managed_ownership":"Ownership","host_owned":"Host-owned",
+"not_managed":"Not managed","unverified":"Unverified",
+"running":"Running","stopping":"Stopping","stopped":"Stopped",
+"authenticated":"Authenticated","none":"None",
+"state":"State","changed":"Changed","pid":"Supervisor PID",
+"control_port":"Control port",
 "opt_language":"Override UI language for this invocation",
 "config_invalid":"Configuration error: {reason}",
 "config_hint":"Configuration hint: {hint}",
@@ -58,6 +69,17 @@ EN = {
 "opt_noninteractive":"Never prompt",
 }
 DE = {
+"stop":"Stoppen","restart":"Neustarten",
+"desc.stop":"Nur CLI-verwalteten Tunnel stoppen","desc.restart":"Nur CLI-verwalteten Tunnel neustarten",
+"runtime_usage":"Verwendung: intel start [--managed] | intel stop | intel restart",
+"runtime_error":"Tunnel-Verwaltung blockiert: {reason}",
+"mcp_lifecycle":"MCP-Lebenszyklus","managed_tunnel":"Verwalteter Tunnel",
+"managed_ownership":"Eigentumsnachweis","host_owned":"Vom Host verwaltet",
+"not_managed":"Nicht verwaltet","unverified":"Nicht verifiziert",
+"running":"Läuft","stopping":"Wird beendet","stopped":"Gestoppt",
+"authenticated":"Authentifiziert","none":"Keiner",
+"state":"Zustand","changed":"Geändert","pid":"Supervisor-PID",
+"control_port":"Steuerport",
 "opt_language":"Sprache nur für diesen Aufruf überschreiben",
 "config_invalid":"Konfigurationsfehler: {reason}",
 "config_hint":"Konfigurationshinweis: {hint}",

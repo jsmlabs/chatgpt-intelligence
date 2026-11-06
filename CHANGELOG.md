@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased - phase 04 runtime lifecycle
+
+- Added opt-in Windows tunnel supervisor with private ownership nonce, authenticated loopback state inspection, and safe managed stop/restart.
+- Preserved foreground `intel start`, host-owned MCP stdio and request-scoped generators; no arbitrary PID termination or silent credential loading.
+- Added lifecycle regression and Windows CLI checks; release acceptance still requires live tunnel validation.
+
 ## Unreleased - phase 03 configuration and setup
 
 - Added versioned, allowlisted language preferences with CLI > environment > user file > default precedence, legacy language-only migration and explicit validation.

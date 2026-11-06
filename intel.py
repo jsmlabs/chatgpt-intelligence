@@ -13,11 +13,12 @@ import tempfile
 from intel_console import Console, read_key
 from intel_locales import CATALOGS, tr
 import intel_config as configuration
+import intel_lifecycle as lifecycle
 
 ROOT = Path(__file__).resolve().parent
 VERSION = "0.1.0"
 COMMANDS = ("help", "version", "generate", "config", "providers", "doctor", "status",
-            "setup", "start", "test", "check", "verify", "dev")
+            "setup", "start", "stop", "restart", "test", "check", "verify", "dev")
 INSPECTION = frozenset(("help", "version", "config", "providers", "doctor", "status", "setup"))
 
 
@@ -58,8 +59,11 @@ def inspect(command: str, language: str | None = None) -> dict[str, object]:
         return {"template":"offline","ollama-local":"not_contacted",
                 "chatgpt-host":"host_required","openai-api":"explicit_grant","comfyui":"not_contacted"}
     if command == "status":
+        runtime = lifecycle.inspect()
         return {"local_generator":(ROOT / "generators" / "__main__.py").is_file(),
                 "mcp_server":(ROOT / "generators" / "mcp_server.py").is_file(),
+                "mcp_lifecycle":"host_owned","managed_tunnel":runtime["state"],
+                "managed_ownership":runtime["ownership"],
                 "tunnel":"not_checked","language":language or read_language()}
     return {"python":sys.version.split()[0],
             "generator_package":(ROOT / "generators" / "__main__.py").is_file(),
@@ -256,6 +260,23 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
         console.report({"configured": True, "changed": changed,
                         "schema_version": configuration.SCHEMA_VERSION})
         return 0
+    if command in ("stop", "restart") or (command == "start" and args == ["--managed"]):
+        if command == "start" and args != ["--managed"]:
+            return 2
+        if command != "start" and args:
+            console.error(console.tr("runtime_usage"))
+            return 2
+        try:
+            result = {"start": lifecycle.start, "stop": lifecycle.stop,
+                      "restart": lifecycle.restart}[command]()
+        except (lifecycle.LifecycleError, OSError) as exc:
+            console.error(console.tr("runtime_error", reason=exc), "blocked")
+            return 3
+        console.report(result, console.tr(command))
+        return 0
+    if command == "start" and args:
+        console.error(console.tr("runtime_usage"))
+        return 2
     if args:
         console.error(console.tr("unexpected", command=command, args=" ".join(args)))
         return 2
@@ -304,7 +325,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.json and args.command not in INSPECTION:
         console.error(console.tr("json_unsupported"))
         return 2
-    if args.quiet and args.command in ("generate","test","check","verify","start"):
+    if args.quiet and args.command in ("generate","test","check","verify","start","stop","restart"):
         console.error(console.tr("quiet_unsupported"))
         return 2
     if args.verbose and not args.quiet and not args.json:
