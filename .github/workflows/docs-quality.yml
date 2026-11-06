@@ -24,6 +24,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Report release readiness (non-blocking for development)
         run: python scripts/check_release.py --root . --report-only
+      - name: Scan tracked public text for credential signatures
+        run: python scripts/check_publication_safety.py --root .
       - name: Verify Markdown links and metadata
         run: python scripts/check_docs.py --root .
       - name: Verify brand files if published
