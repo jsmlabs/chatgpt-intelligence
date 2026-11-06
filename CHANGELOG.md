@@ -13,3 +13,6 @@ This file records meaningful documentation changes. A proposed design or documen
 ### Changed
 - Expanded [Architecture Overview](architecture/overview.md) to index shared specifications.
 - Linked roadmap and the updated architecture from the root README.
+
+### Verified
+- Re-read all 27 foundation and Phase 02 documents on `main`; all expected paths resolved. Checked 125 relative Markdown file links against the known document inventory; no missing file targets were found. External links and heading fragments remain outside this check.
