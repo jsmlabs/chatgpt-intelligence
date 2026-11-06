@@ -44,11 +44,14 @@ GitHub Actions [run #22 for commit `be5a386`](https://github.com/jsmlabs/chatgpt
 
 These new checks do not change the outstanding fresh-chat and binary-publication gates.
 
+## Later publication update (same date)
+The original 57-file brand package was subsequently published in full. [Publication verification](branding-publication-verification.md) records exact Git blob comparison for 57/57 files, and [GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42207335254) confirmed 56/56 SHA-256/size checks. Historical statements above describe earlier observations and should not be read as the current status.
+
 ## Remaining Phase 05 gates
-- Publish the 57 original brand files to `branding/v1.4/` in GitHub, validate remote readback and inspect images.
+- **Completed:** Publish the 57 original brand files to `branding/v1.4/`, validate exact remote bytes and inspect the contact sheet. Full independent visual sign-off is still a separate release gate.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
 - Verify task-fit Intelligent UI and fallback behavior in the target ChatGPT surface.
 
-**Assessment:** Repository CI and local installer evidence are sufficient for the scoped automated QA checks. Overall Phase 05 remains **in progress** because client integration and branding publication remain incomplete.
+**Assessment:** Repository CI and local installer evidence are sufficient for the scoped automated QA checks. Overall Phase 05 remains **in progress** because fresh-chat client integration and UI behavior remain unverified; brand publication is complete.
 
 [Roadmap](../ROADMAP.md) | [Brand integration](../guides/branding-integration.md) | [Evaluation guidelines](evaluation-guidelines.md)
