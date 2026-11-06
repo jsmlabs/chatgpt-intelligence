@@ -58,6 +58,9 @@ A [reproducible fresh-chat execution runbook](intel-fresh-chat-runbook.md) speci
 ## Additional strict release and publication checks (2026-11-06)
 The brand manifest verifier now supports `--strict`, which rejects undeclared files in `branding/v1.4/` while preserving its earlier non-strict behavior. The strict mode runs in CI and the release gate. All release attestations now require an existing repository-relative file or a syntactically valid HTTPS evidence reference; human inspection remains necessary. A [scoped tracked-text credential scan](publication-safety-verification.md) is also implemented. [GitHub Actions](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42210670991) confirmed 46 passing tests, 410 relative links without errors, 56/56 brand hashes and 111 scanned text files with zero signature findings. Four client/review release gates remain open.
 
+## Release verifier and image-link hardening (2026-11-06)
+The strict branding checker now rejects symlink aliases (including symlinked directories), noncanonical manifest names and malformed file metadata. The Markdown checker now verifies local image links and HTML `src`/`srcset` references as well as text links. [GitHub Actions run for `bb51acf`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42215683862) passed **54 tests**, checked **66 Markdown files / 427 relative file and image references with zero errors**, verified **56/56 branding hashes**, and found no high-confidence signatures in **112 tracked text files**. Four release gates remain open.
+
 ## Remaining Phase 05 gates
 - **Completed:** Publish the 57 original brand files to `branding/v1.4/`, validate exact remote bytes and inspect the contact sheet. Full independent visual sign-off is still a separate release gate.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
