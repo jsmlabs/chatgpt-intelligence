@@ -143,7 +143,8 @@ class ComfyUITests(unittest.TestCase):
     def test_no_redirects_and_proxy(self):
         opener = ComfyUIHost(checkpoint=MODEL).opener
         self.assertTrue(any(type(x).__name__ == "NoRedirect" for x in opener.handlers))
-        self.assertTrue(any(type(x).__name__ == "ProxyHandler" and not x.proxies for x in opener.handlers))
+        # An explicit empty ProxyHandler suppresses urllib's default proxy handler.
+        self.assertFalse(any(type(x).__name__ == "ProxyHandler" for x in opener.handlers))
 
     def test_export_exclusive_and_source_integrity(self):
         png = render_abstract_png("test")
