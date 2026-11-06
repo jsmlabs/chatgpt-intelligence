@@ -89,3 +89,10 @@ after a separate acceptance check, but G2.3 does not change G2.2 rendering.
 [DESIGN generator](design-generator.md) |
 [Generator roadmap](../GENERATOR-ROADMAP.md) |
 [Foundation contracts](generator-foundation.md)
+
+## Related BRAND identity
+
+The [G2.4 BRAND Generator](brand-generator.md) embeds this exact
+G2.3 theme payload under `theme` in identity JSON and uses the
+selected accent in an SVG concept. No site-wide accessibility or
+registered-trademark claim is implied.

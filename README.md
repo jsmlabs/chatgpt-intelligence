@@ -87,6 +87,15 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## BRAND generator (G2.4)
+
+Deterministic brand briefs, G2.3-compatible JSON identity tokens, and static
+SVG geometric mark concepts with bounded inputs and exclusive local export.
+These are unreviewed design proposals, not trademark-cleared identities.
+[BRAND generator documentation](architecture/brand-generator.md).
+
+---
+
 ## THEME generator (G2.3)
 
 Generate deterministic light/dark JSON design tokens or CSS custom properties

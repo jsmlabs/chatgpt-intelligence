@@ -121,3 +121,12 @@ contrast-pair checks. It requires `--allow-create`, has no network access
 or MCP filesystem export, and does not attest to full WCAG conformance.
 Default discovery now reports 11 tools (12 with opt-in ComfyUI image
 inference). See [G2.3 THEME specification](theme-generator.md).
+
+## G2.4 BRAND MCP tool
+
+The additive `generate_brand` tool provides a bounded brand identity
+brief, JSON tokens incorporating G2.3 THEME, or a static SVG geometric
+mark concept. Operator CREATE permission is required. No filesystem
+export, paid model or trademark verification occurs through MCP.
+Default tool discovery is now **12 tools**, or **13** with the separate
+ComfyUI opt-in. See [BRAND Generator](brand-generator.md).

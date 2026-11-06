@@ -361,3 +361,17 @@ exclusive verified local exports and the additive `generate_theme` MCP tool
 returns in-memory source and audit metadata. No live browser audit or full
 WCAG compliance is claimed. See [G2.3 technical specification]
 (architecture/theme-generator.md).
+
+## G2.4 - BRAND Generator implementation checkpoint (2026-11-06)
+
+The dependency-free BRAND runtime now creates deterministic Markdown
+brand-identity briefs, JSON identity data reusing the **exact G2.3
+THEME light/dark token and contrast audit**, and a static geometric
+SVG mark concept. Fixed selectable directions: `orbit`, `signal`,
+`aperture`. The CLI supports exclusive verified local exports; the
+additive `generate_brand` MCP tool returns in-memory content.
+No external model, publishing or trademark lookup is invoked.
+
+**Not certified:** legal distinctiveness, visual review, in-app
+rendering and live ChatGPT MCP acceptance. See
+[G2.4 BRAND technical specification](architecture/brand-generator.md).
