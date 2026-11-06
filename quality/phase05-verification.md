@@ -50,6 +50,11 @@ The original 57-file brand package was subsequently published in full. [Publicat
 ## Fresh-chat evidence infrastructure (2026-11-06)
 The [per-case validator](../scripts/verify_intel_e2e.py) and [initially not-run ledger](intel-e2e-results.json) now enforce separate records for all 12 scenarios. [GitHub Actions run for `b046e1c`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208022435) passed **26 tests**, checked 63 Markdown files and 372 relative links with no errors, and verified 56/56 published brand assets. Four release gates remain incomplete. This is validator test evidence, **not** proof of execution of those twelve fresh-chat scenarios.
 
+## Fresh-chat acceptance preparation and visual inspection (2026-11-06)
+A [reproducible fresh-chat execution runbook](intel-fresh-chat-runbook.md) specifies the twelve command prompts, disconnected-source preconditions, safe test fixtures and case-by-case evidence requirements. A [scoped brand visual inspection](branding-visual-inspection.md) examined the supplied contact sheet and light banner; it does not substitute for independent visual sign-off.
+
+[GitHub Actions run for commit `f7ea930`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208829270) **passed**: 26 regression tests, 65 Markdown files, 407 relative links with 0 errors, and 56/56 brand manifest hashes. The release checker correctly reports four remaining conditions. The 12 actual fresh-chat scenarios remain `not-run`.
+
 ## Remaining Phase 05 gates
 - **Completed:** Publish the 57 original brand files to `branding/v1.4/`, validate exact remote bytes and inspect the contact sheet. Full independent visual sign-off is still a separate release gate.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
