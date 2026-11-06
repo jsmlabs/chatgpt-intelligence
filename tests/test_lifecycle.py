@@ -99,6 +99,20 @@ class LifecycleTests(unittest.TestCase):
             self.assertEqual(results, [0])
         self.assertFalse(life.record_path().exists())
 
+    def test_symlink_runtime_record_blocks_without_signals(self):
+        path = life.record_path()
+        target = self.home / "outside.json"
+        target.write_text("{}")
+        try:
+            path.symlink_to(target)
+        except (OSError, NotImplementedError):
+            self.skipTest("No symlink support")
+        self.assertEqual(life.inspect()["state"], "unverified")
+        with patch("os.kill") as kill:
+            self.assertEqual(self.cli("stop")[0], 3)
+            kill.assert_not_called()
+        self.assertEqual(target.read_text(), "{}")
+
     def test_non_windows_managed_start_fails_closed(self):
         if os.name != "nt":
             self.assertEqual(self.cli("start", "--managed")[0], 3)

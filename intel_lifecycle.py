@@ -15,7 +15,7 @@ import subprocess
 import sys
 import time
 
-from intel_config import config_path, _check_parent
+from intel_config import ConfigError, config_path, _check_parent
 
 HOST = "127.0.0.1"
 STATE = "tunnel-runtime.json"
@@ -76,7 +76,7 @@ def inspect() -> dict:
         return {"state": "running" if reply.get("running") else "stopping",
                 "ownership": "authenticated", "pid": record["pid"],
                 "control_port": record["port"]}
-    except (LifecycleError, OSError, TimeoutError):
+    except (LifecycleError, ConfigError, OSError, TimeoutError):
         return {"state": "unverified", "ownership": "unverified"}
 
 def stop() -> dict:
@@ -223,7 +223,7 @@ def supervise(exe: str, profile: str) -> int:
                     current = _read()
                     if current and current["nonce"] == nonce and current["pid"] == os.getpid():
                         path.unlink()
-                except (LifecycleError, OSError):
+                except (LifecycleError, ConfigError, OSError):
                     pass
 
 def main() -> int:
@@ -231,7 +231,7 @@ def main() -> int:
         return 2
     try:
         return supervise(sys.argv[2], sys.argv[3])
-    except (OSError, LifecycleError):
+    except (OSError, LifecycleError, ConfigError):
         return 3
 
 if __name__ == "__main__":
