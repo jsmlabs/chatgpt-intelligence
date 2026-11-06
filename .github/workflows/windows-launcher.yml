@@ -1,0 +1,43 @@
+name: Windows Launcher Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/intel.ps1"
+      - "intel.cmd"
+      - "scripts/verify_host_mcp.py"
+      - "generators/**"
+      - ".github/workflows/windows-launcher.yml"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  launcher:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Parse Windows PowerShell 5.1 launcher
+        shell: powershell
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+              (Join-Path (Get-Location) 'scripts\intel.ps1'),
+              [ref]$tokens,
+              [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -ne 0) {
+              $errors | ForEach-Object { Write-Error $_.Message }
+              exit 1
+          }
+      - name: Run launcher MCP smoke action
+        shell: powershell
+        run: .\scripts\intel.ps1 -Action Test
