@@ -4,6 +4,8 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Implemented [G2.1 IMAGE production briefs](architecture/image-generator.md) through the Python CLI and two additive MCP tools, with explicit `image_generated: false` provenance; real raster rendering remains a separate verified-adapter milestone.
+- Consolidated [G1.9 technical handoff acceptance](architecture/chatgpt-host-integration.md) using three directly observed ChatGPT MCP results and preserving independent release/security gates.
 - Windows launcher can now load the restricted tunnel runtime key from the user's Desktop/tunnel-client/key.txt (single-line, never printed), with masked prompt fallback and non-persistent process environment.
 - Added [Windows INTEL launcher](architecture/windows-launcher.md) with one-click menu for foreground tunnel startup, status, diagnosis, MCP smoke test and optional Ollama listing, without stored credentials.
 - [Closed all six documentation roadmap phases at explicitly limited scope](quality/project-closeout.md); marked the repository as maintenance-oriented without falsely completing fresh-chat tests, independent reviews or a formal release. Existing strict release checks remain unchanged.

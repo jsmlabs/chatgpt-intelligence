@@ -86,3 +86,11 @@ supplied by the calling client. They require a trusted `--allow-create`
 startup permission, use no model API and record `not-attested` model origin.
 The stdio maximum input line is now 128 KiB for bounded Markdown submissions.
 See [G1.9 handoff](chatgpt-host-integration.md).
+
+## G2.1 IMAGE brief tools
+
+The additive `generate_image_brief` and `submit_image_brief` MCP tools
+produce and validate Markdown image production briefs. No raster image is
+generated or returned, and no billable model API is invoked. After a
+repository update, restart the local tunnel-client and refresh the installed
+plugin's tool list. See [G2.1 spec](image-generator.md).

@@ -1,6 +1,6 @@
 ---
 title: INTEL Generator Ecosystem Roadmap
-status: proposed
+status: accepted
 version: 0.1.0
 updated: 2026-11-06
 classification: proposed-design
@@ -10,7 +10,19 @@ classification: proposed-design
 
 > Extend the existing research and documentation reference project with a modular, evidence-aware workflow for generating, validating, revising, and exporting useful artifacts.
 
-**Status:** Proposed expansion. This document is a forward-looking product specification, not a claim that the generators, command dispatcher, model tools, or export pipeline have been implemented.
+**Status:** Active staged implementation. G0 contracts, G1 text generators, G1.8 local provider routing and G1.9 ChatGPT-client MCP handoff have been implemented. G2.1 provides an IMAGE *production-brief generator* only, not bitmap rendering. All other creative capabilities and external exports remain planned until individually verified. The original release gates remain in force.
+
+## Verified implementation matrix (2026-11-06)
+
+| Capability | Actual implemented scope | Native output produced? |
+| --- | --- | --- |
+| PROMPT / CONCEPT / DOCUMENT | Deterministic Markdown; optional local Ollama; client-supplied Markdown via MCP | Markdown drafts only |
+| IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **No PNG/JPEG or other raster image** |
+| DESIGN / THEME / BRAND | Registered but planned | No |
+| GIF / SLIDES / DIAGRAM / CHART / CODE | Registered but planned | No |
+| VIDEO / AUDIO / WORKFLOW / PACK | Registered but planned | No |
+
+The G1.9 technical ChatGPT handoff has been observed through real client tool calls (three reviewed responses). Origin is not independently attested, and this observation does not certify full security, content quality or release readiness.
 
 ## 1. Vision and scope
 
@@ -24,7 +36,7 @@ classification: proposed-design
 
 ## 2. Capability catalog and priority
 
-Priorities: **P0 = initial usable MVP**, **P1 = creative production**, **P2 = richer media**, **P3 = advanced workflows**. All entries below are *planned* unless explicitly verified elsewhere.
+Priorities: **P0 = initial usable MVP**, **P1 = creative production**, **P2 = richer media**, **P3 = advanced workflows**. Capability labels describe product goals, not necessarily installed renderers. See the verified implementation matrix below.
 
 | Capability | Proposed command | Core output | Priority |
 | --- | --- | --- | --- |
@@ -260,12 +272,32 @@ unverified. A separate proposed [G1.9 ChatGPT-host feasibility milestone]
 (architecture/chatgpt-host-integration.md) must prove actual client support
 before `chatgpt-host` is marked operational.
 
-## G1.9 MCP host-handoff checkpoint (2026-11-06)
+## G1.9 MCP host-handoff implementation checkpoint (2026-11-06)
 
 Three additive MCP `submit_*_draft` tools accept client-authored Markdown,
 apply G0 permission and artifact contracts and return structurally reviewed
 in-memory content. Their provenance is not independently attested.
 The local stdio verifier exercises the transport without an external model
-or paid provider. Actual ChatGPT client plugin connection through a supported
-custom MCP setup/tunnel remains unverified. See
+or paid provider. Actual ChatGPT-client connectivity was subsequently exercised in the
+current development conversation: three client-initiated `submit_*_draft`
+calls returned `reviewed` and `structural_validation: passed`.
+This is technical handoff acceptance, not independent model-origin
+attestation or production release approval. See
 [G1.9 integration](architecture/chatgpt-host-integration.md).
+
+## G2.1 IMAGE production-brief checkpoint (2026-11-06)
+
+The `IMAGE` capability is now available **only for Markdown image
+production briefs** through the Python CLI and two add-on MCP tools:
+`generate_image_brief` and `submit_image_brief`. Briefs include aspect
+ratio, audience, style, palette, composition, image prompt, alternatives,
+constraints, provenance and review steps. Client-authored content is
+validated and explicitly labeled `not-attested`.
+
+The implementation uses the G0 create permission, existing artifact lifecycle,
+structural Markdown checks and verified exclusive Markdown export. It performs
+no raster rendering, model API request, or file download; `--format png` and
+non-template model selections fail closed. The first G2.1 checkpoint is
+**implemented for briefs**, while the original G2 deliverable of real image
+generation remains **blocked pending a verified image-capable host adapter**.
+See [G2.1 specification](architecture/image-generator.md).

@@ -19,12 +19,14 @@ and the existing artifact state transitions, returning an in-memory
 `reviewed` artifact. No model HTTP request, additional OpenAI API billing
 or Ollama process is needed for the handoff.
 
-**Not verified:** Whether the current ChatGPT account/workspace can attach
-and invoke this local MCP server. The server cannot directly call the ChatGPT
-conversation model; the model's authorship of the submitted text is **not
-attested**. The resulting provenance is `client-submitted-draft`,
-`model_provider: not-attested`, `llm_generation: not_attested`.
-Structural review does not constitute human approval or source verification.
+**Observed in development on 2026-11-06:** A ChatGPT client successfully
+discovered the six G1.9 tools and directly invoked all three
+`submit_*_draft` tools over the private tunnel. All three returned
+`state: reviewed` and `structural_validation: passed` with
+`model_provider: not-attested`. This was an actual live client-mediated
+handoff, not a synthetic local-only test. The MCP protocol does not attest
+which model authored the submitted text. Structural review does not
+constitute human approval or source verification.
 
 The previous `generate_*` tools, template/Ollama/OpenAI routing,
 16-entry registry and artifact lifecycle are preserved.
@@ -83,15 +85,44 @@ publish tunnel credentials in source control. The tunnel requires separate
 Platform/workspace provisioning; its cost and eligibility must be checked
 rather than assumed to be universally free.
 
-## Live acceptance gates - BLOCKED / NOT RUN
+## G1.9 technical live acceptance evidence (2026-11-06)
 
-1. Actual supported account and workspace connection established.
-2. Secure tunnel health and MCP discovery verified.
-3. Client discovers three `submit_*_draft` tool schemas.
-4. Actual ChatGPT client generates and submits PROMPT, CONCEPT, DOCUMENT.
-5. Permission denial, no billing fallback and provenance labels confirmed.
-6. Record the exact repository revision and client connection evidence.
+**Evidence source:** Direct client tool results observed in the operator's
+ChatGPT development conversation. This report does not expose private tunnel
+credentials and is not an independent audit of the infrastructure.
 
-Only a real client-driven run can clear these gates. Do not claim that the
-`ProviderRouter(chatgpt_host=...)` callback path works without a separate
-verified host adapter, or that an MCP submission proves specific model origin.
+| Tool | Observed artifact ID | State | Structural validation |
+| --- | --- | --- | --- |
+| `submit_prompt_draft` | `d704f3255ef741b48ce9f852ec1bef5e` | reviewed | passed |
+| `submit_concept_draft` | `eb504d5133df4f699660fec8b08705a6` | reviewed | passed |
+| `submit_document_draft` | `a4f8b329f0bd4cd3a8d02492b545eaf2` | reviewed | passed |
+
+The client advertised six G1.9 MCP tools. The operator also supplied
+local PowerShell health evidence: `/healthz` and `/readyz` both returned
+HTTP 200 with expected body values. The three client submissions reported
+`client_submission: received`, `model_provider: not-attested`,
+`llm_generation: not_attested`, `source_verification: not_run`, and
+`human_review: not_run`. The source repository revision before G2.1 was
+`43faa494a4f35df5a09a3d3080d411bcadd31499` for the original
+handoff implementation; the launcher subsequently advanced the repository.
+This is **technical handoff acceptance**, not independent model attestation,
+an image-rendering adapter, or production-release certification.
+
+### Remaining independent checks
+
+- Independently audit private tunnel permissions and process-wide CREATE scope.
+- Verify content quality, source claims and privacy with appropriate review.
+- Repeat a fresh-chat or reproducible operator client acceptance test with
+  recorded connection/version evidence if required for release.
+- Preserve the four existing strict release-readiness blockers.
+- `ProviderRouter(chatgpt_host=...)` callback remains an unverified separate
+  model-host interface, not established by MCP client submissions.
+
+## G2.1 tool refresh
+
+After pulling the G2.1 commit, restart the local tunnel-client to load the
+updated Python MCP process. In the installed ChatGPT Intelligence plugin
+settings, use **Refresh tools**. The G2.1 MCP tools
+`generate_image_brief` and `submit_image_brief` bring the total to eight.
+They return Markdown production briefs and never claim an actual image file.
+See [G2.1 IMAGE specification](image-generator.md).

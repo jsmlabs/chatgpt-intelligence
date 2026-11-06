@@ -87,6 +87,14 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## IMAGE production briefs (G2.1)
+
+The local `IMAGE` command and MCP tools create or validate editable Markdown
+creative briefs, including image prompts, composition, palette and aspect ratio.
+**They do not render image files.** [G2.1 specification](architecture/image-generator.md).
+
+---
+
 ## ChatGPT client handoff (G1.9)
 
 The local MCP stdio host accepts client-authored Markdown via three
