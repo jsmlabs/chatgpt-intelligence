@@ -31,7 +31,8 @@ already set. Otherwise it reads a single-line restricted runtime secret from
 `%USERPROFILE%\\Desktop\\tunnel-client\\key.txt` (or the Windows redirected
 Desktop equivalent). If the file is absent, it prompts with masked input.
 A malformed or empty existing file **blocks startup** rather than falling back
-silently. The secret is never printed or committed, and a temporary
+silently. The launcher resolves the Windows Desktop folder dynamically, including
+redirected desktops, and never hardcodes a Windows account name. The secret is never printed or committed, and a temporary
 environment variable is removed when the action ends. No key or tunnel ID
 is saved in repository files. For a custom executable path, pass `-TunnelClient "C:\path\tunnel-client.exe"`
 or set `INTEL_TUNNEL_CLIENT`. Existing session credentials are preserved.

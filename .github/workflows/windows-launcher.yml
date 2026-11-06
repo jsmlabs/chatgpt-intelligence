@@ -38,6 +38,28 @@ jobs:
               $errors | ForEach-Object { Write-Error $_.Message }
               exit 1
           }
+      - name: Verify automatic desktop key loading with a synthetic key
+        shell: powershell
+        run: |
+          $desktop = [Environment]::GetFolderPath('DesktopDirectory')
+          $dir = Join-Path $desktop 'tunnel-client'
+          $keyFile = Join-Path $dir 'key.txt'
+          $profileDir = Join-Path $env:APPDATA 'tunnel-client'
+          $profileFile = Join-Path $profileDir 'chatgpt-intelligence.yaml'
+          $fakeClient = Join-Path $env:RUNNER_TEMP 'fake-client.cmd'
+          New-Item -ItemType Directory -Force -Path $dir, $profileDir | Out-Null
+          try {
+            Set-Content -LiteralPath $keyFile -Value 'sk-synthetic-test-only-123456789' -Encoding UTF8
+            Set-Content -LiteralPath $profileFile -Value 'synthetic: true' -Encoding UTF8
+            Set-Content -LiteralPath $fakeClient -Value '@echo off', 'if not defined CONTROL_PLANE_API_KEY exit /b 2', 'exit /b 0' -Encoding ASCII
+            Remove-Item Env:\CONTROL_PLANE_API_KEY -ErrorAction SilentlyContinue
+            .\scripts\intel.ps1 -Action Doctor -TunnelClient $fakeClient
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+            if (Test-Path Env:\CONTROL_PLANE_API_KEY) { throw 'Temporary credential was retained.' }
+          }
+          finally {
+            Remove-Item -LiteralPath $keyFile, $profileFile, $fakeClient -Force -ErrorAction SilentlyContinue
+          }
       - name: Run launcher MCP smoke action
         shell: powershell
         run: .\scripts\intel.ps1 -Action Test
