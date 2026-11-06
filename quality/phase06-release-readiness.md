@@ -15,8 +15,8 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Area | Status | Evidence and limitation |
 | --- | --- | --- |
 | Repository identity and seven domain indexes | passed (scoped) | README and roadmap retain the exact project tagline and seven documented areas |
-| Automated tests | passed | [Verified CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208829270): 26 tests, all passing |
-| Relative Markdown links | passed | Same run: 65 Markdown files, 407 links, 0 errors |
+| Automated tests | passed | [Verified CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42209415341): 33 tests, all passing |
+| Relative Markdown links | passed | Same run: 65 Markdown files, 409 links, 0 errors |
 | Documentation CI and E2E evidence validator | passed (tooling only) | [Run for commit `b046e1c`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208022435) passed; the 12 actual fresh-chat scenarios have **not** been run |
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
 | Branding assets on `main` | passed | [Verified publication](branding-publication-verification.md): 57/57 original Git blobs matched; GitHub Actions verified 56/56 manifest entries |
