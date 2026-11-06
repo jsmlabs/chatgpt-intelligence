@@ -2,6 +2,17 @@
 from __future__ import annotations
 
 EN = {
+"opt_language":"Override UI language for this invocation",
+"config_invalid":"Configuration error: {reason}",
+"config_hint":"Configuration hint: {hint}",
+"config_export_failed":"Cannot export preferences ({reason}); choose another writable path.",
+"config_import_preview":"Import preview only. Add --apply to save.",
+"config_usage":"Usage: intel config [show|validate|language en|de|show|export PATH|import PATH [--apply]]",
+"setup_usage":"Usage: intel setup [--apply]",
+"setup_preview":"Setup preview only. Add --apply to create preferences.",
+"valid":"Valid","schema_version":"Schema version","source":"Source",
+"applied":"Applied","changed":"Changed","exported":"Exported","configured":"Configured",
+"config_path":"Configuration file",
 "title":"ChatGPT Intelligence","subtitle":"Offline-first developer console",
 "choose":"Select a command (0 to exit): ","invalid":"Invalid choice.",
 "exit":"Exit","language":"Language","select_language":"Language (1 English, 2 Deutsch, 0 Cancel): ",
@@ -47,6 +58,17 @@ EN = {
 "opt_noninteractive":"Never prompt",
 }
 DE = {
+"opt_language":"Sprache nur für diesen Aufruf überschreiben",
+"config_invalid":"Konfigurationsfehler: {reason}",
+"config_hint":"Konfigurationshinweis: {hint}",
+"config_export_failed":"Einstellungen können nicht exportiert werden ({reason}); neuen Pfad wählen.",
+"config_import_preview":"Nur Importvorschau. Mit --apply speichern.",
+"config_usage":"Verwendung: intel config [show|validate|language en|de|show|export PATH|import PATH [--apply]]",
+"setup_usage":"Verwendung: intel setup [--apply]",
+"setup_preview":"Nur Einrichtungsvorschau. Mit --apply Einstellungen erstellen.",
+"valid":"Gültig","schema_version":"Schemaversion","source":"Quelle",
+"applied":"Angewendet","changed":"Geändert","exported":"Exportiert","configured":"Konfiguriert",
+"config_path":"Konfigurationsdatei",
 "title":"ChatGPT Intelligence","subtitle":"Offline-orientierte Entwicklerkonsole",
 "choose":"Befehl wählen (0 zum Beenden): ","invalid":"Ungültige Auswahl.",
 "exit":"Beenden","language":"Sprache","select_language":"Sprache (1 Englisch, 2 Deutsch, 0 Abbrechen): ",
