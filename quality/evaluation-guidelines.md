@@ -37,3 +37,6 @@ The [pattern evaluation rubric](pattern-evaluation.md) provides comparable scena
 
 ## Existing-chat source retrieval evidence
 The [source smoke test](intel-source-smoke-test.md) records fetched GitHub paths and blob SHAs. It is narrower than a fresh-chat `/INTEL` end-to-end test and cannot be substituted for one.
+
+## Automated documentation regression checks
+The [local checker](../scripts/check_docs.py) validates Markdown file targets and supported frontmatter values. The [CI workflow](../.github/workflows/docs-quality.yml) runs it on main and pull requests and verifies the brand manifest only when the original package is present. A missing manifest is an explicit skip, not a successful branding publication. Review CI execution status separately.
