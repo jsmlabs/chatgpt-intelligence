@@ -22,6 +22,8 @@ jobs:
           python-version: "3.11"
       - name: Run verifier regression tests
         run: python -m unittest discover -s tests -v
+      - name: Report release readiness (non-blocking for development)
+        run: python scripts/check_release.py --root . --report-only
       - name: Verify Markdown links and metadata
         run: python scripts/check_docs.py --root .
       - name: Verify brand files if published
