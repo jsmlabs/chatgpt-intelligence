@@ -33,7 +33,7 @@ DOCTOR_PROFILES = ("basic", "full")
 # command output from the structured runner.
 REDACTIONS = (
     (re.compile(r"(?i)\b(?:bearer)\s+[a-z0-9._~+/-]+(?:=+)?"), "Bearer [REDACTED]"),
-    (re.compile(r'(?i)("(?:api_key|access_token|token|password|secret|authorization)"\s*:\s*)"[^"\\r\\n]*"'), r'\1"[REDACTED]"'),
+    (re.compile(r'(?i)("(?:api_key|access_token|token|password|secret|authorization)"\s*:\s*)"[^"\r\n]*"'), r'\1"[REDACTED]"'),
     (re.compile(r"\b(?:sk-(?:proj-|test-)?[A-Za-z0-9_-]{12,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{24,}|xoxb-[A-Za-z0-9-]{20,}|AKIA[0-9A-Z]{16})\b"), "[REDACTED]"),
     (re.compile(r'(?i)(\b(?:api[_-]?key|access[_-]?token|secret|password|credential|authorization)\b\s*[:=]\s*)(?:"[^"\r\n]*"|\'[^\'\r\n]*\'|[^\s,;}]+)'), r"\1[REDACTED]"),
 )
