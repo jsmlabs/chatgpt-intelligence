@@ -39,6 +39,9 @@ python scripts/verify_intel_e2e.py --file quality/intel-e2e-results.json
 
 The [strict release checker](../scripts/check_release.py) additionally enforces these per-case records if the top-level `fresh_chat_intel` release attestation is marked `passed`. Structural validation does not independently prove a ChatGPT client behavior; review the actual evidence.
 
+## Reproducible client execution
+Use the [fresh-chat runbook](intel-fresh-chat-runbook.md) for exact prompts, required disconnected/source-injection preconditions, privacy-safe evidence capture and case-specific pass/fail rules. Keep this file as the canonical test-plan overview.
+
 ## Results record
 ```yaml
 case_id: E2E-03
