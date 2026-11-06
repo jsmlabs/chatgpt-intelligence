@@ -269,7 +269,7 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
         try:
             result = {"start": lifecycle.start, "stop": lifecycle.stop,
                       "restart": lifecycle.restart}[command]()
-        except (lifecycle.LifecycleError, OSError) as exc:
+        except (lifecycle.LifecycleError, configuration.ConfigError, OSError) as exc:
             console.error(console.tr("runtime_error", reason=exc), "blocked")
             return 3
         console.report(result, console.tr(command))
