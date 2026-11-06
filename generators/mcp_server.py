@@ -7,6 +7,7 @@ No HTTP listener, filesystem export or implicit model permissions.
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import sys
 from typing import Any, BinaryIO
@@ -18,6 +19,7 @@ from .provider_router import ProviderRouter
 from .text_runtime import TextRuntime
 from .host_drafts import submit_host_draft
 from .image_runtime import ImageRuntime
+from .image_render import render_image
 
 MAX_INPUT_LINE = 131072
 SUPPORTED_VERSIONS = frozenset({"2025-06-18", "2025-11-25"})
@@ -26,6 +28,7 @@ TOOL_TYPES = {"generate_prompt": "PROMPT", "generate_concept": "CONCEPT",
 SUBMIT_TYPES = {"submit_prompt_draft": "PROMPT", "submit_concept_draft": "CONCEPT",
                 "submit_document_draft": "DOCUMENT"}
 IMAGE_TOOLS = ("generate_image_brief", "submit_image_brief")
+RENDER_TOOL = "render_abstract_image"
 DESCRIPTION = {
     "generate_prompt": "Generate an editable Markdown prompt draft.",
     "generate_concept": "Generate an editable Markdown concept brief.",
@@ -35,6 +38,7 @@ DESCRIPTION = {
     "submit_document_draft": "Validate an already-written document draft supplied by the ChatGPT client; no model call.",
     "generate_image_brief": "Generate a deterministic IMAGE production brief; no image file or model call.",
     "submit_image_brief": "Validate a client-written IMAGE production brief; no image file or model call.",
+    "render_abstract_image": "Render a small, deterministic procedural geometric PNG. No AI prompt-to-image generation, no model API, no semantic subject rendering.",
 }
 INPUT_SCHEMA = {
     "type": "object",
@@ -85,6 +89,18 @@ IMAGE_SUBMIT_SCHEMA = {
 }
 
 
+RENDER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "objective": {"type": "string", "minLength": 1, "maxLength": 8192},
+        "aspect_ratio": {"type": "string", "enum": ["1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16"]},
+        "palette": {"type": "string", "maxLength": 128},
+    },
+    "required": ["objective"],
+    "additionalProperties": False,
+}
+
+
 class MCPHost:
     def __init__(self, authorization: Authorization | None = None,
                  model_host: OpenAIResponsesHost | None = None,
@@ -120,7 +136,7 @@ class MCPHost:
             self.initialized = True
             return self._ok(request_id, {
                 "protocolVersion": version, "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.5.0"},
+                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.5.1"},
             })
         if not self.initialized:
             return self._error(request_id, -32002, "Initialize MCP connection first")
@@ -142,13 +158,41 @@ class MCPHost:
                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
                                  "idempotentHint": False, "openWorldHint": False}}
                 for name in IMAGE_TOOLS
-            ]})
+            ] + [{"name": RENDER_TOOL, "description": DESCRIPTION[RENDER_TOOL],
+                  "inputSchema": RENDER_SCHEMA,
+                  "annotations": {"readOnlyHint": True, "destructiveHint": False,
+                                  "idempotentHint": True, "openWorldHint": False}}]})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
-            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS:
+            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL:
                 return self._error(request_id, -32602, "Unknown INTEL tool")
             if not isinstance(arguments, dict):
                 return self._error(request_id, -32602, "Tool arguments must be an object")
+            if name == RENDER_TOOL:
+                if set(arguments) - set(RENDER_SCHEMA["properties"]):
+                    return self._error(request_id, -32602, "Unknown raster rendering field")
+                try:
+                    image = render_image(arguments.get("objective"),
+                                         aspect_ratio=arguments.get("aspect_ratio", "1:1"),
+                                         palette=arguments.get("palette", ""),
+                                         authorization=self.authorization)
+                except IntelError as exc:
+                    return self._ok(request_id, {
+                        "content": [{"type": "text", "text": json.dumps(
+                            {"code": exc.code, "message": exc.message}, sort_keys=True)}],
+                        "isError": True})
+                return self._ok(request_id, {
+                    "content": [{"type": "image", "data": base64.b64encode(image.png).decode("ascii"),
+                                 "mimeType": "image/png"}],
+                    "structuredContent": {"capability": "image", "artifact_type": "image/png",
+                                          "width": image.width, "height": image.height,
+                                          "sha256": image.sha256, "image_generated": True,
+                                          "image_verified": True, "model_provider": "not-used",
+                                          "producer": image.producer,
+                                          "semantic_prompt_followed": False,
+                                          "output_verified": False},
+                    "isError": False,
+                })
             if name in IMAGE_TOOLS:
                 schema = IMAGE_SUBMIT_SCHEMA if name == "submit_image_brief" else IMAGE_SCHEMA
                 if set(arguments) - set(schema["properties"]):

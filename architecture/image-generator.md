@@ -59,7 +59,35 @@ The export refuses to overwrite an existing file. The `--format png`,
 `--provider openai-api` and `--provider ollama-local` paths are not
 image-rendering implementations and must fail with explicit errors.
 
-## Deferred: actual image rendering
+## G2.1.1 - Procedural raster rendering (implemented separately)
+
+A pure Python local renderer now generates **actual PNG bytes** for decorative
+abstract geometric artwork. It is not an AI image generation model and cannot
+faithfully render arbitrary semantic subjects, labels, supplied photographs or
+a detailed freeform image prompt. Input `objective` seeds repeatable geometry.
+The optional `palette` accepts exactly three `#RRGGBB` colors and
+`aspect_ratio` uses the existing G2.1 allowed values.
+
+Local verified export (requires an existing output directory):
+
+```powershell
+python -m generators.image_render --objective "Abstract product artwork" --aspect-ratio 16:9 --palette "#101827,#9061f9,#e8dfff" --authorize-create --export-root . --filename artwork.png
+```
+
+The renderer uses no external calls, model API or additional dependencies.
+A strict PNG header/chunk/CRC/pixel check, SHA-256 and readback after exclusive
+file creation must succeed before reporting a verified file. It does not
+overwrite existing files.
+
+The additive `render_abstract_image` MCP tool responds with an actual
+`image/png` content block, dimensions, checksum, and
+`producer: local-procedural-geometry`. It does **not** write a file through
+MCP, and `output_verified` remains false even when returned bytes pass
+local validation. `semantic_prompt_followed` is always false.
+This is a limited, explicit zero-cost local rendering capability, not
+a verified connection to the ChatGPT image generator.
+
+## Deferred: semantic AI image rendering
 
 A future host image adapter must have verified tool capability, explicit
 permission grants where needed, an authorized model/tool runtime,

@@ -17,7 +17,7 @@ classification: proposed-design
 | Capability | Actual implemented scope | Native output produced? |
 | --- | --- | --- |
 | PROMPT / CONCEPT / DOCUMENT | Deterministic Markdown; optional local Ollama; client-supplied Markdown via MCP | Markdown drafts only |
-| IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **No PNG/JPEG or other raster image** |
+| IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **Procedural abstract PNG renderer only (G2.1.1); no semantic AI image renderer** |
 | DESIGN / THEME / BRAND | Registered but planned | No |
 | GIF / SLIDES / DIAGRAM / CHART / CODE | Registered but planned | No |
 | VIDEO / AUDIO / WORKFLOW / PACK | Registered but planned | No |
@@ -301,3 +301,11 @@ non-template model selections fail closed. The first G2.1 checkpoint is
 **implemented for briefs**, while the original G2 deliverable of real image
 generation remains **blocked pending a verified image-capable host adapter**.
 See [G2.1 specification](architecture/image-generator.md).
+
+## G2.1.1 - Local raster image adapter
+
+A bounded procedural geometric PNG renderer is implemented as an opt-in local CLI
+and additive MCP image-content tool. It outputs real CRC-checked PNG bytes,
+without a model API or cloud provider. This does not satisfy the broader
+requirement for natural-language semantic image generation; a verified AI
+image provider adapter is a separate open milestone.
