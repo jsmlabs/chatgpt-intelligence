@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - local/offline CLI modernization
+
+- Added `intel.py` as a dependency-free local command router, with Windows `intel.cmd` forwarding.
+- Added numbered interactive navigation, safe persistent English/German preference, terminal-aware ANSI output and JSON inspection.
+- Preserved generator permissions, MCP contracts and existing PowerShell tunnel actions; added offline CLI regression tests and [local CLI guide](LOCAL_CLI.md).
+- No version tag or release claimed; existing release gates remain in force.
+
 This file records meaningful documentation changes. A proposed design or documentation revision does not imply an implementation or a published software release.
 
 ## Unreleased

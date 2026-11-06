@@ -49,7 +49,7 @@ class LocalCLI(unittest.TestCase):
 
     def test_symlink_config_is_rejected(self):
         destination = intel.config_path()
-        destination.parent.mkdir(parents=True)
+        destination.parent.mkdir(parents=True, exist_ok=True)
         target = Path(self.temp.name) / "outside"
         target.write_text("preserve")
         try:

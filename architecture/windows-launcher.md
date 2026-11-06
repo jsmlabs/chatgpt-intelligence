@@ -8,8 +8,10 @@ classification: experimental
 
 # Windows launcher
 
-Double-click [intel.cmd](../intel.cmd) from the repository root and choose
-Start, Status, Doctor, Test, Ollama, or Locate. From Windows PowerShell 5.1:
+**Unified entrypoint:** `intel.cmd` now starts the Python-backed interactive `intel` CLI or forwards arguments (for example `intel.cmd doctor`, `intel.cmd generate prompt --objective "Draft" --authorize-create`). It requires Python on PATH. The commands below remain available directly through the unchanged legacy PowerShell tunnel launcher. See [local CLI reference](../LOCAL_CLI.md).
+
+
+For the original tunnel-specific Start, Status, Doctor, Test, Ollama and Locate actions, use Windows PowerShell 5.1:
 
 ```powershell
 .\scripts\intel.ps1 -Action Start
