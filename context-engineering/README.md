@@ -19,6 +19,9 @@ Separate instruction priority from information relevance. Prefer the minimum suf
 ## Example question
 Which context is necessary for the current task?
 
+## Practical guide
+- [context selection](context-selection.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
