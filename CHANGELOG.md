@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- [Initial Phase 06 release-readiness review](quality/phase06-release-readiness.md) identifies verified CI evidence and outstanding branding, fresh-chat and runtime acceptance gates.
 - [Phase 05 verification record](quality/phase05-verification.md): GitHub Actions run #21 passed 12 regression tests and checked 330 links across 57 Markdown files; isolated brand import passed 56/56 hash checks. Remote branding remains unpublished.
 - Safe [branding v1.4 installer](scripts/install_branding.py) with preflight manifest checks, overwrite refusal, and rollback attempt; four installer regression tests added, execution pending.
 - [Local verifier execution record](quality/local-verifier-execution.md): eight tests passed in a reconstructed environment, original brand ZIP verified, exact GitHub CI still unverified.
