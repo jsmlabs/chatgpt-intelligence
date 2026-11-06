@@ -78,3 +78,7 @@ python -m generators prompt --objective "Create a secure code review prompt" --a
 ```
 
 `--authorize-create` is explicit local CLI authority; a prompt or source cannot supply this permission. Use `--export-root <existing-directory> --filename <new-name>.md` for verified exclusive Markdown file creation. Existing legacy commands are unchanged and still require a configured ChatGPT host for research/query execution.
+
+## G1.6 opt-in model runtime
+
+The Python CLI accepts `--mode model` for `PROMPT`, `CONCEPT` and `DOCUMENT` with `--authorize-create --authorize-external --authorize-billable`. The provider adapter requires `OPENAI_API_KEY` and `INTEL_OPENAI_MODEL` in a trusted process environment. Without them, it returns `MODEL_UNAVAILABLE`. Without the additional grants it returns `PERMISSION_DENIED`, before any network request. The deterministic template is still the default, with no network access. No live model integration or native ChatGPT command was verified by CI. See [G1.6 model host](architecture/model-host.md).

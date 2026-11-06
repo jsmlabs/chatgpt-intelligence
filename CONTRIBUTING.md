@@ -40,3 +40,7 @@ We aim for explanations anyone can follow, without sacrificing technical accurac
 ## G1 developer workflow
 
 For text-generation changes, extend [the local runtime](architecture/text-runtime.md) and add cases to [G1 tests](tests/test_text_runtime.py). Preserve the G0 `Coordinator` contract, do not treat untrusted user content as authorization, and distinguish structural validation from human review or model verification. Check the exact commit in GitHub Actions before claiming CI passed. Do not add model providers without a verified host adapter and explicit side-effect permissions.
+
+## Model-backed integration boundary
+
+Keep model transport in `generators/model_host.py` and deterministic authorization in the runtime. Any new provider must be independently authenticated and preserve explicit external/billable permission checks, size/time budgets, error sanitization and output validation. Synthetic provider tests must not be described as live integration evidence. No credentials in commits or test fixtures.

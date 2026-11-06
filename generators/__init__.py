@@ -17,3 +17,6 @@ __all__ = [
 from .text_runtime import TextRuntime, text_registry, validate_request, render_markdown
 
 __all__ += ["TextRuntime", "text_registry", "validate_request", "render_markdown"]
+
+from .model_host import OpenAIResponsesHost, ModelOutput
+__all__ += ["OpenAIResponsesHost", "ModelOutput"]

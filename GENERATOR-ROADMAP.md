@@ -235,3 +235,7 @@ The `generators/` Python reference runtime now implements deterministic parsing,
 ## G1 implementation checkpoint (2026-11-06)
 
 A local Python text-first runtime has been added for `PROMPT`, `CONCEPT`, and `DOCUMENT` with deterministic templates, request validation, explicit local creation permission, reviewed draft manifests, revisions and verified Markdown export. All other generators remain planned. This is a **local reference MVP**, not a model-backed ChatGPT native integration. Source verification and human editorial review remain not run. See [runtime architecture](architecture/text-runtime.md) and [G1 tests](tests/test_text_runtime.py). G1 external-tool and client acceptance criteria are **not yet certified**.
+
+## G1.6 implementation checkpoint (2026-11-06)
+
+An opt-in Python Responses API host adapter and injectable model-host contract have been added for the three G1 text generators. External and billable permissions are checked before execution; the original registry, G0 dispatcher and artifact lifecycle are unchanged. Synthetic transport tests are not evidence of live provider access. Current status: **integration code implemented; live provider/client verification not run**. See [model-host architecture](architecture/model-host.md).
