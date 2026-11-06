@@ -21,7 +21,8 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
 | Branding assets on `main` | passed | [Verified publication](branding-publication-verification.md): 57/57 original Git blobs matched; GitHub Actions verified 56/56 manifest entries |
 | Fresh-chat `/INTEL` activation | not-run | Activation instructions and source retrieval exist, but no fresh-chat execution evidence |
-| Live Intelligent UI and fallback | not-run | Design patterns documented; runtime client verification not recorded |
+| Live Intelligent UI and fallback | not-run | Design patterns documented and [fresh-chat runbook](intel-fresh-chat-runbook.md) available; runtime client verification not recorded |
+| Internal branding visual inspection | passed (limited) | [Contact sheet and light-banner inspection](branding-visual-inspection.md); does not satisfy complete visual sign-off |
 | Independent editorial and privacy review | not-run | Internal documented checks are not an independent external review |
 
 ## Critical interpretation
