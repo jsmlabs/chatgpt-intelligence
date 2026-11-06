@@ -44,7 +44,8 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Templates](templates/README.md) | Reusable document structures |
 | [Examples](examples/README.md) | Clear illustrations and comparisons |
 | [Quality](quality/quality-standards.md) | Review and evaluation standards |
-| [Foundation Verification](quality/foundation-verification.md) | Recorded checks and their limits |
+| [Foundation Verification](quality/foundation-verification.md) | Recorded baseline checks and their limits |
+| [Architecture Verification](quality/architecture-verification.md) | Phase 02 verification record |
 | [Contributing](CONTRIBUTING.md) | How to propose and document improvements |
 | [Changelog](CHANGELOG.md) | Changes to this documentation |
 
