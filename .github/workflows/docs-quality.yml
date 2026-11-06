@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |
           if [ -f branding/v1.4/MANIFEST.json ]; then
-            python scripts/verify_branding.py branding/v1.4
+            python scripts/verify_branding.py branding/v1.4 --strict
           else
             echo "Brand v1.4 package not yet published; manifest verification skipped."
           fi
