@@ -24,7 +24,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 | 02 - Core Architecture | Define shared concepts and decision models | Complete (documentation scope) |
 | 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | Complete (documentation scope) |
 | 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Complete (documentation scope) |
-| 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | Planned |
+| 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | In progress |
 | 06 - Review & Release | Comprehensive editorial and compatibility review | Planned |
 
 ## Phase 01 - Foundation & Verification
@@ -57,7 +57,7 @@ The [command convention](COMMANDS.md), [source resolution design](architecture/a
 ## Phase 04 - Patterns & Examples
 Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
 
-**Acceptance:** Each pattern states the problem, prerequisites, example use, expected outcome, and failure cases. **Status: Complete (documentation scope)**. The patterns have not yet been empirically evaluated inside a fresh ChatGPT conversation.
+**Acceptance:** Each pattern states the problem, prerequisites, example use, expected outcome, and failure cases. **Status: Complete (documentation scope)**; see [Phase 04 Verification](quality/phase04-verification.md). The patterns have not yet been empirically evaluated inside a fresh ChatGPT conversation.
 
 ## ChatGPT activation and complete brand integration - outstanding gates
 1. **Branding import:** The original archive has 56/56 manifest entries verified locally. The GitHub repository still requires full binary asset publication, preservation of any separately authored branding documentation, and exact post-installation checks. See [branding integration](guides/branding-integration.md), [branding manifest verifier](scripts/verify_branding.py), and [brand status](branding/README.md). **Status: Blocked on a binary-capable, authorized GitHub upload.**
@@ -65,7 +65,9 @@ Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent
 3. **Intelligent UI:** The [response pattern library](intelligent-ui/response-patterns.md) documents content-first choices, fallback behavior and non-decorative controls. Verify each supported component in the actual target ChatGPT experience. **Status: Design complete; runtime unverified.**
 
 ## Phase 05 - Quality & Evaluation
-Define reproducible evaluation tasks, critical failures, scoring guidance, and results records.
+Initial deliverables: [response-pattern evaluation rubric](quality/pattern-evaluation.md), [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md), and [Phase 04 verification record](quality/phase04-verification.md). The next work is to execute cases on a connected ChatGPT client, record exact source revisions and observed outputs, and review the results.
+
+**Status: In progress; actual live-client test results not-run.**
 
 **Acceptance:** Test outcomes have evidence, dates, scope, and exact statuses; proposed evaluation methods are never reported as executed tests.
 
