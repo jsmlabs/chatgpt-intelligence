@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - phase 02 terminal UI and localization
+
+- Added centralized dependency-free terminal renderer with semantic markers, width handling, Windows VT detection and plain-text fallback.
+- Added complete English/German catalogs for the local CLI-owned menus, help, prompts, inspections and diagnostics; preserved machine-readable identifiers and legacy runtime output.
+- Added arrow-key/Enter navigation with numbered accessible fallback and an explicitly authorized interactive text-generation workflow.
+- Added terminal, localization and permission regression tests; CLI inspect JSON remains clean on stdout.
+
 ## Unreleased - local/offline CLI modernization
 
 - Added `intel.py` as a dependency-free local command router, with Windows `intel.cmd` forwarding.

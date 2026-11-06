@@ -30,9 +30,9 @@ On non-Windows platforms, replace `intel` with `python intel.py` unless you have
 - `verify` runs the existing local MCP verification script, not a live ChatGPT integration.
 - `test` runs the standard-library unittest suite; `check` runs the existing documentation checker and then tests. These may execute repository Python code and are intended for trusted local checkouts.
 - `setup` and `dev` display actionable local instructions only, with no installation, downloads or mutation.
-- `config language en|de|show` manages a small JSON preference file. The default is English. German translates the interactive shell and selected status messages. Existing generator and legacy PowerShell messages stay English for compatibility.
+- `config language en|de|show` manages a small JSON preference file. The default is English. English and German cover all messages owned by the new CLI, including built-in help, menus, prompts, diagnostics and errors. Legacy generator/PowerShell output stays English to preserve established contracts. Missing keys fall back to English.
 - Built-in inspection commands accept `--json`, `--quiet`, `--verbose`, `--no-color` and `--non-interactive` before the subcommand. `--json` is not an alternative to generator-specific `--format json`.
-- ANSI colors activate only on supported interactive terminals; `NO_COLOR` and non-TTY output are plain text. Inspection JSON is emitted alone on stdout.
+- The terminal UI uses `intel_console.py`, with Unicode-safe cropping, terminal-width-aware rows, status markers and ANSI feature detection (including Windows VT enablement and fallback). Arrow/Enter navigation is available on compatible interactive ANSI terminals, with a numbered plain-text alternative. The interactive prompt/concept/document flow requires explicit confirmation of local CREATE permission. ANSI colors activate only on supported interactive terminals; `NO_COLOR` and non-TTY output are plain text. Inspection JSON is emitted alone on stdout.
 - Exit codes: 0 success; 2 usage/authorization/generator error; 3 missing prerequisite or config write failure; subprocess commands preserve the underlying exit code.
 
 ## Extending
@@ -42,3 +42,10 @@ Commands are registered in the `COMMANDS` mapping and dispatched from `intel.py`
 ## Boundaries and migration
 
 Legacy `python -m generators ...` continues working. `intel.cmd` now forwards into the unified Python shell rather than directly presenting the legacy six-option tunnel menu; the old PowerShell actions remain unchanged and documented. The Python CLI requires Python on PATH. No global `intel` executable is installed and no running-process management is implied. No `stop`, `restart`, `update`, `clean` or `logs` command is advertised without a verified safe implementation.
+
+## Console and localization extension
+
+- All CLI-owned text is keyed in `intel_locales.py`, using matching `en` and `de` catalogs. The catalog regression test guards parity and English fallback. Command syntax, JSON keys, program identifiers, and legacy generator output stay in English.
+- `intel_console.py` owns status markers, width handling, ANSI detection, Windows VT fallback, keyboard navigation, and stdout/stderr separation. Avoid raw console formatting in command handlers.
+- The interactive menu supports numbers in plain-text terminals and arrows/Enter on capable ANSI terminals. Esc/Q exits. The renderer does not download packages or contact providers.
+- `--json` is limited to inspection commands, so it cannot corrupt generator output. Use generator `--format json` for artifact serialization.

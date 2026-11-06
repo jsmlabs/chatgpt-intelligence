@@ -1,4 +1,4 @@
-"""Unified offline-first local CLI. ChatGPT /INTEL is a separate convention."""
+"""Unified offline-first local CLI, separate from the ChatGPT /INTEL convention."""
 from __future__ import annotations
 
 import argparse
@@ -10,40 +10,15 @@ import subprocess
 import sys
 import tempfile
 
+from intel_console import Console, read_key
+from intel_locales import CATALOGS, tr
+
 ROOT = Path(__file__).resolve().parent
 VERSION = "0.1.0"
-COMMANDS = {
-    "help": "Show commands and examples",
-    "version": "Show CLI version",
-    "generate": "Run an existing deterministic generator",
-    "config": "Show or set local preferences",
-    "providers": "Inspect optional providers (no connections)",
-    "doctor": "Check local prerequisites without changing anything",
-    "status": "Show installed local capabilities",
-    "setup": "Show safe installation steps",
-    "start": "Start the optional Windows tunnel in the foreground",
-    "test": "Run the Python unit test suite",
-    "check": "Run documentation checks and unit tests",
-    "verify": "Run existing local MCP verification",
-    "dev": "Show developer shortcuts",
-}
-MESSAGES = {
-    "en": {"title": "ChatGPT Intelligence", "choose": "Select a command (0 to exit): ",
-           "invalid": "Invalid selection.", "goodbye": "Exit.", "saved": "Language saved.",
-           "language": "Language", "optional": "Optional", "missing": "Missing",
-           "available": "Available", "not_available": "Not available",
-           "setup": "Install Python 3.12+ and use intel generate --help. Tunnel and models are optional.",
-           "dev": "Developer shortcuts: intel test | intel check | intel verify",
-           "unsupported": "This command requires Windows PowerShell and a configured tunnel."},
-    "de": {"title": "ChatGPT Intelligence", "choose": "Befehl wählen (0 zum Beenden): ",
-           "invalid": "Ungültige Auswahl.", "goodbye": "Beenden.", "saved": "Sprache gespeichert.",
-           "language": "Sprache", "optional": "Optional", "missing": "Fehlt",
-           "available": "Verfügbar", "not_available": "Nicht verfügbar",
-           "setup": "Python 3.12+ installieren und intel generate --help verwenden. Tunnel und Modelle sind optional.",
-           "dev": "Entwicklerbefehle: intel test | intel check | intel verify",
-           "unsupported": "Dieser Befehl benötigt Windows PowerShell und einen konfigurierten Tunnel."},
-}
-COLORS = {"info": "36", "pass": "32", "warn": "33", "fail": "31", "muted": "90"}
+COMMANDS = ("help", "version", "generate", "config", "providers", "doctor", "status",
+            "setup", "start", "test", "check", "verify", "dev")
+INSPECTION = frozenset(("help", "version", "config", "providers", "doctor", "status"))
+
 
 def config_path() -> Path:
     base = os.environ.get("INTEL_CONFIG_HOME")
@@ -53,17 +28,20 @@ def config_path() -> Path:
         return Path(os.environ.get("APPDATA", str(Path.home()))) / "ChatGPTIntelligence" / "config.json"
     return Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "chatgpt-intelligence" / "config.json"
 
+
 def read_language() -> str:
     try:
         data = json.loads(config_path().read_text(encoding="utf-8"))
-        return data.get("language", "en") if data.get("language") in MESSAGES else "en"
+        return data.get("language", "en") if data.get("language") in CATALOGS else "en"
     except (OSError, ValueError, TypeError, AttributeError):
         return "en"
 
+
 def save_language(language: str) -> None:
+    if language not in CATALOGS:
+        raise ValueError("Unsupported language")
     path = config_path()
     path.parent.mkdir(parents=True, exist_ok=True)
-    # Never follow or overwrite an existing symlink as a config destination.
     if path.is_symlink():
         raise OSError("Refusing to write through a configuration symlink")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent,
@@ -76,163 +54,213 @@ def save_language(language: str) -> None:
     finally:
         temp.unlink(missing_ok=True)
 
-class Console:
-    def __init__(self, *, language: str, json_mode: bool, quiet: bool, no_color: bool):
-        self.language, self.json_mode, self.quiet = language, json_mode, quiet
-        self.color = not (json_mode or no_color or os.environ.get("NO_COLOR") is not None
-                          or os.environ.get("TERM") == "dumb" or not sys.stdout.isatty())
-        if os.name == "nt" and not (os.environ.get("WT_SESSION") or os.environ.get("ANSICON")
-                                    or os.environ.get("ConEmuANSI") == "ON"):
-            self.color = False
 
-    def tr(self, key: str) -> str:
-        return MESSAGES[self.language].get(key, MESSAGES["en"].get(key, key))
-
-    def emit(self, text: str, kind: str = "info") -> None:
-        if self.quiet or self.json_mode:
-            return
-        prefix = {"pass": "[PASS]", "warn": "[WARN]", "fail": "[FAIL]",
-                  "skip": "[SKIP]", "blocked": "[BLOCKED]"}.get(kind, "")
-        line = (prefix + " " if prefix else "") + text
-        color = COLORS.get(kind, "36")
-        print(f"\033[{color}m{line}\033[0m" if self.color else line)
-
-    def output(self, data: dict) -> None:
-        if self.json_mode:
-            print(json.dumps(data, ensure_ascii=False, sort_keys=True))
-        elif not self.quiet:
-            for key, value in data.items():
-                self.emit(f"{key}: {value}")
-
-def parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="intel", description="Offline-first ChatGPT Intelligence local CLI",
-                                epilog="Examples: intel generate prompt --objective 'Draft a checklist' --authorize-create; intel config language de")
-    p.add_argument("--json", action="store_true", help="Machine-readable output for built-in inspection commands")
-    p.add_argument("--quiet", action="store_true", help="Suppress informational text")
-    p.add_argument("--verbose", action="store_true", help="Show command details")
-    p.add_argument("--no-color", action="store_true", help="Disable ANSI colors")
-    p.add_argument("--non-interactive", action="store_true", help="Never prompt")
-    p.add_argument("command", nargs="?", choices=tuple(COMMANDS))
+def parser(language: str | None = None) -> argparse.ArgumentParser:
+    lang = language or read_language()
+    p = argparse.ArgumentParser(prog="intel", description=tr(lang, "parser_desc"),
+                                epilog=tr(lang, "parser_epilog"))
+    p.add_argument("--json", action="store_true", help=tr(lang, "opt_json"))
+    p.add_argument("--quiet", action="store_true", help=tr(lang, "opt_quiet"))
+    p.add_argument("--verbose", action="store_true", help=tr(lang, "opt_verbose"))
+    p.add_argument("--no-color", action="store_true", help=tr(lang, "opt_no_color"))
+    p.add_argument("--non-interactive", action="store_true", help=tr(lang, "opt_noninteractive"))
+    p.add_argument("command", nargs="?", choices=COMMANDS)
     p.add_argument("arguments", nargs=argparse.REMAINDER)
     return p
 
-def inspect(command: str) -> dict:
+
+def inspect(command: str) -> dict[str, object]:
     if command == "version":
         return {"cli_version": VERSION}
     if command == "providers":
-        return {"template": "available (offline)", "ollama-local": "optional (not contacted)",
-                "chatgpt-host": "host required", "openai-api": "optional, explicit authorization required",
-                "comfyui": "optional (not contacted)"}
+        return {"template":"offline","ollama-local":"not_contacted",
+                "chatgpt-host":"host_required","openai-api":"explicit_grant","comfyui":"not_contacted"}
     if command == "status":
-        return {"local_generator": "available", "mcp_server": "python -m generators.mcp_server",
-                "tunnel": "optional; not started", "language": read_language()}
-    return {"python": sys.version.split()[0], "generator_package": (ROOT / "generators" / "__main__.py").is_file(),
-            "powershell": bool(shutil.which("powershell.exe") or shutil.which("pwsh")),
-            "tunnel_launcher": (ROOT / "scripts" / "intel.ps1").is_file(),
-            "mcp_server": (ROOT / "generators" / "mcp_server.py").is_file(),
-            "configured_language": read_language()}
+        return {"local_generator":(ROOT / "generators" / "__main__.py").is_file(),
+                "mcp_server":(ROOT / "generators" / "mcp_server.py").is_file(),
+                "tunnel":"not_checked","language":read_language()}
+    return {"python":sys.version.split()[0],
+            "generator_package":(ROOT / "generators" / "__main__.py").is_file(),
+            "powershell":bool(shutil.which("powershell.exe") or shutil.which("pwsh")),
+            "tunnel_launcher":(ROOT / "scripts" / "intel.ps1").is_file(),
+            "mcp_server":(ROOT / "generators" / "mcp_server.py").is_file(),
+            "configured_language":read_language()}
 
-def run_script(script: str, *args: str) -> int:
+
+def run_script(script: str, console: Console, *args: str) -> int:
     path = ROOT / script
     if not path.is_file():
-        print(f"[BLOCKED] Required script missing: {script}", file=sys.stderr)
+        console.error(console.tr("missing_script", script=script), "blocked")
         return 3
     return subprocess.run([sys.executable, str(path), *args], cwd=str(ROOT), check=False).returncode
 
+
+def choose_menu(console: Console, options: tuple[str, ...]) -> str | None:
+    descriptions = {name:console.tr("desc." + name) for name in options}
+    use_arrows = console.color and sys.stdin.isatty()
+    if use_arrows:
+        current = 0
+        console.menu(options, descriptions, current)
+        while True:
+            key = read_key()
+            if key in ("exit", "q", "Q", "0"):
+                return None
+            if key == "up":
+                current = (current - 1) % len(options)
+            elif key == "down":
+                current = (current + 1) % len(options)
+            elif key == "enter":
+                return options[current]
+            elif key.isdigit() and 1 <= int(key) <= len(options):
+                return options[int(key)-1]
+            else:
+                continue
+            console.menu(options, descriptions, current)
+    console.menu(options, descriptions)
+    try:
+        answer = console.ask(console.tr("choose")).strip()
+    except (EOFError, KeyboardInterrupt):
+        return None
+    if answer in ("0", "00", "q", "Q"):
+        return None
+    if answer.isdigit() and 1 <= int(answer) <= len(options):
+        return options[int(answer)-1]
+    console.emit(console.tr("invalid"), "warn")
+    return ""
+
+
+def interactive_generate(console: Console) -> int:
+    try:
+        kind = console.ask(console.tr("menu_type")).strip().lower()
+        if kind not in {"prompt", "concept", "document"}:
+            console.emit(console.tr("menu_invalid_type"), "warn")
+            return 2
+        objective = console.ask(console.tr("menu_objective")).strip()
+        if not objective:
+            console.emit(console.tr("menu_empty"), "warn")
+            return 2
+        answer = console.ask(console.tr("menu_grant")).strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        console.emit(console.tr("menu_cancelled"), "skip")
+        return 2
+    if answer not in ("y", "yes", "j", "ja"):
+        console.emit(console.tr("menu_cancelled"), "skip")
+        return 2
+    return dispatch("generate", [kind, "--objective", objective, "--authorize-create"], console)
+
+
+def interactive_config(console: Console) -> int:
+    try:
+        choice = console.ask(console.tr("select_language")).strip()
+    except (EOFError, KeyboardInterrupt):
+        return 0
+    if choice == "0":
+        return 0
+    return dispatch("config", ["language", {"1":"en", "2":"de"}.get(choice, "")], console)
+
+
 def menu(console: Console) -> int:
     if not sys.stdin.isatty():
-        print("[BLOCKED] No interactive terminal. Run intel help.", file=sys.stderr)
+        console.error(console.tr("not_tty"), "blocked")
         return 2
-    choices = ("generate", "status", "doctor", "providers", "config", "test", "help", "start")
+    options = ("generate", "status", "doctor", "providers", "config", "test", "help", "start")
     while True:
-        console.emit(console.tr("title"))
-        for i, command in enumerate(choices, 1):
-            console.emit(f"{i:>2}. {command:10} {COMMANDS[command]}")
-        console.emit(" 0. Exit")
-        try:
-            choice = input(console.tr("choose")).strip()
-        except (EOFError, KeyboardInterrupt):
-            print()
+        selected = choose_menu(console, options)
+        if selected is None:
             return 0
-        if choice == "0":
-            return 0
-        if not choice.isdigit() or not 1 <= int(choice) <= len(choices):
-            console.emit(console.tr("invalid"), "warn")
+        if selected == "":
             continue
-        selected = choices[int(choice) - 1]
         if selected == "generate":
-            console.emit("Use: intel generate prompt --objective \"...\" --authorize-create")
-            continue
-        if selected == "config":
-            console.emit(f"{console.tr('language')}: {read_language()} (intel config language de)")
-            continue
-        code = dispatch(selected, [], console)
+            code = interactive_generate(console)
+        elif selected == "config":
+            code = interactive_config(console)
+        else:
+            code = dispatch(selected, [], console)
         if code:
-            console.emit(f"Exit code: {code}", "warn")
+            console.emit(f"{console.tr('exit_code')}: {code}", "warn")
+
 
 def dispatch(command: str, args: list[str], console: Console) -> int:
     if command == "help":
-        for name, description in COMMANDS.items():
-            console.emit(f"{name:10} {description}")
-        console.emit("Legacy: python -m generators <type> ... | scripts/intel.ps1 -Action Start")
+        if args:
+            console.error(console.tr("unexpected", command=command, args=" ".join(args)))
+            return 2
+        if console.json_mode:
+            console.report({"commands":{name:tr("en", "desc." + name) for name in COMMANDS}})
+        else:
+            console.table([(name, console.tr("desc." + name), "info") for name in COMMANDS],
+                          console.tr("commands"))
+            console.emit(console.tr("flags"), "muted")
+            console.emit(console.tr("legacy"), "muted")
         return 0
     if command == "generate":
         from generators.__main__ import main as generate_main
-        return generate_main(args)  # Preserve original parser, formats, permission gates and streams.
+        return generate_main(args)  # Preserve original formats, permissions and streams.
     if command == "config":
         if args == ["language", "show"] or not args:
-            console.output({"language": read_language()})
+            console.report({"language":read_language()})
             return 0
-        if len(args) == 2 and args[0] == "language" and args[1] in MESSAGES:
+        if len(args) == 2 and args[0] == "language" and args[1] in CATALOGS:
             try:
                 save_language(args[1])
             except OSError as exc:
-                print(f"[FAIL] Could not save language: {exc}", file=sys.stderr)
+                console.error(console.tr("save_failed", error=exc))
                 return 3
             console.language = args[1]
-            console.output({"language": args[1]})
+            console.report({"language":args[1]})
             return 0
-        print("[FAIL] Usage: intel config language {en|de|show}", file=sys.stderr)
+        console.error(console.tr("usage_language"))
         return 2
     if args:
-        print(f"[FAIL] Unexpected arguments for {command}: {' '.join(args)}", file=sys.stderr)
+        console.error(console.tr("unexpected", command=command, args=" ".join(args)))
         return 2
-    if command in ("version", "providers", "status", "doctor"):
-        console.output(inspect(command))
+    if command in ("version","providers","status","doctor"):
+        console.report(inspect(command), console.tr(command))
         return 0
-    if command in ("setup", "dev"):
-        console.emit(console.tr(command))
+    if command in ("setup","dev"):
+        console.emit(console.tr(command + "_text"))
         return 0
     if command == "test":
-        return subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"],
-                              cwd=str(ROOT), check=False).returncode
+        return subprocess.run([sys.executable,"-m","unittest","discover","-s","tests"],
+                              cwd=str(ROOT),check=False).returncode
     if command == "check":
-        code = run_script("scripts/check_docs.py", "--root", ".")
-        return code if code else dispatch("test", [], console)
+        code = run_script("scripts/check_docs.py",console,"--root",".")
+        return code if code else dispatch("test",[],console)
     if command == "verify":
-        return run_script("scripts/verify_host_mcp.py")
+        return run_script("scripts/verify_host_mcp.py",console)
     if command == "start":
         executable = shutil.which("powershell.exe")
         if os.name != "nt" or not executable:
-            print(f"[BLOCKED] {console.tr('unsupported')}", file=sys.stderr)
+            console.error(console.tr("unsupported"),"blocked")
             return 3
-        return subprocess.run([executable, "-NoProfile", "-File",
-                               str(ROOT / "scripts" / "intel.ps1"), "-Action", "Start"],
-                              cwd=str(ROOT), check=False).returncode
+        return subprocess.run([executable,"-NoProfile","-File",
+                               str(ROOT / "scripts" / "intel.ps1"),"-Action","Start"],
+                              cwd=str(ROOT),check=False).returncode
     return 2
 
+
 def main(argv: list[str] | None = None) -> int:
-    raw = list(sys.argv[1:] if argv is None else argv)
-    # Permit global flags before or after the command, without stealing generator-specific flags.
-    p = parser()
-    options = p.parse_args(raw)
-    console = Console(language=read_language(), json_mode=options.json,
-                      quiet=options.quiet, no_color=options.no_color)
-    if options.command is None:
-        return 2 if options.non_interactive else menu(console)
-    if options.verbose and not options.quiet and not options.json:
-        print(f"intel {options.command}", file=sys.stderr)
-    return dispatch(options.command, options.arguments, console)
+    args = parser().parse_args(sys.argv[1:] if argv is None else argv)
+    console = Console(language=read_language(),json_mode=args.json,
+                      quiet=args.quiet,no_color=args.no_color)
+    if args.command is None:
+        if args.non_interactive:
+            console.error(console.tr("no_command"),"blocked")
+            return 2
+        if args.json:
+            console.error(console.tr("not_tty"),"blocked")
+            return 2
+        return menu(console)
+    if args.json and args.command not in INSPECTION:
+        console.error(console.tr("json_unsupported"))
+        return 2
+    if args.quiet and args.command in ("generate","test","check","verify","start"):
+        console.error(console.tr("quiet_unsupported"))
+        return 2
+    if args.verbose and not args.quiet and not args.json:
+        print(f"intel {args.command}", file=sys.stderr)
+    return dispatch(args.command,args.arguments,console)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
