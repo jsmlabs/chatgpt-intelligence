@@ -159,11 +159,20 @@ class ArtifactChecks(unittest.TestCase):
         manifest.transition(ArtifactState.REVIEWED)
         with self.assertRaises(IntelError):
             manifest.transition(ArtifactState.EXPORTED, output_verified=True)
-        manifest.record_verified_output("out/file.md", True)
-        with self.assertRaises(IntelError):
-            manifest.transition(ArtifactState.EXPORTED)
-        manifest.transition(ArtifactState.EXPORTED, output_verified=True)
-        self.assertEqual(manifest.state, ArtifactState.EXPORTED)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with self.assertRaises(IntelError):
+                manifest.record_verified_output("missing.md", root)
+            (root / "file.md").write_text("validated artifact", encoding="utf-8")
+            manifest.record_verified_output("file.md", root)
+            with self.assertRaises(IntelError):
+                manifest.transition(ArtifactState.EXPORTED)
+            (root / "file.md").unlink()
+            with self.assertRaises(IntelError):
+                manifest.transition(ArtifactState.EXPORTED, output_verified=True)
+            (root / "file.md").write_text("validated artifact", encoding="utf-8")
+            manifest.transition(ArtifactState.EXPORTED, output_verified=True)
+            self.assertEqual(manifest.state, ArtifactState.EXPORTED)
 
     def test_revision_lineage(self):
         manifest = ArtifactManifest("one", "document", "1.0", ("source",), "document")

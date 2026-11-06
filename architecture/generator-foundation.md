@@ -15,7 +15,7 @@ This is a dependency-free Python **reference runtime**, not a native ChatGPT int
 1. `parse_command` recognizes the documented legacy namespace and `GENERATE <TYPE>`; no model parsing or implicit authority.
 2. `Registry` owns unique generator identities, aliases, input descriptors, formats, required tools, risk and implementation states. All 16 generators are `planned`.
 3. `Coordinator.dispatch` validates format/objective, checks fixed caller-provided permissions and verified tool evidence, then locates an explicitly registered adapter. It does not call third-party APIs by default.
-4. `ArtifactManifest` records immutable identity, editable revision lineage, validation metadata and guarded lifecycle transitions. Export requires independent evidence provided through `record_verified_output`. The package does not itself write or verify external outputs.
+4. `ArtifactManifest` records immutable identity, editable revision lineage, validation metadata and guarded lifecycle transitions. Export requires a non-empty, safe local file checked by `record_verified_output(reference, root)` and checked again at export time. The package does not write artifacts or verify remote/provider references.
 5. `IntelError` returns machine-readable codes; audit events omit user content and credentials.
 
 ## Integration model
