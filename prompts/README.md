@@ -19,6 +19,9 @@ Specify objective, inputs, constraints, expected output, examples, and evaluatio
 ## Example question
 How should a reusable prompt define scope and expected output?
 
+## Practical guide
+- [prompt design](prompt-design.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
