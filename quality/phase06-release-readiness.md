@@ -15,14 +15,14 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Area | Status | Evidence and limitation |
 | --- | --- | --- |
 | Repository identity and seven domain indexes | passed (scoped) | README and roadmap retain the exact project tagline and seven documented areas |
-| Automated tests | passed | [Verified CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42215683862): 54 tests, all passing |
-| Relative Markdown links | passed | Same run: 66 Markdown files, 427 file/image references, 0 errors |
+| Automated tests | passed | [Verified CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42223107435): 61 tests, all passing |
+| Relative Markdown links | passed | Same run: 67 Markdown files, 447 file/image references, 0 errors |
 | Documentation CI and E2E evidence validator | passed (tooling only) | [Run for commit `b046e1c`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208022435) passed; the 12 actual fresh-chat scenarios have **not** been run |
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
 | Branding assets on `main` | passed | [Verified publication](branding-publication-verification.md): 57/57 original Git blobs matched; GitHub Actions verified 56/56 manifest entries |
 | Fresh-chat `/INTEL` activation | not-run | Activation instructions and source retrieval exist, but no fresh-chat execution evidence |
 | Live Intelligent UI and fallback | not-run | Design patterns documented and [fresh-chat runbook](intel-fresh-chat-runbook.md) available; runtime client verification not recorded |
-| Internal branding visual inspection | passed (limited) | [Contact sheet and light-banner inspection](branding-visual-inspection.md); does not satisfy complete visual sign-off |
+| Internal branding visual inspection | passed (limited) | [Contact sheet and light-banner inspection](branding-visual-inspection.md) and [static media/contrast sampling](branding-accessibility-sampling.md); does not satisfy full browser or independent sign-off |
 | Automated publication safety scan | passed (limited) | [111 tracked text files, zero high-confidence credential signatures](publication-safety-verification.md), not a comprehensive privacy audit |
 | Internal editorial/source review | completed (limited) | [Primary-source review](editorial-source-review.md) identifies a naming/trademark assessment need and records unresolved privacy/visual gaps |
 | Independent editorial and privacy review | not-run | Internal and automated checks are not independent external review |
