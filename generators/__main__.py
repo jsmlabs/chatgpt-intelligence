@@ -15,9 +15,11 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif", "slides"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
+    parser.add_argument("--slide", action="append", default=None,
+                        help="Slide as layout|title|body1|body2 (repeatable, max 12)")
     parser.add_argument("--motion", choices=["pulse", "orbit", "bounce"], default="pulse")
     parser.add_argument("--width", type=int, default=128)
     parser.add_argument("--height", type=int, default=128)
@@ -81,7 +83,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "gif":
         from .motion_runtime import MotionRuntime
         selected_runtime = MotionRuntime()
-    fmt = args.format if args.format is not None else ("json" if args.type in {"theme", "gif"} else "markdown")
+    if args.type == "slides":
+        from .slides_runtime import SlidesRuntime
+        selected_runtime = SlidesRuntime()
+    fmt = args.format if args.format is not None else ("json" if args.type in {"theme", "gif", "slides"} else "markdown")
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
@@ -112,6 +117,21 @@ def main(argv: list[str] | None = None) -> int:
             request["accent"] = args.accent
         if fmt == "gif" and (args.export_root is None or args.filename is None):
             parser.error("GIF binary export requires --export-root and --filename")
+    if args.type == "slides":
+        request = {"objective": args.objective, "audience": args.audience,
+                   "preset": args.preset, "format": fmt}
+        if args.accent is not None:
+            request["accent"] = args.accent
+        if args.slide is not None:
+            request["slides"] = []
+            for spec in args.slide:
+                items = spec.split("|")
+                if len(items) < 2:
+                    parser.error("Slide syntax: layout|title|body1|body2")
+                request["slides"].append({"layout": items[0], "title": items[1],
+                                          "body": items[2:]})
+        if fmt == "pptx" and (args.export_root is None or args.filename is None):
+            parser.error("PPTX binary export requires --export-root and --filename")
     result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request=request,
@@ -124,9 +144,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     manifest = result["manifest"]
     if isinstance(result["content"], bytes):
-        print(json.dumps({"artifact_type": "image/gif", "output_reference": manifest.content_reference,
+        print(json.dumps({"artifact_type": manifest.artifact_type,
+                          "output_reference": manifest.content_reference,
                           "sha256": result["evidence"].get("file_sha256"),
-                          "frame_count": result["evidence"]["frame_count"]}, sort_keys=True))
+                          "slide_count": result["evidence"].get("slide_count"),
+                          "frame_count": result["evidence"].get("frame_count")}, sort_keys=True))
     else:
         print(result["content"], end="")
     print(json.dumps({"artifact_id": manifest.identifier, "state": manifest.state.value,

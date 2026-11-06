@@ -23,6 +23,7 @@ from .design_runtime import DesignRuntime
 from .theme_runtime import ThemeRuntime
 from .brand_runtime import BrandRuntime
 from .motion_runtime import MotionRuntime
+from .slides_runtime import SlidesRuntime
 from .image_render import render_image
 from .comfyui_image import ComfyUIHost
 
@@ -37,6 +38,7 @@ DESIGN_TOOL = "generate_design"
 THEME_TOOL = "generate_theme"
 BRAND_TOOL = "generate_brand"
 MOTION_TOOL = "generate_motion"
+SLIDES_TOOL = "generate_slides"
 RENDER_TOOL = "render_abstract_image"
 COMFY_TOOL = "generate_image_comfyui"
 DESCRIPTION = {
@@ -49,6 +51,7 @@ DESCRIPTION = {
     "generate_image_brief": "Generate a deterministic IMAGE production brief; no image file or model call.",
     "submit_image_brief": "Validate a client-written IMAGE production brief; no image file or model call.",
     "render_abstract_image": "Render a small, deterministic procedural geometric PNG. No AI prompt-to-image generation, no model API, no semantic subject rendering.",
+    "generate_slides": "Generate offline editable PPTX or structured slide storyboard JSON. No remote images or model; PPTX returned as base64 encoded binary in structured content.",
     "generate_motion": "Create deterministic motion storyboard JSON or actual procedural animated GIF89a with verified frames and timing. No semantic scene or external renderer.",
     "generate_brand": "Generate deterministic brand identity brief, reusable JSON theme tokens, or static SVG logo concept. No trademark clearance or image model.",
     "generate_theme": "Create deterministic light/dark JSON design tokens or CSS and audited WCAG 2.2 color-pair contrast results; no full accessibility certification.",
@@ -184,6 +187,28 @@ MOTION_SCHEMA = {
 }
 
 
+SLIDES_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "objective": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "audience": {"type": "string", "minLength": 1, "maxLength": 240},
+        "preset": {"type": "string", "enum": ["graphite", "ocean", "plum", "forest"]},
+        "accent": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
+        "format": {"type": "string", "enum": ["json", "pptx"]},
+        "slides": {
+            "type": "array", "minItems": 1, "maxItems": 12,
+            "items": {"type": "object", "properties": {
+                "layout": {"type": "string", "enum": ["title", "section", "bullets", "two-column"]},
+                "title": {"type": "string", "minLength": 1, "maxLength": 160},
+                "body": {"type": "array", "maxItems": 6,
+                         "items": {"type": "string", "minLength": 1, "maxLength": 220}}},
+                "required": ["title"], "additionalProperties": False}},
+    },
+    "required": ["objective"],
+    "additionalProperties": False,
+}
+
+
 COMFY_SCHEMA = {
     "type": "object",
     "properties": {
@@ -212,6 +237,7 @@ class MCPHost:
         self.theme_runtime = ThemeRuntime()
         self.brand_runtime = BrandRuntime()
         self.motion_runtime = MotionRuntime()
+        self.slides_runtime = SlidesRuntime()
         self.allow_comfyui_image = bool(allow_comfyui_image)
         self.comfyui_host = comfyui_host or ComfyUIHost()
         self.initialized = False
@@ -242,7 +268,7 @@ class MCPHost:
             self.initialized = True
             return self._ok(request_id, {
                 "protocolVersion": version, "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.9.0"},
+                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.10.0"},
             })
         if not self.initialized:
             return self._error(request_id, -32002, "Initialize MCP connection first")
@@ -264,6 +290,10 @@ class MCPHost:
                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
                                  "idempotentHint": False, "openWorldHint": False}}
                 for name in IMAGE_TOOLS
+            ] + [{"name": SLIDES_TOOL, "description": DESCRIPTION[SLIDES_TOOL],
+                  "inputSchema": SLIDES_SCHEMA,
+                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
+                                  "idempotentHint": False, "openWorldHint": False}}
             ] + [{"name": MOTION_TOOL, "description": DESCRIPTION[MOTION_TOOL],
                   "inputSchema": MOTION_SCHEMA,
                   "annotations": {"readOnlyHint": False, "destructiveHint": False,
@@ -291,7 +321,7 @@ class MCPHost:
                   if self.allow_comfyui_image else [])})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
-            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL and name != DESIGN_TOOL and name != THEME_TOOL and name != BRAND_TOOL and name != MOTION_TOOL and not (self.allow_comfyui_image and name == COMFY_TOOL):
+            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL and name != DESIGN_TOOL and name != THEME_TOOL and name != BRAND_TOOL and name != MOTION_TOOL and name != SLIDES_TOOL and not (self.allow_comfyui_image and name == COMFY_TOOL):
                 return self._error(request_id, -32602, "Unknown INTEL tool")
             if not isinstance(arguments, dict):
                 return self._error(request_id, -32602, "Tool arguments must be an object")
@@ -354,7 +384,24 @@ class MCPHost:
                                           "output_verified": False},
                     "isError": False,
                 })
-            if name == MOTION_TOOL:
+            if name == SLIDES_TOOL:
+                if set(arguments) - set(SLIDES_SCHEMA["properties"]):
+                    return self._error(request_id, -32602, "Unknown SLIDES field")
+                result = self.slides_runtime.execute(
+                    "/INTEL GENERATE SLIDES", request=arguments, authorization=self.authorization)
+                if result["ok"] and isinstance(result["content"], bytes):
+                    return self._ok(request_id, {
+                        "content": [{"type": "text", "text": "Editable PPTX generated in memory; see structuredContent.base64."}],
+                        "structuredContent": {
+                            "capability": "slides",
+                            "artifact_type": result["manifest"].artifact_type,
+                            "state": result["manifest"].state.value,
+                            "output_verified": False,
+                            "base64": base64.b64encode(result["content"]).decode("ascii"),
+                            "provenance": result["manifest"].provenance,
+                            "verification": result["evidence"],
+                        }, "isError": False})
+            elif name == MOTION_TOOL:
                 if set(arguments) - set(MOTION_SCHEMA["properties"]):
                     return self._error(request_id, -32602, "Unknown motion field")
                 result = self.motion_runtime.execute(
