@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased - phase 05 capability registry and provider discovery
+
+- Added static runtime capability descriptors for the ten implemented CLI generators, separate from the sixteen-entry planned command registry.
+- Added read-only `intel generators`, `intel providers` and `intel capabilities` discovery, including stable JSON metadata, permission requirements and explicit unverified provider states.
+- Reused existing ProviderRouter passive detection; preserved dispatch, default offline template, CREATE/EXTERNAL/BILLABLE enforcement, CLI formats and MCP contracts.
+
 ## Unreleased - phase 04 runtime lifecycle
 
 - Added opt-in Windows tunnel supervisor with private ownership nonce, authenticated loopback state inspection, and safe managed stop/restart.

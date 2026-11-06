@@ -2,6 +2,11 @@
 from __future__ import annotations
 
 EN = {
+"generators":"Generators","capabilities":"Capabilities",
+"desc.generators":"List implemented generator interfaces",
+"desc.capabilities":"Show generators, providers and permission boundaries",
+"configured_unverified":"Configured; not verified",
+"not_configured":"Not configured",
 "stop":"Stop","restart":"Restart",
 "desc.stop":"Stop CLI-managed tunnel only","desc.restart":"Restart CLI-managed tunnel only",
 "runtime_usage":"Usage: intel start [--managed] | intel stop | intel restart",
@@ -69,6 +74,11 @@ EN = {
 "opt_noninteractive":"Never prompt",
 }
 DE = {
+"generators":"Generatoren","capabilities":"Funktionen",
+"desc.generators":"Implementierte Generator-Schnittstellen anzeigen",
+"desc.capabilities":"Generatoren, Provider und Berechtigungen anzeigen",
+"configured_unverified":"Konfiguriert; nicht verifiziert",
+"not_configured":"Nicht konfiguriert",
 "stop":"Stoppen","restart":"Neustarten",
 "desc.stop":"Nur CLI-verwalteten Tunnel stoppen","desc.restart":"Nur CLI-verwalteten Tunnel neustarten",
 "runtime_usage":"Verwendung: intel start [--managed] | intel stop | intel restart",

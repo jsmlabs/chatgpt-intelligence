@@ -77,3 +77,20 @@ Managed mode currently supports **Windows tunnels only**. Set `CONTROL_PLANE_API
 A private runtime record stores a 256-bit random control nonce, supervisor PID and loopback-only control port in the user config directory. This is **runtime state**, never configuration export. `status` authenticates the supervisor over loopback, rather than interpreting a PID or port as proof of ownership. `stop` and `restart` refuse an unverified record. They never kill a PID from disk, a foreign listener on 8080, a user-started tunnel or an MCP server. The supervisor only signals its own direct `tunnel-client.exe` child (gracefully first, termination fallback). If the supervisor itself is forcibly killed, child cleanup is not guaranteed; inspect processes before manually repairing stale state.
 
 `python -m generators.mcp_server` remains a stdio server owned by its invoking ChatGPT/MCP host. There is no detached MCP service or automatic restart; generator calls are independent. `intel stop` affects only the CLI-managed tunnel. The local status command does not claim ChatGPT connectivity, profile identity or tunnel readiness merely from port occupancy. An existing runtime record with failed authentication blocks new managed startup and requires manual inspection; it is never silently overwritten or used as a PID-kill target.
+
+## Passive capability and provider registry (Phase 05)
+
+```text
+intel generators
+intel providers
+intel capabilities
+intel --json capabilities
+intel --json generators
+intel --json providers
+```
+
+`generators.capabilities` defines the 10 **implemented CLI entrypoints** and static output/provider interfaces; it is distinct from the 16-entry planned `/INTEL` concept registry. The generator CLI imports `GENERATOR_NAMES` to prevent drift, but dispatch and input/format validation stay in their existing runtimes. A catalog entry means **implemented**, not that the generator was executed or a model/provider is reachable.
+
+Provider discovery delegates to existing `ProviderRouter.detect()`, making **no network or file-system probes**, model calls or credential reads. It identifies configured/authorized/verified states without claiming that a configured adapter is reachable. The standalone CLI has no injected ChatGPT host or optional provider credentials, so optional integrations remain **not configured** in discovery. User-facing discovery grants no permissions; `Authorization.require` and generator/host boundaries remain authoritative. The default `template` remains deterministic and offline. `ollama-local` still needs CREATE + EXTERNAL, and `openai-api` needs CREATE + EXTERNAL + BILLABLE. No provider is automatically selected as fallback and no pricing/network operations are triggered by these commands.
+
+Machine-readable output keeps English keys and stable schema identifiers regardless of UI language; use `intel --json capabilities` for the full report. Existing `python -m generators` and MCP invocations retain their arguments and permission checks.

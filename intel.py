@@ -17,9 +17,9 @@ import intel_lifecycle as lifecycle
 
 ROOT = Path(__file__).resolve().parent
 VERSION = "0.1.0"
-COMMANDS = ("help", "version", "generate", "config", "providers", "doctor", "status",
+COMMANDS = ("help", "version", "generate", "generators", "capabilities", "config", "providers", "doctor", "status",
             "setup", "start", "stop", "restart", "test", "check", "verify", "dev")
-INSPECTION = frozenset(("help", "version", "config", "providers", "doctor", "status", "setup"))
+INSPECTION = frozenset(("help", "version", "config", "providers", "generators", "capabilities", "doctor", "status", "setup"))
 
 
 def config_path() -> Path:
@@ -55,9 +55,13 @@ def parser(language: str | None = None) -> argparse.ArgumentParser:
 def inspect(command: str, language: str | None = None) -> dict[str, object]:
     if command == "version":
         return {"cli_version": VERSION}
-    if command == "providers":
-        return {"template":"offline","ollama-local":"not_contacted",
-                "chatgpt-host":"host_required","openai-api":"explicit_grant","comfyui":"not_contacted"}
+    if command in ("providers", "generators", "capabilities"):
+        from generators.capabilities import capability_report, generators_report, providers_report
+        if command == "generators":
+            return generators_report()
+        if command == "providers":
+            return providers_report()
+        return capability_report()
     if command == "status":
         runtime = lifecycle.inspect()
         return {"local_generator":(ROOT / "generators" / "__main__.py").is_file(),
@@ -280,7 +284,7 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
     if args:
         console.error(console.tr("unexpected", command=command, args=" ".join(args)))
         return 2
-    if command in ("version","providers","status","doctor"):
+    if command in ("version","providers","generators","capabilities","status","doctor"):
         console.report(inspect(command, console.language), console.tr(command))
         return 0
     if command == "dev":

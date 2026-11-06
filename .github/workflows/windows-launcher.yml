@@ -11,6 +11,7 @@ on:
       - "intel_locales.py"
       - "intel_config.py"
       - "intel_lifecycle.py"
+      - "tests/test_capability_registry.py"
       - "tests/test_lifecycle.py"
       - "tests/test_configuration_setup.py"
       - "tests/test_local_cli.py"
@@ -36,7 +37,7 @@ jobs:
       - name: Verify localized CLI and terminal rendering on Windows
         shell: pwsh
         run: |
-          python -m unittest tests.test_local_cli tests.test_terminal_localization tests.test_configuration_setup tests.test_lifecycle -v
+          python -m unittest tests.test_local_cli tests.test_terminal_localization tests.test_configuration_setup tests.test_lifecycle tests.test_capability_registry -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $env:INTEL_CONFIG_HOME = Join-Path $env:RUNNER_TEMP 'intel-ui-test'
           $env:NO_COLOR = '1'
@@ -55,6 +56,8 @@ jobs:
           cmd /c "intel.cmd config language de"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           cmd /c "intel.cmd help"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python intel.py --json capabilities | ConvertFrom-Json | Out-Null
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python intel.py --json providers | ConvertFrom-Json | Out-Null
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

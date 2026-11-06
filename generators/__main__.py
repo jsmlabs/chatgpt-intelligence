@@ -11,11 +11,12 @@ from .text_runtime import TextRuntime
 from .model_host import OpenAIResponsesHost
 from .ollama_host import OllamaLocalHost
 from .provider_router import ProviderRouter
+from .capabilities import GENERATOR_NAMES
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif", "slides", "diagram"])
+    parser.add_argument("type", choices=GENERATOR_NAMES)
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
     parser.add_argument("--diagram-kind", choices=["flowchart", "architecture"], default="flowchart")
