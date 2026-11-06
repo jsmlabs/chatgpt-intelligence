@@ -51,7 +51,27 @@ function ClientPath {
         }
     }
 
-    throw 'tunnel-client.exe not found. Use -Action Locate to diagnose or supply -TunnelClient with the full executable path.'
+    # Desktop may be redirected (for example to OneDrive); query Windows for its real path.
+    $desktop = [Environment]::GetFolderPath('DesktopDirectory')
+    if ($desktop -and (Test-Path -LiteralPath $desktop -PathType Container)) {
+        $direct = Join-Path $desktop 'tunnel-client\tunnel-client.exe'
+        if (Test-Path -LiteralPath $direct -PathType Leaf) {
+            return (Resolve-Path -LiteralPath $direct).Path
+        }
+        $dirs = @(Get-ChildItem -LiteralPath $desktop -Directory -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -eq 'tunnel-client' -or $_.Name -like 'tunnel-client-v*-windows-amd64' })
+            foreach ($dir in $dirs) {
+                $candidate = Join-Path $dir.FullName 'tunnel-client.exe'
+                if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                    return (Resolve-Path -LiteralPath $candidate).Path
+                }
+                $nested = @(Get-ChildItem -LiteralPath $dir.FullName -Filter 'tunnel-client.exe' -File -Recurse -ErrorAction SilentlyContinue |
+                    Select-Object -First 1)
+                if ($nested.Count -gt 0) { return $nested[0].FullName }
+            }
+    }
+
+    throw 'tunnel-client.exe not found in PATH, Downloads or Desktop. Use -Action Locate to diagnose or supply -TunnelClient with the full executable path.'
 }
 function IsHealthy([string]$endpoint,[string]$expected) {
     try {
