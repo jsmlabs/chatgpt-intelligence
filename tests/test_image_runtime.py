@@ -94,7 +94,7 @@ class ImageGeneratorTests(unittest.TestCase):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         tools = host.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]
-        self.assertEqual(len(tools), 10)
+        self.assertEqual(len(tools), 11)
         for name, args in (
             ("generate_image_brief", {"objective": "Poster", "aspect_ratio": "9:16"}),
             ("submit_image_brief", {"objective": "Poster", "content": "# Poster\n\n## Design\n\nVisual."}),

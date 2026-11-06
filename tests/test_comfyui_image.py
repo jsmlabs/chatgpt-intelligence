@@ -206,7 +206,7 @@ class ComfyUITests(unittest.TestCase):
         enabled = init(MCPHost(CREATE, allow_comfyui_image=True, comfyui_host=comfy))
         names = [x["name"] for x in enabled.handle({
             "jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]]
-        self.assertEqual(len(names), 11)
+        self.assertEqual(len(names), 12)
         response = enabled.handle({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
             "params": {"name": "generate_image_comfyui", "arguments": {
                 "prompt": "a mountain", "width": 384, "height": 384}}})["result"]
