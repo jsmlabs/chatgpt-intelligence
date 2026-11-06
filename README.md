@@ -79,6 +79,14 @@ python -m generators prompt --objective "Draft a checklist" --authorize-create
 
 ---
 
+## Windows launcher
+
+Double-click [intel.cmd](intel.cmd) for the local ChatGPT Intelligence tunnel
+menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
+[Windows launcher guide](architecture/windows-launcher.md).
+
+---
+
 ## ChatGPT client handoff (G1.9)
 
 The local MCP stdio host accepts client-authored Markdown via three
