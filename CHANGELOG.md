@@ -45,6 +45,7 @@ This file records meaningful documentation changes. A proposed design or documen
 - Version-aware compatibility guidance distinguishing verified product capabilities, proposed designs, and experimental observations.
 
 ### Changed
+- Refined the [root README](README.md) into a leaner, task-first landing page with the existing responsive light/dark hero, seven domain entry points, honest `/INTEL` setup, compact design principles, scoped project closeout and clearer resource navigation; no branding assets or capabilities changed.
 - Redesigned the root [README](README.md) as a branded, task-oriented landing page: light/dark hero, seven domain entry points, accurate `/INTEL` setup, concise roadmap closeout, evidence boundaries and clearer contribution navigation. No product-release or client-certification claims were added.
 - Prepared a collision-safe original brand archive layout in `branding/v1.4/`, preserving all 56 original assets and the manifest without replacing independently authored branding guides.
 - Recorded binary branding publication and fresh-chat activation as open verification gates, rather than completed integrations.
