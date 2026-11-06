@@ -28,6 +28,8 @@ jobs:
         run: python scripts/check_publication_safety.py --root .
       - name: Verify Markdown links and metadata
         run: python scripts/check_docs.py --root .
+      - name: Check branding PNG SVG and HTML media
+        run: python scripts/check_brand_media.py branding/v1.4
       - name: Verify brand files if published
         shell: bash
         run: |
