@@ -19,7 +19,7 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 | Relative Markdown links | passed | Same run: 59 Markdown files, 346 links, 0 errors |
 | Documentation CI after the security changes | passed | [GitHub Actions run for commit `be5a386`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42205753806) completed successfully; later documentation-only commits need their own checks |
 | Brand ZIP and isolated installation | passed (local scope) | [Phase 05 verification](phase05-verification.md): 57 entries installed, 56/56 SHA-256 checks |
-| Branding assets on `main` | blocked | The latest observed tree contains only a one-byte `branding/v1.4/files` placeholder and no `MANIFEST.json`; GitHub Actions correctly skips remote manifest check |
+| Branding assets on `main` | passed | [Verified publication](branding-publication-verification.md): 57/57 original Git blobs matched; GitHub Actions verified 56/56 manifest entries |
 | Fresh-chat `/INTEL` activation | not-run | Activation instructions and source retrieval exist, but no fresh-chat execution evidence |
 | Live Intelligent UI and fallback | not-run | Design patterns documented; runtime client verification not recorded |
 | Independent editorial and privacy review | not-run | Internal documented checks are not an independent external review |
@@ -31,13 +31,13 @@ Pre-release review of the public documentation repository as of 2026-11-06. This
 - Existing test results are commit-specific; do not automatically extend them to future changes.
 
 ## Automated release gate
-A [strict structural release readiness checker](../scripts/check_release.py), [machine-readable evidence ledger](release-evidence.json), and [verification record](release-gate-verification.md) now exist. The strict command currently reports **five unmet conditions**. In routine development CI it runs in report-only mode; green CI is not release approval. The [manually triggered strict GitHub Actions workflow](../.github/workflows/release-readiness.yml) evaluates the release gate without creating a tag or publishing a release. Human attestation references must be independently inspected before any release.
+A [strict structural release readiness checker](../scripts/check_release.py), [machine-readable evidence ledger](release-evidence.json), and [verification record](release-gate-verification.md) now exist. The strict command currently reports **four unmet conditions**. In routine development CI it runs in report-only mode; green CI is not release approval. The [manually triggered strict GitHub Actions workflow](../.github/workflows/release-readiness.yml) evaluates the release gate without creating a tag or publishing a release. Human attestation references must be independently inspected before any release.
 
 ## Release decision
-**Blocked for a complete Phase 06 release.** The repository is useful as scoped documentation, but the final release gate depends on missing asset publication, observed fresh-chat tests, runtime UI assessment and independent review. No version tag, release object or other publication action is authorized by this review alone.
+**Blocked for a complete Phase 06 release.** The repository is useful as scoped documentation, but the final release gate depends on observed fresh-chat tests, runtime UI assessment, comprehensive brand visual approval, and independent review. No version tag, release object or other publication action is authorized by this review alone.
 
 ## Required next actions
-1. Publish all manifest-listed original branding files to `branding/v1.4/` without overwriting other branding content; confirm file counts, SHA-256, images and green CI at that revision.
+1. **Completed:** Publish and verify the original 57 branding files, including the 56 manifest checks and published CI evidence. Comprehensive independent visual approval remains open.
 2. Execute the [12 fresh-chat cases](intel-end-to-end-tests.md) with exact source revision, evidence and outcome for each.
 3. Verify Intelligent UI presentation and fallback in the target ChatGPT client.
 4. Complete an independent editorial/privacy review and record unresolved findings.
