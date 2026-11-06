@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 import sys
 
 TAGLINE = (
@@ -29,6 +30,24 @@ REQUIRED_GATES = (
     "brand_visual_review",
     "independent_editorial_privacy_review",
 )
+
+
+def evidence_reference_valid(value: object, root: Path) -> bool:
+    """Accept a concrete HTTPS link or an existing in-repository evidence file.
+
+    Syntactic validity does not prove evidence authenticity; human review is
+    required prior to release.
+    """
+    if not isinstance(value, str) or not value.strip():
+        return False
+    value = value.strip()
+    parsed = urlsplit(value)
+    if parsed.scheme:
+        return parsed.scheme == "https" and bool(parsed.netloc) and not parsed.username and not parsed.password
+    if value.startswith(("/", "\\")) or parsed.query or parsed.fragment:
+        return False
+    target = (root / value).resolve()
+    return target.is_relative_to(root.resolve()) and target.is_file()
 
 
 def check(root: Path) -> list[str]:
@@ -75,8 +94,8 @@ def check(root: Path) -> list[str]:
             continue
         if item.get("status") != "passed":
             failures.append(f"{gate}: not passed")
-        elif not isinstance(item.get("evidence"), str) or not item["evidence"].strip():
-            failures.append(f"{gate}: passed but missing supporting evidence reference")
+        elif not evidence_reference_valid(item.get("evidence"), root):
+            failures.append(f"{gate}: passed but missing or invalid supporting evidence reference")
 
     intel = evidence.get("fresh_chat_intel")
     if isinstance(intel, dict) and intel.get("status") == "passed":
