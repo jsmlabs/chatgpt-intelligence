@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- [INTEL source retrieval smoke test](quality/intel-source-smoke-test.md), confirming five canonical documents were actually fetched in an existing connected ChatGPT conversation, without claiming fresh-chat prefix activation.
 - Phase 04: [prompt patterns](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [INTEL conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
 - [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md) and [branding installation guide](guides/branding-integration.md).
 - [Brand manifest verification script](scripts/verify_branding.py) for exact local SHA-256 checks.
