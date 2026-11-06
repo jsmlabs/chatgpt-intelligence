@@ -91,6 +91,39 @@ class ExtractedBrandManifestChecks(unittest.TestCase):
         self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
 
 
+    def test_symlink_alias_to_declared_asset_rejected_in_strict_mode(self):
+        alias = self.root / "alias.svg"
+        try:
+            alias.symlink_to(self.asset)
+        except (OSError, NotImplementedError):
+            self.skipTest("Symlinks unavailable on this runner")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+    def test_symlink_directory_to_declared_asset_rejected_in_strict_mode(self):
+        alias = self.root / "alias-dir"
+        try:
+            alias.symlink_to(self.asset.parent, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("Symlinks unavailable on this runner")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+    def test_noncanonical_manifest_name_rejected(self):
+        self.manifest["files"]["logos//mark.svg"] = self.manifest["files"].pop("logos/mark.svg")
+        (self.root / "MANIFEST.json").write_text(json.dumps(self.manifest), encoding="utf-8")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+    def test_malformed_manifest_entry_fails_without_exception(self):
+        self.manifest["files"]["logos/mark.svg"]["sha256"] = None
+        (self.root / "MANIFEST.json").write_text(json.dumps(self.manifest), encoding="utf-8")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+    def test_casefold_manifest_collision_rejected(self):
+        self.manifest["files"]["logos/Mark.svg"] = self.manifest["files"]["logos/mark.svg"]
+        self.manifest["file_count"] = 2
+        (self.root / "MANIFEST.json").write_text(json.dumps(self.manifest), encoding="utf-8")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+
 class BrandingArchiveChecks(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
