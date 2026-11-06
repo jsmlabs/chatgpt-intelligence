@@ -34,3 +34,25 @@ This article presents an **original project method**, not a verified description
 
 ## Related reading
 [Response lifecycle](../architecture/response-lifecycle.md) and [Documentation contracts](../architecture/documentation-contracts.md).
+
+## Mini concept canvas
+
+| Question | Proposed answer: adaptive response formatting |
+| --- | --- |
+| Who benefits? | Readers who need both speed and clarity |
+| Problem | Decorative or poorly structured answers obscure essential information |
+| Goal | Make key conclusions easy to locate |
+| Constraints | Preserve accuracy; respect client capabilities; avoid inaccessible formats |
+| Proposed mechanism | Plan content hierarchy first, then select the minimum useful presentation |
+| Alternative | Always use prose or always use cards |
+| Trade-off | Adaptive selection adds decision effort but may improve task fit |
+| Verification | Compare responses across diverse questions using the same rubric |
+
+## Decision record
+Mark **proposed** while investigating and **accepted** only when the project agrees on the design. Acceptance does not mean implementation, empirical success, or official OpenAI endorsement.
+
+## Reject or revise when
+- The problem is not explained in user terms.
+- The proposed mechanism depends on unconfirmed API or UI behavior.
+- No meaningful comparison or test can distinguish alternatives.
+- A simpler pattern already solves the problem.
