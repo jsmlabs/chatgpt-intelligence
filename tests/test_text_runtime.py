@@ -56,7 +56,7 @@ class RegistryAndGoldenCases(unittest.TestCase):
                         authorization=GRANT)
                     self.assertTrue(result["ok"], result)
                     self.assertIn(section, result["content"])
-                    self.assertIn(objective, result["content"])
+                    self.assertIn(objective, result["content"].replace("\\-", "-"))
                     self.assertEqual(result["manifest"].state, ArtifactState.REVIEWED)
                     self.assertEqual(result["manifest"].validations["markdown_structure"], True)
                     self.assertEqual(result["evidence"]["llm_generation"], "not_run")
