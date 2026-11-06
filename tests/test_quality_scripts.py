@@ -53,6 +53,29 @@ class DocumentationChecks(unittest.TestCase):
         self.assertEqual(self.checker.audit(self.root), (1, 0, []))
 
 
+    def test_markdown_image_checked(self):
+        (self.root / "README.md").write_text("![Icon](missing.png)", encoding="utf-8")
+        _, total, errors = self.checker.audit(self.root)
+        self.assertEqual(total, 1)
+        self.assertTrue(any("missing.png" in issue for issue in errors))
+
+    def test_html_picture_srcset_checked(self):
+        (self.root / "README.md").write_text(
+            '<picture><source srcset="missing-dark.png 2x, missing-light.png 1x">'
+            '<img src="missing-default.png"></picture>', encoding="utf-8"
+        )
+        _, total, errors = self.checker.audit(self.root)
+        self.assertEqual(total, 3)
+        self.assertEqual(len(errors), 3)
+
+    def test_existing_markdown_and_html_images_pass(self):
+        (self.root / "banner.png").write_bytes(b"image")
+        (self.root / "README.md").write_text(
+            '![Icon](banner.png)\n<img src="banner.png">', encoding="utf-8"
+        )
+        self.assertEqual(self.checker.audit(self.root), (1, 2, []))
+
+
 class ExtractedBrandManifestChecks(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
