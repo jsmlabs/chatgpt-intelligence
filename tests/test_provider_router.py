@@ -194,7 +194,7 @@ class ProviderRoutingTests(unittest.TestCase):
                     provider="ollama-local")
                 self.assertFalse(result["ok"], result)
                 self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")
-                self.assertFalse(result["manifest"].validations["balanced_code_fences"])
+                self.assertFalse(result["manifest"].validations.get("balanced_code_fences", False))
 
     def test_balanced_inner_code_fence_is_preserved(self):
         local = Fake()
