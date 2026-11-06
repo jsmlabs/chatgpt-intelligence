@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.error
 from unittest.mock import patch
 
 from generators import (
@@ -172,7 +173,8 @@ class OpenAIHostTransportTests(unittest.TestCase):
             payload = json.loads(request.data)
             self.assertEqual(payload["store"], False)
             self.assertEqual(payload["model"], "test-model")
-            self.assertEqual(payload["max_output_tokens"], 2048)
+            self.assertEqual(payload["max_output_tokens"], 4096)
+            self.assertEqual(build.return_value.open.call_args.kwargs["timeout"], 60.0)
             self.assertEqual(request.get_method(), "POST")
             self.assertIn("Bearer test-key-not-real", request.get_header("Authorization"))
         self.assertEqual(result.content, "# Draft\n\nContent.")
@@ -180,8 +182,7 @@ class OpenAIHostTransportTests(unittest.TestCase):
 
     def test_invalid_responses(self):
         cases = (b"{}", b"not json", json.dumps({
-            "status": "incomplete", "output": []}).encode(),
-            json.dumps({"status": "completed", "output": []}).encode())
+            "status": "completed", "output": []}).encode())
         for raw in cases:
             with self.subTest(raw=raw):
                 with patch("urllib.request.build_opener") as build:
@@ -189,6 +190,69 @@ class OpenAIHostTransportTests(unittest.TestCase):
                     with self.assertRaises(IntelError) as ctx:
                         self.host.generate("PROMPT", self.brief)
                 self.assertEqual(ctx.exception.code, "MODEL_RESPONSE_INVALID")
+
+    def test_incomplete_model_response_is_specific(self):
+        for reason in ("max_output_tokens", "content_filter", None):
+            with self.subTest(reason=reason):
+                data = {"status": "incomplete", "output": [],
+                        "incomplete_details": {"reason": reason}}
+                with patch("urllib.request.build_opener") as build:
+                    build.return_value.open.return_value = DummyResponse(
+                        json.dumps(data).encode("utf-8"))
+                    with self.assertRaises(IntelError) as ctx:
+                        self.host.generate("CONCEPT", self.brief)
+                self.assertEqual(ctx.exception.code, "MODEL_OUTPUT_INCOMPLETE")
+
+    def test_http_status_codes_are_safe_and_specific(self):
+        cases = [
+            (401, {}, "MODEL_AUTH_FAILED"),
+            (403, {}, "MODEL_AUTH_FAILED"),
+            (400, {}, "MODEL_REQUEST_REJECTED"),
+            (404, {}, "MODEL_REQUEST_REJECTED"),
+            (408, {}, "MODEL_TIMEOUT"),
+            (429, {"error": {"code": "credit_balance_exhausted",
+                              "message": "sk-secret-private"}}, "MODEL_QUOTA_EXHAUSTED"),
+            (429, {"error": {"code": "rate_limit_exceeded"}}, "MODEL_RATE_LIMITED"),
+            (429, {}, "MODEL_RATE_LIMITED"),
+            (500, {}, "MODEL_PROVIDER_UNAVAILABLE"),
+            (503, {}, "MODEL_PROVIDER_UNAVAILABLE"),
+        ]
+        for status, response, expected in cases:
+            with self.subTest(status=status, expected=expected):
+                error = urllib.error.HTTPError(
+                    "https://api.openai.com/v1/responses", status,
+                    "secret raw response", {}, io.BytesIO(json.dumps(response).encode()))
+                with patch("urllib.request.build_opener") as build:
+                    build.return_value.open.side_effect = error
+                    with self.assertRaises(IntelError) as ctx:
+                        self.host.generate("PROMPT", self.brief)
+                self.assertEqual(ctx.exception.code, expected)
+                self.assertNotIn("sk-secret", ctx.exception.message)
+                self.assertNotIn("secret raw response", ctx.exception.message)
+
+    def test_timeout_is_distinct_and_no_retry(self):
+        for failure in (TimeoutError("sensitive timeout"),
+                        urllib.error.URLError(TimeoutError("sensitive timeout"))):
+            with self.subTest(failure=type(failure).__name__):
+                with patch("urllib.request.build_opener") as build:
+                    build.return_value.open.side_effect = failure
+                    with self.assertRaises(IntelError) as ctx:
+                        self.host.generate("DOCUMENT", self.brief)
+                    self.assertEqual(build.return_value.open.call_count, 1)
+                self.assertEqual(ctx.exception.code, "MODEL_TIMEOUT")
+                self.assertNotIn("sensitive", ctx.exception.message)
+
+    def test_bounded_config_and_explicit_overrides(self):
+        with self.assertRaises(ValueError):
+            OpenAIResponsesHost(api_key="x", model="test-model", max_output_tokens=8193)
+        with self.assertRaises(ValueError):
+            OpenAIResponsesHost(api_key="x", model="test-model", timeout=121)
+        with self.assertRaises(ValueError):
+            OpenAIResponsesHost(api_key="x", model="test-model", max_output_tokens=True)
+        host = OpenAIResponsesHost(
+            api_key="x", model="test-model", timeout=45, max_output_tokens=6144)
+        self.assertEqual(host.timeout, 45)
+        self.assertEqual(host.max_output_tokens, 6144)
 
     def test_network_error_is_sanitized(self):
         with patch("urllib.request.build_opener") as build:
