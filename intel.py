@@ -271,6 +271,9 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
         if command == "doctor" and not args:
             console.report(inspect("doctor", console.language), console.tr("doctor"))
             return 0
+        if command == "doctor" and args not in (["basic"], ["full"]):
+            console.error(console.tr("unexpected", command=command, args=" ".join(args)))
+            return 2
         if command == "check" and not args and not console.json_mode:
             code = run_script("scripts/check_docs.py", console, "--root", ".")
             return code if code else dispatch("test", [], console)
