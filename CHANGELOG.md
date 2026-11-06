@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Windows launcher can now load the restricted tunnel runtime key from the user's Desktop/tunnel-client/key.txt (single-line, never printed), with masked prompt fallback and non-persistent process environment.
 - Added [Windows INTEL launcher](architecture/windows-launcher.md) with one-click menu for foreground tunnel startup, status, diagnosis, MCP smoke test and optional Ollama listing, without stored credentials.
 - [Closed all six documentation roadmap phases at explicitly limited scope](quality/project-closeout.md); marked the repository as maintenance-oriented without falsely completing fresh-chat tests, independent reviews or a formal release. Existing strict release checks remain unchanged.
 - Hardened [branding media checks](scripts/check_brand_media.py) to reject external/executable HTML references and SVG event handlers or external resource references; four negative regression cases added. [GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42231231309) passed 65 tests and checked 52 original brand media files.
