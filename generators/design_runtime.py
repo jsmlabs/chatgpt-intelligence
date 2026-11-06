@@ -141,7 +141,7 @@ def validate_html(content):
     return {
         "bounded": len(content.encode("utf-8")) <= 65536,
         "document": content.startswith("<!doctype html>") and content.endswith("</html>\n"),
-        "no_scripts": not re.search(r"<script\b|\bon\w+\s*=", content, re.I),
+        "no_scripts": not re.search(r"<script\b|<[^>]+\bon\w+\s*=", content, re.I),
         "no_remote_assets": not re.search(r'\b(?:src|href)\s*=\s*["\x27](?:https?:|//|data:)', content, re.I),
         "responsive": "@media(min-width:640px)" in content and "@media(min-width:960px)" in content,
         "landmarks": '<main id="main">' in content and "<h1>" in content,

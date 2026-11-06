@@ -36,14 +36,13 @@ def text_registry() -> Registry:
     base = default_registry()
     capabilities = []
     for cap in base.all():
-        if cap.command in TEXT_TYPES or cap.command in {"IMAGE", "DESIGN"}:
+        if cap.command in TEXT_TYPES or cap.command == "IMAGE":
             cap = replace(cap, implemented=True, state=State.AVAILABLE,
                           description=("Local IMAGE production brief (not raster generation)"
                                        if cap.command == "IMAGE" else
                                        "Local deterministic Markdown " + cap.identifier + " template"),
                           version="0.1.0" if cap.command == "IMAGE" else "0.2.0",
-                          formats=("markdown", "html") if cap.command == "DESIGN" else ("markdown",),
-                          required_tools=(), risk="low")
+                          formats=("markdown",), required_tools=(), risk="low")
         capabilities.append(cap)
     return Registry(capabilities)
 

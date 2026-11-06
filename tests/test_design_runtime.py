@@ -74,8 +74,7 @@ class DesignTests(unittest.TestCase):
         result = self.runtime.execute("/INTEL GENERATE DESIGN",
              request={"objective": "dashboard"}, authorization=Authorization())
         self.assertEqual(result["error"]["code"], "PERMISSION_DENIED")
-        self.assertEqual(self.run_design(provider="openai-api")["error"]["code"], "INVALID_REQUEST" if False else "INVALID_REQUEST") if False else None
-        result = self.runtime.execute("/INTEL GENERATE DESIGN",
+         result = self.runtime.execute("/INTEL GENERATE DESIGN",
             request={"objective": "dashboard"}, authorization=CREATE, provider="openai-api")
         self.assertEqual(result["error"]["code"], "CAPABILITY_UNAVAILABLE")
 
@@ -113,8 +112,7 @@ class DesignTests(unittest.TestCase):
                                     capture_output=True, text=True, timeout=15)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual((Path(folder)/"landing.html").read_text(), result.stdout)
-            self.assertIn("text/html", (Path(folder)/"landing.html").read_text() if False else "text/html") if False else None
-
+ 
     def test_mcp_design_tool_and_no_network(self):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
