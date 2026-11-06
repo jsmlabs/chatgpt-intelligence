@@ -19,6 +19,9 @@ Document the question, method, evidence, limitations, and next steps. Do not lab
 ## Example question
 What does current official documentation confirm about a ChatGPT feature?
 
+## Practical guide
+- [research method](research-method.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
