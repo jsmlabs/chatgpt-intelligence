@@ -12,7 +12,7 @@ classification: proposed-design
 A good response is **easy to understand before it is visually impressive**. Choose text, tables, charts, diagrams, or interactions based on what the reader needs to accomplish.
 
 ## Product evidence
-OpenAI documents GPT-6 Intelligent UI as combining text, visuals, and interactive elements in ChatGPT. Available experiences can differ by model, reasoning mode, plan, and client; GPT-6 Pro/Astra does not support Intelligent UI in the documented Chat experience. See [Intelligent UI in ChatGPT](https://help.openai.com/en/articles/20001598-intelligent-ui-in-chatgpt) and [GPT-6 models](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt), reviewed 2026-11-06.
+OpenAI documents GPT-6 Intelligent UI as combining text, visuals, and interactive elements in ChatGPT. Available experiences can differ by model, reasoning mode, plan, and client; GPT-6 Pro/Astra does not support Intelligent UI in the documented Chat experience. See [GPT-6 models](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt), reviewed 2026-11-06.
 
 The following selection policy is **our proposed design guidance**, not a guaranteed internal component-selection algorithm.
 
@@ -59,3 +59,27 @@ Keep meaningful text outside visuals, label units, avoid relying on color alone,
 
 ## Related reading
 [Decision model](../architecture/intelligent-ui-decision-model.md) | [Response lifecycle](../architecture/response-lifecycle.md)
+
+## Component choice worksheet
+
+| Question | Decision |
+| --- | --- |
+| Can one paragraph answer clearly? | Prefer prose |
+| Are several items compared on identical dimensions? | Prefer a table |
+| Is the relationship spatial or sequential? | Consider a diagram or map where appropriate |
+| Does the user need to adjust values? | Consider supported working inputs |
+| Can the component be shown in this client? | Check before promising it |
+| Can the content stand on its own without the visual? | Include an accessible textual explanation |
+
+## Example: avoid decorative UI
+**User:** "Define memory in one sentence."
+
+**Poor design:** Five large metric cards with invented scores.
+
+**Better design:** One clear sentence with the relevant limitation. Add a table only when multiple concepts must be compared.
+
+## Verified scope, not universal support
+As of the documentation review on 2026-11-06, the [official GPT-6 model guide](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt) documents Intelligent UI in supported GPT-6 Chat experiences, with rollout, client, model, and thinking-level restrictions. This documentation review is **not a client-side runtime test**.
+
+## Evaluation exercise
+Give the same definition, comparison, workflow, and numerical trend to an evaluator. Ask whether the selected format improves comprehension, whether sources and units are visible, and whether decorative elements were avoided.
