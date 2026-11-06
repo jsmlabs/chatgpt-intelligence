@@ -52,11 +52,13 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [INTEL Test Results](quality/intel-e2e-results.json) | Per-case evidence ledger, initially not-run |
+| [INTEL Fresh-Chat Runbook](quality/intel-fresh-chat-runbook.md) | Reproducible twelve-case acceptance instructions |
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
 | [Local Verifier Execution](quality/local-verifier-execution.md) | Earlier scoped local tests and limitations |
 | [Phase 05 Verification](quality/phase05-verification.md) | Verified CI and quality regression results |
 | [Branding Publication Verification](quality/branding-publication-verification.md) | 57/57 exact original assets and 56/56 GitHub SHA-256 checks |
+| [Branding Visual Inspection](quality/branding-visual-inspection.md) | Scoped contact-sheet and light-banner inspection, with remaining gaps |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
 | [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
 | [Strict Release Readiness Workflow](.github/workflows/release-readiness.yml) | Manual CI validation of release prerequisites without publishing a release |
