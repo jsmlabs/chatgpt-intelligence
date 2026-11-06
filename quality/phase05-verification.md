@@ -47,6 +47,9 @@ These new checks do not change the outstanding fresh-chat and binary-publication
 ## Later publication update (same date)
 The original 57-file brand package was subsequently published in full. [Publication verification](branding-publication-verification.md) records exact Git blob comparison for 57/57 files, and [GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42207335254) confirmed 56/56 SHA-256/size checks. Historical statements above describe earlier observations and should not be read as the current status.
 
+## Fresh-chat evidence infrastructure (2026-11-06)
+The [per-case validator](../scripts/verify_intel_e2e.py) and [initially not-run ledger](intel-e2e-results.json) now enforce separate records for all 12 scenarios. [GitHub Actions run for `b046e1c`](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42208022435) passed **26 tests**, checked 63 Markdown files and 372 relative links with no errors, and verified 56/56 published brand assets. Four release gates remain incomplete. This is validator test evidence, **not** proof of execution of those twelve fresh-chat scenarios.
+
 ## Remaining Phase 05 gates
 - **Completed:** Publish the 57 original brand files to `branding/v1.4/`, validate exact remote bytes and inspect the contact sheet. Full independent visual sign-off is still a separate release gate.
 - Execute fresh ChatGPT client [`/INTEL` scenarios](intel-end-to-end-tests.md) and record actual evidence.
