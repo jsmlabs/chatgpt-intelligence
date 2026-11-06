@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "fresh_chat_intel": {
+    "status": "not-run",
+    "evidence": null
+  },
+  "intelligent_ui": {
+    "status": "not-run",
+    "evidence": null
+  },
+  "brand_visual_review": {
+    "status": "not-run",
+    "evidence": null
+  },
+  "independent_editorial_privacy_review": {
+    "status": "not-run",
+    "evidence": null
+  }
+}
