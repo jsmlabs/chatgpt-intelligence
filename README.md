@@ -51,6 +51,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Phase 05 Verification](quality/phase05-verification.md) | Verified CI: 21 tests, 346 Markdown links, and isolated brand installation |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
 | [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
+| [Strict Release Readiness Workflow](.github/workflows/release-readiness.yml) | Manual CI validation of release prerequisites without publishing a release |
 | [Automated Quality Checks](.github/workflows/docs-quality.yml) | Documentation CI and regression tests |
 | [Verifier Regression Tests](tests/test_quality_scripts.py) | Deterministic tests for link and archive verification |
 | [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
