@@ -24,6 +24,9 @@ An **internal, limited visual inspection** of the user's supplied `asset-contact
 | Full HTML preview/accessibility | not-run | No interactive browser/accessibility audit performed |
 | Trademark and independent review | blocked | Must be reviewed independently before a formal release |
 
+## Additional static checks
+A later [media and contrast sampling](branding-accessibility-sampling.md) verified the encoding and dimensions of 26 PNG and 25 SVG files, 1 static HTML reference set, and calculated selected theme-token contrast ratios. It identified a **conditional 4.24:1 light-accent contrast caution if the accent is used for normal-sized text**, not a confirmed violation in the existing focus-outline usage. This remains distinct from actual browser or independent accessibility approval.
+
 ## Interpretation
 This inspection supports the documented layout consistency of the sampled images, not a comprehensive endorsement of the visual package. The original 57 files remain unchanged and have [verified byte identity](branding-publication-verification.md).
 
