@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Ran a [scoped Chromium preview interaction smoke test](quality/branding-browser-smoke-test.md) on desktop and mobile, checking theme changes, sidebar response, horizontal overflow and JS runtime errors. The runtime blocked direct page navigation, so this is not a full resource-loading or accessibility audit.
 - Added [brand media format validator](scripts/check_brand_media.py) with PNG CRC, SVG parsing and paired dimensions, plus seven regression cases and CI steps. [Verified GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42223107435) passed 61 tests and 52 brand media checks. [Accessibility sampling](quality/branding-accessibility-sampling.md) records theme contrast values and a conditional light-accent caution, without asserting WCAG conformance.
 - [Scoped editorial and primary-source review](quality/editorial-source-review.md) documents confirmed boundaries for `/INTEL`, Intelligent UI and Memory, plus an unresolved naming/trademark assessment before product promotion. This is not the independent review required for release.
 - Hardened extracted branding verification against symlink aliases and malformed/noncanonical manifest entries; extended documentation checks to Markdown image links and HTML `src`/`srcset` assets. [CI run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42215683862): 54 passing tests, 427 checked file/image references with no errors.
