@@ -15,11 +15,14 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
     parser.add_argument("--aspect-ratio", default="1:1")
     parser.add_argument("--palette", default="")
+    parser.add_argument("--layout", choices=["dashboard", "landing", "form", "catalog"], default="dashboard")
+    parser.add_argument("--responsive", choices=["mobile-first", "desktop-first"], default="mobile-first")
+    parser.add_argument("--component", action="append", default=None)
     parser.add_argument("--style", default="")
     parser.add_argument("--source", action="append", default=[])
     parser.add_argument("--constraint", action="append", default=[])
@@ -55,12 +58,19 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "image":
         from .image_runtime import ImageRuntime
         selected_runtime = ImageRuntime()
+    if args.type == "design":
+        from .design_runtime import DesignRuntime
+        selected_runtime = DesignRuntime()
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
                "format": args.format}
     if args.type == "image":
         request.update(aspect_ratio=args.aspect_ratio, palette=args.palette)
+    if args.type == "design":
+        request.update(layout=args.layout, responsive=args.responsive)
+        if args.component is not None:
+            request["components"] = args.component
     result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request=request,

@@ -24,6 +24,8 @@ __all__ += ["OpenAIResponsesHost", "ModelOutput"]
 from .ollama_host import OllamaLocalHost
 from .provider_router import ProviderRouter, PROVIDERS
 __all__ += ["OllamaLocalHost", "ProviderRouter", "PROVIDERS"]
+from .design_runtime import DesignRuntime, design_capability
+__all__ += ["DesignRuntime", "design_capability"]
 from .image_runtime import ImageRuntime, image_capability
 __all__ += ["ImageRuntime", "image_capability"]
 from .comfyui_image import ComfyUIHost, ComfyImage
