@@ -14,7 +14,7 @@ An independent, open knowledge base for **understanding ChatGPT and designing cl
 
 **7 knowledge domains** · **6/6 documentation phases complete** · **Maintenance mode**
 
-[**Get started**](GETTING_STARTED.md) · [**Explore the knowledge base**](#seven-knowledge-domains) · [**Try-intel**](#use-intel) · [**Architecture**](architecture/overview.md) · [**Project status**](#project-status)
+[**Get started**](GETTING_STARTED.md) · [**Explore the knowledge base**](#seven-knowledge-domains) · [**Use /INTEL**](#use-intel) · [**Architecture**](architecture/overview.md) · [**Project status**](#project-status)
 
 ---
 
