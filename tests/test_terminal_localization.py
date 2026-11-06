@@ -39,7 +39,10 @@ class TerminalLocalization(unittest.TestCase):
         self.assertIn("Befehle",self.run_cli("help")[1])
         self.assertIn("Lokale Voraussetzungen",self.run_cli("help")[1])
         self.assertIn("Verwendung",self.run_cli("config","language","invalid")[2])
-        self.assertIn("Unerwartete",self.run_cli("doctor","oops")[2])
+        doctor_code, _, doctor_error = self.run_cli("doctor", "oops")
+        self.assertEqual(doctor_code, 2)
+        self.assertIn("Entwicklerwerkzeug", doctor_error)
+        self.assertIn("doctor [basic|full]", doctor_error)
         self.assertIn("Offline-orientierte",self.run_cli("--help")[1])
         self.assertEqual(json.loads(self.run_cli("--json","config","language","show")[1]),{"language":"de"})
 
