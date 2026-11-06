@@ -87,6 +87,15 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## DESIGN generator (G2.2)
+
+Create deterministic UI/UX specifications and static, responsive HTML
+prototype source with bounded components and exclusive verified export.
+No browser or functional application integration is implied.
+[DESIGN generator documentation](architecture/design-generator.md).
+
+---
+
 ## ComfyUI local acceptance (G2.1.3)
 
 A read-only ComfyUI preflight and opt-in single-image verifier are available

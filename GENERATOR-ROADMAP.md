@@ -335,3 +335,17 @@ paid model APIs or install software. **No real ComfyUI model execution on the
 operator's PC has been observed.** The [Windows acceptance checklist]
 (architecture/comfyui-live-acceptance.md) documents installation prerequisites,
 operator verification and optional ChatGPT MCP activation.
+
+## G2.2 - DESIGN Generator implementation checkpoint (2026-11-06)
+
+A dependency-free DESIGN runtime now generates deterministic Markdown
+UI/UX specifications and **static** responsive HTML/CSS prototypes with
+four allowlisted layouts, bounded components, escaping, structural checks
+and exclusive verified local export. The additive `generate_design` MCP
+tool returns in-memory text with provenance. The original
+`/INTEL DESIGN` research command is unchanged;
+`/INTEL GENERATE DESIGN` selects the new artifact generator.
+
+Live browser/visual inspection, working interactions, a connected external
+product-design engine and independent accessibility certification remain
+**not run**. See [G2.2 implementation](architecture/design-generator.md).

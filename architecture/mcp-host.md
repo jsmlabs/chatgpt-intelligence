@@ -104,3 +104,11 @@ starts MCP with `--allow-create --allow-comfyui-image` and configures
 the OpenAI API BILLABLE permission. Without it, the MCP tool is not
 advertised (nine tools remain). The Windows tunnel launcher profile is
 unchanged. See [local image setup and security](image-generator.md).
+
+## G2.2 DESIGN MCP tool
+
+The additive `generate_design` tool returns deterministic Markdown design
+specifications or static HTML/CSS layout source. It requires `--allow-create`
+and never invokes a remote model, browser or filesystem export through MCP.
+The default tool set now contains 10 tools (11 when opt-in ComfyUI image
+inference is enabled). See [G2.2 DESIGN spec](design-generator.md).
