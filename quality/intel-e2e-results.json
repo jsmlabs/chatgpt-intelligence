@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "note": "No fresh-chat client tests have been executed; do not mark passed without independently reviewable evidence.",
+  "cases": [
+    {
+      "case_id": "E2E-01",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-02",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-03",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-04",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-05",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-06",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-07",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-08",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-09",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-10",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-11",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    },
+    {
+      "case_id": "E2E-12",
+      "result": "not-run",
+      "tested_on": null,
+      "surface": null,
+      "source_revision": null,
+      "evidence": null,
+      "notes": "Not executed in a fresh, source-configured ChatGPT conversation."
+    }
+  ]
+}
