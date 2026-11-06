@@ -42,7 +42,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 6. [Documentation contracts](architecture/documentation-contracts.md)
 7. [ChatGPT compatibility](architecture/chatgpt-compatibility.md)
 
-**Acceptance:** Each proposed specification has purpose, decision logic, realistic examples, explicit limitations or failure modes, and criteria for assessment. Links work, and models are clearly identified as proposals rather than claims about internal ChatGPT implementation.
+**Acceptance:** Each proposed specification has purpose, decision logic, realistic examples, explicit limitations or failure modes, and criteria for assessment. Links work, and models are clearly identified as proposals rather than claims about internal ChatGPT implementation. See the [Phase 02 verification record](quality/architecture-verification.md).
 
 ## Phase 03 - Seven Knowledge Domains
 Expand [Research](research/README.md), [Concepts](concepts/README.md), [Prompts](prompts/README.md), [Knowledge](knowledge/README.md), [Memory](memory/README.md), [Context Engineering](context-engineering/README.md), and [Intelligent UI](intelligent-ui/README.md).
