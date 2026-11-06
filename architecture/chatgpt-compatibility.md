@@ -56,3 +56,20 @@ Do not assign `verified-capability` without evidence. `verified_on: null` means 
 - [OpenAI platform documentation](https://platform.openai.com/docs/)
 
 These are reference entry points, **not** evidence of any individual feature. Specific claims require more specific citations.
+
+## Example
+A proposed memory design can be labeled `proposed-design` without claiming that native ChatGPT Memory supports its storage format. To mark a specific product capability `verified-capability`, provide an exact official source or repeatable observation and record surface, access conditions, and verification date.
+
+## Failure modes
+- Assigning a current model name to an untested surface.
+- Confusing a project proposal with a product feature.
+- Using generic documentation entry points as evidence for specific behavior.
+- Assuming identical support across clients or plans.
+
+## Acceptance criteria
+- Each changeable capability claim includes applicable evidence and a date, or is explicitly unverified.
+- Plan, model, and interface scope are recorded where material.
+- The three classifications are applied consistently.
+- Unavailable or unknown capabilities are not represented as implemented.
+
+[Documentation contracts](documentation-contracts.md) | [Architecture overview](overview.md)
