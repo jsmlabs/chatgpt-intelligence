@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Dependency-free [Markdown link/metadata checker](scripts/check_docs.py) and [documentation quality CI workflow](.github/workflows/docs-quality.yml); execution result pending verification.
 - [Safe branding archive verifier](scripts/verify_branding_archive.py) for manifest SHA-256, ZIP CRC, traversal, duplicates, and size-limit checks.
 - [INTEL source retrieval smoke test](quality/intel-source-smoke-test.md), confirming five canonical documents were actually fetched in an existing connected ChatGPT conversation, without claiming fresh-chat prefix activation.
 - Phase 04: [prompt patterns](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [INTEL conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
