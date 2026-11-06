@@ -95,7 +95,7 @@ class ModelBoundaryTests(unittest.TestCase):
     def test_invalid_unicode_input_rejected(self):
         result = TextRuntime(model_host=FakeModel()).execute(
             "/INTEL GENERATE PROMPT",
-            request={"objective": "Invalid \\ud800"},
+            request={"objective": "Invalid " + chr(0xD800)},
             authorization=MODEL, mode="model")
         self.assertEqual(result["error"]["code"], "INVALID_REQUEST")
 
