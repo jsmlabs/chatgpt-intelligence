@@ -60,6 +60,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Branding Publication Verification](quality/branding-publication-verification.md) | 57/57 exact original assets and 56/56 GitHub SHA-256 checks |
 | [Branding Visual Inspection](quality/branding-visual-inspection.md) | Scoped contact-sheet and light-banner inspection, with remaining gaps |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
+| [Editorial Source Review](quality/editorial-source-review.md) | Primary-source findings, naming risk and unresolved review requirements |
 | [Publication Safety Verification](quality/publication-safety-verification.md) | Scoped tracked-text credential scan and explicit limitations |
 | [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
 | [Strict Release Readiness Workflow](.github/workflows/release-readiness.yml) | Manual CI validation of release prerequisites without publishing a release |
