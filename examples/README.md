@@ -1,5 +1,7 @@
 # Examples
 
+Start with [INTEL Conversation Examples](intel-command-examples.md) to see the proposed command workflow and its failure cases. These are design examples, not client test records.
+
 Examples should demonstrate the difference between a clear response and an unnecessarily complex one.
 
 ## Example: a simple question
