@@ -12,7 +12,7 @@ ChatGPT Intelligence is an open, beginner-friendly knowledge and documentation r
 
 **Use inside ChatGPT:** [Try `/INTEL`](COMMANDS.md) to activate the repository-grounded conversation convention in an appropriately configured chat. Follow the [activation guide](guides/chatgpt-activation.md); a prefix alone does not connect GitHub or install an app.
 
-New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals. View the [Roadmap](ROADMAP.md) for milestones and current work.
+New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals. View the [Roadmap](ROADMAP.md) for milestones and current work. For immediately useful patterns, see the [Prompt Pattern Library](prompts/prompt-patterns.md) and [Intelligent UI Response Patterns](intelligent-ui/response-patterns.md).
 
 ## Explore the seven core areas
 
@@ -42,6 +42,9 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
 | [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
 | [Branding](branding/README.md) | Original v1.4 package, tokens, and integration status |
+| [Branding Integration](guides/branding-integration.md) | Safe manual asset import and hash verification |
+| [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
+| [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [Architecture](architecture/overview.md) | How the project's concepts fit together |
 | [Compatibility](architecture/chatgpt-compatibility.md) | Model, client, plan, evidence, and version boundaries |
 | [Design Principles](architecture/design-principles.md) | Core project principles |
@@ -75,6 +78,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-03 complete within documented review scope.** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes.** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
