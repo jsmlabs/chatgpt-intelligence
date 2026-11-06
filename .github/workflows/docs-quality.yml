@@ -1,0 +1,32 @@
+name: Documentation Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify Markdown links and metadata
+        run: python scripts/check_docs.py --root .
+      - name: Verify brand files if published
+        shell: bash
+        run: |
+          if [ -f branding/v1.4/MANIFEST.json ]; then
+            python scripts/verify_branding.py branding/v1.4
+          else
+            echo "Brand v1.4 package not yet published; manifest verification skipped."
+          fi
