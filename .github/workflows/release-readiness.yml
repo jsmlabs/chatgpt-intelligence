@@ -23,5 +23,7 @@ jobs:
         run: python scripts/check_publication_safety.py --root .
       - name: Check documentation
         run: python scripts/check_docs.py --root .
+      - name: Check branding PNG SVG and HTML media
+        run: python scripts/check_brand_media.py branding/v1.4
       - name: Enforce release evidence and branding checks
         run: python scripts/check_release.py --root .
