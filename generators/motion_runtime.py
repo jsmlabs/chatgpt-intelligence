@@ -195,6 +195,11 @@ def _verify_simple_lzw(compressed: bytes, pixels_expected: int):
         byte_index, bit_shift = divmod(bitpos, 8)
         code = int.from_bytes(compressed[byte_index:byte_index+2], "little") >> bit_shift & 7
         bitpos += 3
+        if code == 5 and expecting_clear and count == pixels_expected:
+            if any((compressed[i // 8] >> (i % 8)) & 1
+                   for i in range(bitpos, total_bits)):
+                raise IntelError("INVALID_GIF", "Nonzero trailing data")
+            return
         if expecting_clear:
             if code != 4:
                 raise IntelError("INVALID_GIF", "Expected clear LZW code")
@@ -227,9 +232,6 @@ def verify_gif(data: bytes, *, width: int, height: int, frames: int,
     if data[pos:pos+14] != b"!\xff\x0bNETSCAPE2.0":
         raise IntelError("INVALID_GIF", "Loop extension absent")
     pos += 14
-    if data[pos:pos+3] != b"\x03\x01" + struct.pack("<H", loop)[:1]:
-        # Loop control is parsed explicitly below instead of assuming byte offsets.
-        pass
     if data[pos:pos+5] != b"\x03\x01" + struct.pack("<H", loop) + b"\x00":
         raise IntelError("INVALID_GIF", "Invalid loop extension")
     pos += 5
