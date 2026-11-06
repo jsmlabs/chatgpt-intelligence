@@ -15,11 +15,14 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
     parser.add_argument("--aspect-ratio", default="1:1")
     parser.add_argument("--palette", default="")
+    parser.add_argument("--name", default=None, help="Brand display name (required for BRAND)")
+    parser.add_argument("--value", action="append", default=[])
+    parser.add_argument("--direction", choices=["orbit", "signal", "aperture"], default="orbit")
     parser.add_argument("--preset", choices=["graphite", "ocean", "plum", "forest"], default="graphite")
     parser.add_argument("--accent", default=None)
     parser.add_argument("--layout", choices=["dashboard", "landing", "form", "catalog"], default="dashboard")
@@ -66,6 +69,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "theme":
         from .theme_runtime import ThemeRuntime
         selected_runtime = ThemeRuntime()
+    if args.type == "brand":
+        from .brand_runtime import BrandRuntime
+        selected_runtime = BrandRuntime()
     fmt = args.format if args.format is not None else ("json" if args.type == "theme" else "markdown")
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
@@ -79,6 +85,13 @@ def main(argv: list[str] | None = None) -> int:
             request["components"] = args.component
     if args.type == "theme":
         request = {"objective": args.objective, "format": fmt, "preset": args.preset}
+        if args.accent is not None:
+            request["accent"] = args.accent
+    if args.type == "brand":
+        request = {"objective": args.objective, "name": args.name or "",
+                   "audience": args.audience, "style": args.style or "Minimal geometric",
+                   "values": args.value, "preset": args.preset,
+                   "direction": args.direction, "format": fmt}
         if args.accent is not None:
             request["accent"] = args.accent
     result = selected_runtime.execute(
