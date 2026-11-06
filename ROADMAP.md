@@ -25,7 +25,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 | 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | Complete (documentation scope) |
 | 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Complete (documentation scope) |
 | 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | In progress |
-| 06 - Review & Release | Comprehensive editorial and compatibility review | Planned |
+| 06 - Review & Release | Comprehensive editorial and compatibility review | In progress (release blocked) |
 
 ## Phase 01 - Foundation & Verification
 **Deliverables:** Accessible introduction, seven topic entry points, documentation standards, architecture, and a [verification record](quality/foundation-verification.md).
@@ -76,7 +76,7 @@ Initial deliverables: [response-pattern evaluation rubric](quality/pattern-evalu
 **Acceptance:** Test outcomes have evidence, dates, scope, and exact statuses; proposed evaluation methods are never reported as executed tests.
 
 ## Phase 06 - Review & Release
-Review navigation, clarity, source freshness, privacy, metadata, changelog, and release readiness.
+The [initial release-readiness review](quality/phase06-release-readiness.md) documents verified documentation CI, asset-publication gaps and unexecuted client acceptance cases. **Status: In progress; full release blocked.** Review navigation, clarity, source freshness, privacy, metadata, changelog, and release readiness.
 
 **Acceptance:** Review findings resolved or explicitly documented; a stable release only with authorization and appropriate verification.
 
