@@ -89,13 +89,15 @@ def validate_png(data: object) -> tuple[int, int]:
     if not (64 <= w <= 512 and 64 <= h <= 512 and w * h <= MAX_PIXELS and
             (depth, color, compress, filt, interlace) == (8, 2, 0, 0, 0)):
         raise IntelError("IMAGE_INVALID", "Unsupported PNG header")
+    expected = h * (1 + 3 * w)
     try:
         decompressor = zlib.decompressobj()
-        raw = decompressor.decompress(bytes(idat), h * (1 + 3 * w) + 1)
-        raw += decompressor.flush()
+        raw = decompressor.decompress(bytes(idat), expected + 1)
     except zlib.error:
         raise IntelError("IMAGE_INVALID", "Invalid PNG compressed data") from None
-    if len(raw) != h * (1 + 3 * w) or not decompressor.eof or decompressor.unused_data:
+    # Do not flush untrusted streams: that operation has no output size bound.
+    if (len(raw) != expected or not decompressor.eof or
+            decompressor.unused_data or decompressor.unconsumed_tail):
         raise IntelError("IMAGE_INVALID", "Incorrect PNG pixel data length")
     row_bytes = 1 + 3 * w
     if any(raw[pos] != 0 for pos in range(0, len(raw), row_bytes)):
