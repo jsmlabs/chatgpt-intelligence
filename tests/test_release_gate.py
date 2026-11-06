@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
@@ -25,6 +26,8 @@ class ReleaseGateTests(unittest.TestCase):
             path.parent.mkdir(parents=True)
             path.write_text("# Index\n", encoding="utf-8")
         (self.root / "quality").mkdir()
+        (self.root / "scripts").mkdir()
+        shutil.copy2(SOURCE.parent / "verify_intel_e2e.py", self.root / "scripts/verify_intel_e2e.py")
         self.evidence = {
             key: {"status": "not-run", "evidence": None}
             for key in CHECKER.REQUIRED_GATES
