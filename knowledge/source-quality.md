@@ -34,3 +34,30 @@ This article presents an **original project method**, not a verified description
 
 ## Related reading
 [ChatGPT compatibility](../architecture/chatgpt-compatibility.md) and [Research method](../research/research-method.md).
+
+## Claim record template
+
+```yaml
+claim: "Feature X is available in product Y"
+classification: experimental
+product: chatgpt
+surface: web
+model: not-confirmed
+plan: not-confirmed
+source_url: null
+verified_on: null
+conclusion: unverified
+recheck_when: source-or-product-changes
+```
+
+Change the classification to `verified-capability` only after checking a suitable source or documented reproducible observation, including all material access conditions.
+
+## Practical example
+
+**Question:** Is an interactive answer possible in ChatGPT? The [GPT-6 model guide](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt) describes Intelligent UI in eligible Chat environments (accessed 2026-11-06). The supported conclusion is limited to those environments; it does not establish universal availability across all plans, models, or older desktop apps.
+
+## Trust and freshness
+Prefer official feature documentation for product behavior, authoritative primary datasets for measurements, and explicit dated tests for observed behavior. A high-quality old source may still be stale. Record a new review date when rechecking; never update dates merely to make a document look current.
+
+## Maintenance workflow
+When a claim changes, update its canonical page, log the change, inspect inbound references, and distinguish superseded facts from historical observations.
