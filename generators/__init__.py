@@ -24,6 +24,8 @@ __all__ += ["OpenAIResponsesHost", "ModelOutput"]
 from .ollama_host import OllamaLocalHost
 from .provider_router import ProviderRouter, PROVIDERS
 __all__ += ["OllamaLocalHost", "ProviderRouter", "PROVIDERS"]
+from .diagram_runtime import DiagramRuntime, diagram_capability
+__all__ += ["DiagramRuntime", "diagram_capability"]
 from .slides_runtime import SlidesRuntime, slide_capability
 __all__ += ["SlidesRuntime", "slide_capability"]
 from .motion_runtime import MotionRuntime, motion_capability

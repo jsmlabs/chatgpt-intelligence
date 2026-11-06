@@ -15,9 +15,15 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif", "slides"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif", "slides", "diagram"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
+    parser.add_argument("--diagram-kind", choices=["flowchart", "architecture"], default="flowchart")
+    parser.add_argument("--diagram-direction", choices=["TB", "LR"], default="TB")
+    parser.add_argument("--node", action="append", default=None,
+                        help="Node: id|label|type (repeatable)")
+    parser.add_argument("--edge", action="append", default=None,
+                        help="Edge: source|target|label (repeatable)")
     parser.add_argument("--slide", action="append", default=None,
                         help="Slide as layout|title|body1|body2 (repeatable, max 12)")
     parser.add_argument("--motion", choices=["pulse", "orbit", "bounce"], default="pulse")
@@ -86,7 +92,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "slides":
         from .slides_runtime import SlidesRuntime
         selected_runtime = SlidesRuntime()
-    fmt = args.format if args.format is not None else ("json" if args.type in {"theme", "gif", "slides"} else "markdown")
+    if args.type == "diagram":
+        from .diagram_runtime import DiagramRuntime
+        selected_runtime = DiagramRuntime()
+    fmt = args.format if args.format is not None else ("json" if args.type in {"theme", "gif", "slides", "diagram"} else "markdown")
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
@@ -132,6 +141,28 @@ def main(argv: list[str] | None = None) -> int:
                                           "body": items[2:]})
         if fmt == "pptx" and (args.export_root is None or args.filename is None):
             parser.error("PPTX binary export requires --export-root and --filename")
+    if args.type == "diagram":
+        request = {"objective": args.objective, "format": fmt,
+                   "kind": args.diagram_kind, "direction": args.diagram_direction,
+                   "preset": args.preset}
+        if args.accent is not None:
+            request["accent"] = args.accent
+        if args.node is not None or args.edge is not None:
+            if args.node is None:
+                parser.error("--node is required when providing --edge")
+            request["nodes"], request["edges"] = [], []
+            for item in args.node:
+                parts = item.split("|")
+                if len(parts) not in (2, 3):
+                    parser.error("Node syntax: id|label|type")
+                request["nodes"].append({"id": parts[0], "label": parts[1],
+                                          "type": parts[2] if len(parts) == 3 else "process"})
+            for item in args.edge or []:
+                parts = item.split("|")
+                if len(parts) not in (2, 3):
+                    parser.error("Edge syntax: source|target|label")
+                request["edges"].append({"source": parts[0], "target": parts[1],
+                                          "label": parts[2] if len(parts) == 3 else ""})
     result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request=request,
