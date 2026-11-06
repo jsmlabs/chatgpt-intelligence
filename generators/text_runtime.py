@@ -48,6 +48,10 @@ def _require_text(value: object, key: str, *, required: bool = False,
                   limit: int = MAX_VALUE) -> str:
     if not isinstance(value, str) or len(value) > limit or "\x00" in value:
         raise IntelError("INVALID_REQUEST", key + " must be a bounded UTF-8 string")
+    try:
+        value.encode("utf-8")
+    except UnicodeError:
+        raise IntelError("INVALID_REQUEST", key + " contains invalid Unicode") from None
     normalized = value.strip()
     if required and not normalized:
         raise IntelError("INVALID_REQUEST", key + " is required")
@@ -177,8 +181,12 @@ def render_markdown(kind: str, request: GenerationRequest) -> str:
 
 
 def _check_markdown(content: object) -> dict[str, bool]:
+    try:
+        size = len(content.encode("utf-8")) if isinstance(content, str) else 0
+    except UnicodeError:
+        size = 0
     return {
-        "nonempty": isinstance(content, str) and 0 < len(content.encode("utf-8")) <= MAX_OUTPUT,
+        "nonempty": 0 < size <= MAX_OUTPUT,
         "markdown_structure": isinstance(content, str) and content.startswith("# ") and
                               "## Provenance and limitations" in content,
         "no_nul": isinstance(content, str) and "\x00" not in content,

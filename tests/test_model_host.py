@@ -92,6 +92,13 @@ class ModelBoundaryTests(unittest.TestCase):
             self.assertFalse(result["ok"])
             self.assertEqual(result["manifest"].state, ArtifactState.FAILED)
 
+    def test_invalid_unicode_input_rejected(self):
+        result = TextRuntime(model_host=FakeModel()).execute(
+            "/INTEL GENERATE PROMPT",
+            request={"objective": "Invalid \\ud800"},
+            authorization=MODEL, mode="model")
+        self.assertEqual(result["error"]["code"], "INVALID_REQUEST")
+
     def test_model_error_sanitized(self):
         fake = FakeModel(fail=RuntimeError("sk-secret-private-value"))
         result = TextRuntime(model_host=fake).execute("/INTEL GENERATE PROMPT",

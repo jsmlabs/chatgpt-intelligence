@@ -118,7 +118,8 @@ class OpenAIResponsesHost:
                 raise ValueError("Invalid output length")
             response_id = result.get("id", "")
             actual_model = result.get("model", self.model)
-            if not isinstance(response_id, str) or not isinstance(actual_model, str):
+            if (not isinstance(response_id, str) or len(response_id) > 256
+                    or not isinstance(actual_model, str) or len(actual_model) > 128):
                 raise ValueError("Malformed provenance")
         except (ValueError, TypeError, AttributeError):
             raise IntelError("MODEL_RESPONSE_INVALID", "Model response failed validation") from None
