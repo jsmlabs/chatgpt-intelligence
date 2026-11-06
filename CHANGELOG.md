@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - phase 08 release hardening
+
+- Added machine-readable fail-closed release-gate reports that never claim publication approval.
+- Strengthened Windows CI to run the full offline unittest suite; manual release workflow validates Linux 3.11/3.12 and Windows 3.12 before strict evidence checks.
+- Preserved the current CLI version until release approval, without publishing a tag or package.
+
+
 ## Unreleased - phase 07 architecture cleanup and documentation
 
 - Added implementation-specific architecture, extension, migration and troubleshooting guides without relocating executable modules or renaming published entrypoints.

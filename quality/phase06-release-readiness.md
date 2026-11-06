@@ -50,3 +50,11 @@ The [scoped editorial review](editorial-source-review.md) identifies an open nam
 5. Recheck release criteria, obtain release authorization and only then create an appropriate tag or release.
 
 [Roadmap](../ROADMAP.md) | [Quality standards](quality-standards.md) | [Phase 05 evidence](phase05-verification.md)
+
+## Phase 08 hardening and release policy
+
+The executable CLI currently reports version 0.1.0. The additive CLI changes suggest **proposed SemVer 0.2.0** as a next candidate (subject to final compatibility verification); this is not a published version or tag. Do not bump or tag until all acceptance checks pass.
+
+The checker now supports python scripts/check_release.py --root . --json, with machine-readable failures and publication_permitted: false / release_approved: false. Report-only mode never grants publishing authority. The manual [Release Readiness workflow](../.github/workflows/release-readiness.yml) runs Linux Python 3.11/3.12 and Windows Python 3.12 tests before the strict evidence gate. The workflow has read-only permissions and cannot create release objects or tags.
+
+Before publishing, validate the final tested commit, independently perform the four evidence-gated client/visual/privacy reviews, record authentic references in [release evidence](release-evidence.json), inspect the strict gate, confirm SemVer and rollback paths, and obtain explicit release approval. Missing evidence or failed CI is a stop condition.

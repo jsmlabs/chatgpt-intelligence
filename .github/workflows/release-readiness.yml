@@ -3,27 +3,86 @@ name: Release Readiness
 on:
   workflow_dispatch:
 
+# Manual read-only gate. No tag creation or publication.
 permissions:
   contents: read
 
 jobs:
-  verify:
+  linux:
+    name: Linux Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Full offline regression suite
+        run: python -m unittest discover -s tests -v
+      - name: Publication safety scan
+        run: python scripts/check_publication_safety.py --root .
+      - name: Documentation and branding checks
+        run: |
+          python scripts/check_docs.py --root .
+          python scripts/check_brand_media.py branding/v1.4
+          python scripts/verify_branding.py branding/v1.4 --strict
+      - name: Passive CLI checks
+        run: |
+          python intel.py --json capabilities >/dev/null
+          python intel.py --json doctor basic >/dev/null
+          python intel.py --json clean >/dev/null
+          python intel.py --json update >/dev/null
+          python intel.py --json logs >/dev/null
+
+  windows:
+    name: Windows Python 3.12
+    runs-on: windows-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Full Windows regression suite
+        run: python -m unittest discover -s tests -v
+      - name: CMD and PowerShell compatibility
+        shell: pwsh
+        run: |
+          $env:INTEL_CONFIG_HOME = Join-Path $env:RUNNER_TEMP 'release-candidate-config'
+          $env:NO_COLOR = '1'
+          cmd /c 'intel.cmd --json capabilities'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmd /c 'intel.cmd --json clean'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmd /c 'intel.cmd --json doctor basic'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path (Get-Location) 'scripts\intel.ps1'),
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -ne 0) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+
+  strict_release_gate:
+    name: Blocking evidence gate - no publication
+    needs: [linux, windows]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Run regression tests
-        run: python -m unittest discover -s tests -v
-      - name: Scan tracked public text for credential signatures
-        run: python scripts/check_publication_safety.py --root .
-      - name: Check documentation
-        run: python scripts/check_docs.py --root .
-      - name: Check branding PNG SVG and HTML media
-        run: python scripts/check_brand_media.py branding/v1.4
-      - name: Enforce release evidence and branding checks
-        run: python scripts/check_release.py --root .
+      - name: Structured strict evidence check
+        run: python scripts/check_release.py --root . --json
+      - name: Explicit publication boundary
+        if: success()
+        run: |
+          echo 'Structural checks passed; human evidence inspection still required.'
+          echo 'This workflow never creates a release or tag.'
