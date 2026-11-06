@@ -117,7 +117,7 @@ class DesignTests(unittest.TestCase):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         tools = host.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]
-        self.assertEqual(len(tools), 11)
+        self.assertEqual(len(tools), 12)
         design = next(x for x in tools if x["name"] == "generate_design")
         self.assertEqual(design["inputSchema"]["required"], ["objective"])
         for fmt in ("markdown", "html"):

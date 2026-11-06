@@ -89,7 +89,7 @@ class LocalImageRendererTests(unittest.TestCase):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         tools = host.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]
-        self.assertEqual(len(tools), 11)
+        self.assertEqual(len(tools), 12)
         response = host.handle({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
                                 "params": {"name": "render_abstract_image",
                                            "arguments": {"objective": "cover", "aspect_ratio": "9:16"}}})["result"]
