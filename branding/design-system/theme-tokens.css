@@ -1,0 +1,15 @@
+/* ChatGPT Intelligence project tokens. NOT official OpenAI design tokens. */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --ci-bg: #FFFFFF; --ci-sidebar: #F9F9F9; --ci-surface: #F7F7F8;
+  --ci-text: #171717; --ci-muted: #676767; --ci-border: #E5E5E5;
+  --ci-accent: #0F8B72; --ci-radius-sm: 8px; --ci-radius-md: 12px;
+  --ci-radius-lg: 18px; --ci-radius-pill: 999px;
+  --ci-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ci-bg: #212121; --ci-sidebar: #171717; --ci-surface: #303030;
+  --ci-text: #F9F9F9; --ci-muted: #B4B4B4; --ci-border: #424242;
+  --ci-accent: #2EAA91;
+}
