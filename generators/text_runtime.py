@@ -188,6 +188,8 @@ MODEL_TITLES = {"PROMPT": "Prompt Specification", "CONCEPT": "Concept Brief",
 def _prepare_model_markdown(kind: str, value: str) -> str:
     """Normalize enclosing Markdown wrappers; preserve strict content checks."""
     content = value.strip()
+    if not content:
+        return content
     # Unwrap only one complete fenced Markdown document.
     opening = re.match(r"^```(?:markdown|md)?[ \t]*\r?\n", content, re.I)
     if opening and re.search(r"\r?\n```$", content):
