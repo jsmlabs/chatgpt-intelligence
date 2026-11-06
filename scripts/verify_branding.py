@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""Verify an extracted ChatGPT Intelligence brand package against MANIFEST.json.
+
+Usage: python scripts/verify_branding.py branding
+Requires Python 3.10+ and standard library only.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+import sys
+
+
+def verify(directory: pathlib.Path) -> int:
+    base = directory.resolve()
+    manifest_path = base / "MANIFEST.json"
+    if not manifest_path.is_file():
+        print(f"FAIL: missing manifest: {manifest_path}")
+        return 1
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        declared = manifest["files"]
+        expected_count = manifest["file_count"]
+        if not isinstance(declared, dict) or len(declared) != expected_count:
+            raise ValueError("Inconsistent manifest file count")
+    except (ValueError, KeyError, TypeError) as exc:
+        print(f"FAIL: invalid manifest: {exc}")
+        return 1
+
+    failures: list[str] = []
+    expected: set[pathlib.Path] = {manifest_path.resolve()}
+    for name, spec in sorted(declared.items()):
+        path = pathlib.PurePosixPath(name)
+        if path.is_absolute() or ".." in path.parts or "\\" in name:
+            failures.append(f"unsafe path: {name}")
+            continue
+        target = base.joinpath(*path.parts)
+        resolved = target.resolve()
+        if not resolved.is_relative_to(base) or target.is_symlink():
+            failures.append(f"unsafe or symlinked target: {name}")
+            continue
+        expected.add(resolved)
+        if not target.is_file():
+            failures.append(f"missing: {name}")
+            continue
+        data = target.read_bytes()
+        if len(data) != spec["size_bytes"]:
+            failures.append(f"size mismatch: {name}")
+        if hashlib.sha256(data).hexdigest() != spec["sha256"]:
+            failures.append(f"sha256 mismatch: {name}")
+
+    # A dedicated integration-status document can coexist with the supplied assets,
+    # but all manifest-listed assets must preserve their exact bytes.
+    extra = sorted(
+        p.relative_to(base).as_posix()
+        for p in base.rglob("*")
+        if p.is_file() and p.resolve() not in expected
+    )
+    if extra:
+        print("NOTE: additional files not in manifest: " + ", ".join(extra))
+    for issue in failures:
+        print("FAIL:", issue)
+    print(f"Verified {len(declared) - len(failures)} declared paths against {len(declared)} manifest entries")
+    if failures:
+        return 1
+    print("PASS: all declared sizes and SHA-256 hashes match")
+    return 0
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python scripts/verify_branding.py <branding-directory>")
+        sys.exit(2)
+    sys.exit(verify(pathlib.Path(sys.argv[1])))
