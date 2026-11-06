@@ -51,7 +51,32 @@ class ReleaseGateTests(unittest.TestCase):
         self.evidence["fresh_chat_intel"] = {"status": "passed", "evidence": ""}
         self.save()
         errors = CHECKER.check(self.root)
-        self.assertTrue(any("missing supporting evidence" in e for e in errors))
+        self.assertTrue(any("missing or invalid supporting evidence" in e for e in errors))
+
+    def test_non_url_attestation_evidence_is_rejected(self):
+        self.evidence["brand_visual_review"] = {
+            "status": "passed", "evidence": "review completed"
+        }
+        self.save()
+        errors = CHECKER.check(self.root)
+        self.assertTrue(any("brand_visual_review: passed but missing or invalid" in e for e in errors))
+
+    def test_nonexistent_local_evidence_is_rejected(self):
+        self.evidence["brand_visual_review"] = {
+            "status": "passed", "evidence": "quality/absent.md"
+        }
+        self.save()
+        errors = CHECKER.check(self.root)
+        self.assertTrue(any("brand_visual_review: passed but missing or invalid" in e for e in errors))
+
+    def test_existing_local_evidence_is_accepted_structurally(self):
+        (self.root / "quality/visual-review.md").write_text("review observation", encoding="utf-8")
+        self.evidence["brand_visual_review"] = {
+            "status": "passed", "evidence": "quality/visual-review.md"
+        }
+        self.save()
+        errors = CHECKER.check(self.root)
+        self.assertFalse(any("brand_visual_review:" in e for e in errors))
 
     def test_missing_domain_index_blocks(self):
         (self.root / "memory/README.md").unlink()
