@@ -20,3 +20,7 @@ __all__ += ["TextRuntime", "text_registry", "validate_request", "render_markdown
 
 from .model_host import OpenAIResponsesHost, ModelOutput
 __all__ += ["OpenAIResponsesHost", "ModelOutput"]
+
+from .ollama_host import OllamaLocalHost
+from .provider_router import ProviderRouter, PROVIDERS
+__all__ += ["OllamaLocalHost", "ProviderRouter", "PROVIDERS"]

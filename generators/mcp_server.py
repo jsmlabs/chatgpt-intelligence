@@ -13,6 +13,8 @@ from typing import Any, BinaryIO
 
 from .foundation import Authorization, Permission, IntelError
 from .model_host import OpenAIResponsesHost
+from .ollama_host import OllamaLocalHost
+from .provider_router import ProviderRouter
 from .text_runtime import TextRuntime
 
 MAX_INPUT_LINE = 32768
@@ -35,6 +37,8 @@ INPUT_SCHEMA = {
         "verification": {"type": "array", "maxItems": 16, "items": {"type": "string", "maxLength": 1024}},
         "format": {"type": "string", "enum": ["markdown"]},
         "mode": {"type": "string", "enum": ["template", "model"]},
+        "provider": {"type": "string", "enum": ["template", "ollama-local",
+                                                   "chatgpt-host", "openai-api"]},
     },
     "required": ["objective"],
     "additionalProperties": False,
@@ -43,9 +47,10 @@ INPUT_SCHEMA = {
 
 class MCPHost:
     def __init__(self, authorization: Authorization | None = None,
-                 model_host: OpenAIResponsesHost | None = None):
+                 model_host: OpenAIResponsesHost | None = None,
+                 provider_router: ProviderRouter | None = None):
         self.authorization = authorization or Authorization()
-        self.runtime = TextRuntime(model_host=model_host)
+        self.runtime = TextRuntime(model_host=model_host, provider_router=provider_router)
         self.initialized = False
 
     def handle(self, message: Any) -> dict | None:
@@ -94,10 +99,12 @@ class MCPHost:
             mode = arguments.get("mode", "template")
             if not isinstance(mode, str) or mode not in ("template", "model"):
                 return self._error(request_id, -32602, "Invalid execution mode")
-            brief = {key: value for key, value in arguments.items() if key != "mode"}
+            provider = arguments.get("provider")
+            brief = {key: value for key, value in arguments.items()
+                     if key not in {"mode", "provider"}}
             result = self.runtime.execute(
                 "/INTEL GENERATE " + TOOL_TYPES[name],
-                request=brief, authorization=self.authorization, mode=mode,
+                request=brief, authorization=self.authorization, mode=mode, provider=provider,
             )
             if not result["ok"]:
                 error = result["error"]
@@ -180,8 +187,11 @@ def main(argv: list[str] | None = None) -> int:
     if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
         parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
     host = MCPHost(Authorization(frozenset(granted)),
-                   OpenAIResponsesHost(timeout=args.model_timeout,
-                                       max_output_tokens=args.model_max_output_tokens))
+                   provider_router=ProviderRouter(
+                       ollama_host=OllamaLocalHost(timeout=args.model_timeout,
+                                                   max_output_tokens=args.model_max_output_tokens),
+                       openai_host=OpenAIResponsesHost(timeout=args.model_timeout,
+                                                       max_output_tokens=args.model_max_output_tokens)))
     serve(host, sys.stdin.buffer, sys.stdout.buffer)
     return 0
 

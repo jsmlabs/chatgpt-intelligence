@@ -67,6 +67,18 @@ The domains are connected, but each can be explored independently.
 
 ---
 
+## Offline-first local text generators (G1.8)
+
+The Python PROMPT, CONCEPT and DOCUMENT generators default to offline deterministic Markdown with no API key, paid model, or external connection. Local Ollama inference and the explicitly billable OpenAI API are optional. A native ChatGPT host adapter is not installed or implied.
+
+```bash
+python -m generators prompt --objective "Draft a checklist" --authorize-create
+```
+
+[Provider routing and permission boundaries](architecture/provider-routing.md)
+
+---
+
 ## Design principles
 
 The reference architecture follows a simple sequence:

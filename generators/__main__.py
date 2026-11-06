@@ -9,6 +9,8 @@ import sys
 from .foundation import Authorization, Permission
 from .text_runtime import TextRuntime
 from .model_host import OpenAIResponsesHost
+from .ollama_host import OllamaLocalHost
+from .provider_router import ProviderRouter
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -22,6 +24,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--verify", action="append", default=[])
     parser.add_argument("--format", default="markdown")
     parser.add_argument("--mode", choices=["template", "model"], default="template")
+    parser.add_argument("--provider", choices=["template", "ollama-local", "chatgpt-host",
+                                               "openai-api"], default=None)
     parser.add_argument("--model-timeout", type=float, default=60.0)
     parser.add_argument("--model-max-output-tokens", type=int, default=4096)
     parser.add_argument("--authorize-external", action="store_true")
@@ -40,9 +44,11 @@ def main(argv: list[str] | None = None) -> int:
         granted.add(Permission.BILLABLE)
     if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
         parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
-    runtime = TextRuntime(model_host=OpenAIResponsesHost(
-        timeout=args.model_timeout, max_output_tokens=args.model_max_output_tokens
-    ) if args.mode == "model" else None)
+    runtime = TextRuntime(provider_router=ProviderRouter(
+        ollama_host=OllamaLocalHost(timeout=args.model_timeout,
+                                    max_output_tokens=args.model_max_output_tokens),
+        openai_host=OpenAIResponsesHost(timeout=args.model_timeout,
+                                        max_output_tokens=args.model_max_output_tokens)))
     result = runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request={"objective": args.objective, "audience": args.audience,
@@ -51,6 +57,7 @@ def main(argv: list[str] | None = None) -> int:
                  "format": args.format},
         authorization=Authorization(frozenset(granted)),
         export_root=args.export_root, filename=args.filename, mode=args.mode,
+        provider=args.provider,
     )
     if not result["ok"]:
         print(json.dumps(result["error"], sort_keys=True), file=sys.stderr)

@@ -16,6 +16,7 @@ from uuid import uuid4
 
 from .artifacts import ArtifactManifest, ArtifactState, GenerationRequest
 from .model_host import ModelOutput
+from .provider_router import ProviderRouter
 from .foundation import (
     Adapter, Authorization, Coordinator, IntelError, Permission, Registry, State,
     default_registry, parse_command, safe_relative_path, verify_file,
@@ -251,15 +252,17 @@ class TextModelHost(Protocol):
 class TextRuntime:
     """Local host implementation: validate -> authorize -> render -> review -> optional export."""
 
-    def __init__(self, *, model_host: TextModelHost | None = None):
+    def __init__(self, *, model_host: TextModelHost | None = None,
+                 provider_router: ProviderRouter | None = None):
         self.model_host = model_host
+        self.provider_router = provider_router or ProviderRouter(openai_host=model_host)
         self.registry = text_registry()
         self.coordinator = Coordinator(registry=self.registry)
 
     def execute(self, raw: str, *, request: Mapping[str, object] | None = None,
                 authorization: Authorization | None = None, export_root: Path | None = None,
                 filename: str | None = None, previous: ArtifactManifest | None = None,
-                mode: str = "template") -> dict:
+                mode: str = "template", provider: str | None = None) -> dict:
         """A single synchronous execution; caller grants are not read from request text."""
         manifest: ArtifactManifest | None = None
         try:
@@ -272,12 +275,14 @@ class TextRuntime:
             brief = validate_request(cmd.argument, request)
             if mode not in {"template", "model"}:
                 raise IntelError("INVALID_REQUEST", "Mode must be template or model")
+            selected = provider if provider is not None else (
+                "openai-api" if mode == "model" else "template")
+            if mode == "model" and selected != "openai-api":
+                raise IntelError("INVALID_REQUEST", "Conflicting mode and provider")
             grants = authorization or Authorization()
             grants.require(cap.permissions)
-            if mode == "model":
-                grants.require(frozenset({Permission.EXTERNAL, Permission.BILLABLE}))
-                if self.model_host is None or not self.model_host.configured:
-                    raise IntelError("MODEL_UNAVAILABLE", "No configured model runtime is connected")
+            host = self.provider_router.select(selected, grants)
+            is_model = host is not None
             if (export_root is None) != (filename is None):
                 raise IntelError("INVALID_REQUEST", "Export requires root and filename together")
             if previous is not None:
@@ -296,15 +301,14 @@ class TextRuntime:
                     source_references=brief.sources, capability=cap.identifier,
                 )
             manifest.created_at = datetime.now(timezone.utc).isoformat()
-            manifest.provenance = {"producer": "local-deterministic-template" if mode == "template"
-                                   else "model-host", "source_status": "unverified",
+            manifest.provenance = {"producer": "model-host" if is_model else "local-deterministic-template", "source_status": "unverified",
                                    "renderer_version": cap.version}
             manifest.transition(ArtifactState.READY)
             manifest.transition(ArtifactState.GENERATING)
             model_result: ModelOutput | None = None
-            if mode == "model":
+            if is_model:
                 try:
-                    model_result = self.model_host.generate(cap.command, brief)
+                    model_result = host.generate(cap.command, brief)
                 except IntelError:
                     raise
                 except Exception:
@@ -341,7 +345,7 @@ class TextRuntime:
             manifest.transition(ArtifactState.REVIEWED)
             evidence = {"structural_validation": "passed", "human_review": "not_run",
                         "source_verification": "not_run",
-                        "llm_generation": "host_reported" if mode == "model" else "not_run"}
+                        "llm_generation": "host_reported" if is_model else "not_run"}
             if export_root is not None:
                 path, digest = export_markdown(content, export_root, filename)
                 manifest.record_verified_output(path, export_root)

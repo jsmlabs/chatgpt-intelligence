@@ -66,3 +66,7 @@ Expected CI verification: protocol handshake, tool discovery, real local stdio s
 ## Tunable model budgets
 
 The process flags `--model-timeout 60` and `--model-max-output-tokens 4096` set bounded model budgets for model-backed calls; local template-mode calls remain offline. Valid ranges are 1-120 seconds and 128-8192 output tokens. The live verifier accepts the same two flags. The default single-request behavior and explicit startup permissions are unchanged. Live verification must run separately from CI.
+
+## G1.8 provider routing
+
+The MCP tool schema now accepts optional `provider: template | ollama-local | chatgpt-host | openai-api`. Default stays offline `template`, and legacy `mode=model` still explicitly selects billable `openai-api`. Optional local Ollama requires `INTEL_OLLAMA_MODEL` and `--allow-external`, never `--allow-billable`. Standalone MCP cannot execute `chatgpt-host` without a trusted, verified injected adapter. See [provider routing](provider-routing.md).

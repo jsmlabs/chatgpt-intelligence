@@ -51,3 +51,7 @@ Do not claim live-model or ChatGPT client support from synthetic MCP unit tests.
 ## G1.7 model-budget hardening
 
 When tuning the model transport, keep bounded limits and explicit host-operator configuration, never retry billable requests silently. Unit-test rejected `incomplete` responses, transport timeouts, and HTTP 429 quota/rate-limit distinctions with synthetic payloads. User-provided prior live outcomes do not automatically certify a newer commit.
+
+## G1.8 provider rules
+
+Preserve offline default behavior and billable provider opt-in. Local Ollama is loopback-only with an explicitly selected installed model; no automatic download or cloud fallback. `chatgpt-host` requires a trusted injected adapter and verified tool declaration. Test providers with synthetic data and no live/paid CI requests.
