@@ -43,3 +43,21 @@ When both integrations are independently available in the same chat, call only t
 Forge Studio 3.1.0 ships an MCP bridge and synthetic subprocess protocol tests. These establish client-side behavior but **do not prove** a real local checkout handshake, fresh ChatGPT client connection, tunneled MCP availability, private deployment or full generator coverage. Verification must be repeated for the actual revision and installation. Keep the independent projects' release gates separate.
 
 See [MCP host](../architecture/mcp-host.md), [host integration](../architecture/chatgpt-host-integration.md), and [source resolution](../architecture/activation-and-source-resolution.md).
+
+## Forge Studio v3.2 release candidate - live connectivity and reliability
+
+**Status (2026-11-06):** v3.2 is a locally tested candidate, not a published Forge Studio release. The current published plugin remains v3.1.0 until all release gates pass.
+
+The candidate tightens the existing opt-in MCP client without adding remote, billable, ComfyUI or shell permissions:
+
+- Sends `notifications/initialized` before tool discovery and validates MCP protocol, IDs, server identity and result structure.
+- Enforces bounded JSON arguments, frames and inventory; rejects duplicate tool declarations and unavailable tools.
+- Adds repeatable `--require-tool` fail-closed discovery checks and stable error codes for transport, protocol, timeout and permission-related failures.
+- Limits local subprocess duration to 1-120 seconds; no checkout code runs without `--execute`.
+- Keeps the ChatGPT connector path independent from the local stdio path and records evidence tiers distinctly.
+
+**Actual evidence:** The v3.2 Forge Studio candidate passed its local 58-test suite, CLI compatibility and structural package checks. A connected ChatGPT Intelligence `generate_prompt` call returned a structurally validated offline draft, demonstrating that the tool was reachable in the invoking session. This is **not** proof of a Forge CLI subprocess executing the current GitHub checkout. The added `tests/test_forge_interop.py` invokes the real local Intelligence MCP host in GitHub CI with an offline template request and verifies that model mode without external/billable grants is denied.
+
+**Release blocker:** GitHub Actions run [42291154597](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42291154597) failed in the complete regression suite because seven `tests/test_configuration_setup.py` cases failed. The log does not attribute those failures to the new MCP integration test, but a green whole-repository gate is absent. No overall passing CI or v3.2 production certification is claimed.
+
+**Acceptance still required:** Fix and verify the seven configuration-CLI failures without weakening tests, re-run the full workflow on the final revision, execute the Forge CLI against an actual trusted checkout if operator access permits, then publish and read back the Forge Studio release. Preserve both projects' independent authorization and provenance boundaries.
