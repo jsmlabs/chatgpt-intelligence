@@ -48,3 +48,6 @@ Keep model transport in `generators/model_host.py` and deterministic authorizati
 ## MCP host verification
 
 Do not claim live-model or ChatGPT client support from synthetic MCP unit tests. A live call uses `-m scripts.verify_model_live --authorize-live-billable` only with credentials provisioned outside source control and with explicit operator authorization. Keep the MCP stdio transport free of additional filesystem, network retrieval or publishing tools unless separately designed and approved. See [MCP host](architecture/mcp-host.md).
+## G1.7 model-budget hardening
+
+When tuning the model transport, keep bounded limits and explicit host-operator configuration, never retry billable requests silently. Unit-test rejected `incomplete` responses, transport timeouts, and HTTP 429 quota/rate-limit distinctions with synthetic payloads. User-provided prior live outcomes do not automatically certify a newer commit.

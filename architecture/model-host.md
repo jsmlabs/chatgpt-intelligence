@@ -54,3 +54,11 @@ python scripts/check_docs.py --root .
 The G1.6 tests use a synthetic model and a stub HTTP response: they check exact permission gates, missing host failures, invalid outputs, non-escalation, supported generator types, provenance, revisions, Markdown export, error sanitization and the documented request shape. **Live invocation: NOT RUN** until a user configures authorized credentials. CI does not spend money and never requires an API key.
 
 [Text Runtime](text-runtime.md) | [Commands](../COMMANDS.md) | [Generator Roadmap](../GENERATOR-ROADMAP.md)
+
+## G1.7 hardened limits and error mapping (2026-11-06)
+
+The model host now defaults to `max_output_tokens=4096` and `timeout=60` seconds. Trusted operators can override limits through `--model-max-output-tokens` (128-8192) and `--model-timeout` (1-120 seconds), or constructor arguments. The bounds are enforced before model execution. No automatic retries or model/provider substitution were introduced.
+
+Safe, stable error codes include `MODEL_OUTPUT_INCOMPLETE` for incomplete Responses statuses (including `max_output_tokens` exhaustion), `MODEL_TIMEOUT`, `MODEL_AUTH_FAILED`, `MODEL_QUOTA_EXHAUSTED`, `MODEL_RATE_LIMITED`, `MODEL_REQUEST_REJECTED` and `MODEL_PROVIDER_UNAVAILABLE`. Unrecognized cases remain `MODEL_REQUEST_FAILED`. The HTTP 429 code is determined only from an at-most-8-KiB provider-error payload and no raw response body is exposed. A model returning `incomplete` is **not** counted as successful generation.
+
+An operator independently reported a three-generator live smoke run on the preceding revision with `PASSED` for PROMPT, CONCEPT and DOCUMENT. This is user-supplied external evidence, **not** CI evidence and **not** verification of the hardened commit. The new exact revision requires its own live test. Neither smoke result proves ChatGPT client installation or factual accuracy.

@@ -22,6 +22,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--verify", action="append", default=[])
     parser.add_argument("--format", default="markdown")
     parser.add_argument("--mode", choices=["template", "model"], default="template")
+    parser.add_argument("--model-timeout", type=float, default=60.0)
+    parser.add_argument("--model-max-output-tokens", type=int, default=4096)
     parser.add_argument("--authorize-external", action="store_true")
     parser.add_argument("--authorize-billable", action="store_true")
     parser.add_argument("--authorize-create", action="store_true",
@@ -36,7 +38,11 @@ def main(argv: list[str] | None = None) -> int:
         granted.add(Permission.EXTERNAL)
     if args.authorize_billable:
         granted.add(Permission.BILLABLE)
-    runtime = TextRuntime(model_host=OpenAIResponsesHost() if args.mode == "model" else None)
+    if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
+        parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
+    runtime = TextRuntime(model_host=OpenAIResponsesHost(
+        timeout=args.model_timeout, max_output_tokens=args.model_max_output_tokens
+    ) if args.mode == "model" else None)
     result = runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request={"objective": args.objective, "audience": args.audience,

@@ -14,13 +14,18 @@ from generators import Authorization, Permission, TextRuntime, OpenAIResponsesHo
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model-timeout", type=float, default=60.0)
+    parser.add_argument("--model-max-output-tokens", type=int, default=4096)
     parser.add_argument("--authorize-live-billable", action="store_true",
                         help="Explicitly approve THREE potentially billable API requests")
     args = parser.parse_args(argv)
     if not args.authorize_live_billable:
         print(json.dumps({"status": "BLOCKED", "reason": "explicit authorization required"}))
         return 2
-    host = OpenAIResponsesHost()
+    if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
+        parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
+    host = OpenAIResponsesHost(timeout=args.model_timeout,
+                               max_output_tokens=args.model_max_output_tokens)
     if not host.configured:
         print(json.dumps({"status": "BLOCKED", "reason": "model host not configured"}))
         return 2

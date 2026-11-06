@@ -161,6 +161,8 @@ def serve(host: MCPHost, source: BinaryIO, sink: BinaryIO) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Local MCP stdio host for INTEL")
+    parser.add_argument("--model-timeout", type=float, default=60.0)
+    parser.add_argument("--model-max-output-tokens", type=int, default=4096)
     parser.add_argument("--allow-create", action="store_true",
                         help="Trusted operator grant for draft creation")
     parser.add_argument("--allow-external", action="store_true",
@@ -175,7 +177,11 @@ def main(argv: list[str] | None = None) -> int:
         granted.add(Permission.EXTERNAL)
     if args.allow_billable:
         granted.add(Permission.BILLABLE)
-    host = MCPHost(Authorization(frozenset(granted)), OpenAIResponsesHost())
+    if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
+        parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
+    host = MCPHost(Authorization(frozenset(granted)),
+                   OpenAIResponsesHost(timeout=args.model_timeout,
+                                       max_output_tokens=args.model_max_output_tokens))
     serve(host, sys.stdin.buffer, sys.stdout.buffer)
     return 0
 

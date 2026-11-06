@@ -243,3 +243,6 @@ An opt-in Python Responses API host adapter and injectable model-host contract h
 ## G1.7 checkpoint (2026-11-06)
 
 A local MCP stdio host with three bounded text tools, explicit startup grants and isolated synthetic protocol tests has been implemented. The live-provider verifier `scripts/verify_model_live.py` requires environment-provided credentials plus explicit billable authorization and is intentionally excluded from CI. **Local MCP support is not native ChatGPT plugin installation.** A real authenticated model call and ChatGPT-client acceptance must be verified separately; no release gate is waived. [Integration guide](architecture/mcp-host.md).
+## G1.7 model-hardening checkpoint (2026-11-06)
+
+Following a user-reported three-generator live `PASSED` on the preceding revision, model defaults and diagnostic categories were hardened with regression coverage. The preceding live result is external, user-supplied evidence; it does not prove that the hardened head passes live, or that a native ChatGPT client connected. Exact-head CI plus a subsequent separately authorized live run are required before claiming completion.

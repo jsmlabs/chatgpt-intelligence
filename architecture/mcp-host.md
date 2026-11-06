@@ -62,3 +62,7 @@ python scripts/check_docs.py --root .
 Expected CI verification: protocol handshake, tool discovery, real local stdio subprocess, deny-by-default, authorized template mode, synthetic model mode, malformed requests and oversized input. These are contract tests, not proof of live API success or an installed ChatGPT plugin.
 
 [Commands](../COMMANDS.md) | [Model host](model-host.md) | [Text runtime](text-runtime.md)
+
+## Tunable model budgets
+
+The process flags `--model-timeout 60` and `--model-max-output-tokens 4096` set bounded model budgets for model-backed calls; local template-mode calls remain offline. Valid ranges are 1-120 seconds and 128-8192 output tokens. The live verifier accepts the same two flags. The default single-request behavior and explicit startup permissions are unchanged. Live verification must run separately from CI.
