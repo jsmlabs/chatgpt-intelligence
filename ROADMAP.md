@@ -23,7 +23,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 | 01 - Foundation & Verification | Verify initial documents and navigation | Complete (scoped) |
 | 02 - Core Architecture | Define shared concepts and decision models | Complete (documentation scope) |
 | 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | Complete (documentation scope) |
-| 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Planned |
+| 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Complete (documentation scope) |
 | 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | Planned |
 | 06 - Review & Release | Comprehensive editorial and compatibility review | Planned |
 
@@ -55,9 +55,14 @@ Expand [Research](research/README.md), [Concepts](concepts/README.md), [Prompts]
 The [command convention](COMMANDS.md), [source resolution design](architecture/activation-and-source-resolution.md), [activation guide](guides/chatgpt-activation.md) and [prompt instructions](prompts/activation-instructions.md) establish a proposed `/INTEL` workflow. Its actual operation requires both applicable instructions and a connected, working source. The attached brand v1.4 package is [validated but only partially published](branding/README.md): text guidance/tokens are present, and binary artwork remains pending manual or binary-capable upload. Neither activation nor visual integration has been independently tested as an installed native ChatGPT feature.
 
 ## Phase 04 - Patterns & Examples
-Produce reusable prompt templates, response patterns, intelligent UI examples, and good/bad comparisons.
+Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent UI response patterns](intelligent-ui/response-patterns.md), [conversation examples](examples/intel-command-examples.md), and [response pattern template](templates/response-pattern-template.md).
 
-**Acceptance:** Each pattern states the problem, prerequisites, example use, expected outcome, and failure cases.
+**Acceptance:** Each pattern states the problem, prerequisites, example use, expected outcome, and failure cases. **Status: Complete (documentation scope)**. The patterns have not yet been empirically evaluated inside a fresh ChatGPT conversation.
+
+## ChatGPT activation and complete brand integration - outstanding gates
+1. **Branding import:** The original archive has 56/56 manifest entries verified locally. The GitHub repository still requires full binary asset publication, preservation of any separately authored branding documentation, and exact post-installation checks. See [branding integration](guides/branding-integration.md), [branding manifest verifier](scripts/verify_branding.py), and [brand status](branding/README.md). **Status: Blocked on a binary-capable, authorized GitHub upload.**
+2. **ChatGPT activation:** The `/INTEL` command contract and activation guide are documented, but no globally installed native command exists. Set up instructions and an actually connected source, then execute the [fresh-chat test plan](quality/intel-end-to-end-tests.md). **Status: Not tested in a fresh ChatGPT client.**
+3. **Intelligent UI:** The [response pattern library](intelligent-ui/response-patterns.md) documents content-first choices, fallback behavior and non-decorative controls. Verify each supported component in the actual target ChatGPT experience. **Status: Design complete; runtime unverified.**
 
 ## Phase 05 - Quality & Evaluation
 Define reproducible evaluation tasks, critical failures, scoring guidance, and results records.
