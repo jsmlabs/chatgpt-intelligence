@@ -3,7 +3,7 @@
 ## Unreleased - phase 08 release hardening
 
 - Added machine-readable fail-closed release-gate reports that never claim publication approval.
-- Strengthened Windows CI to run the full offline unittest suite; manual release workflow validates Linux 3.11/3.12 and Windows 3.12 before strict evidence checks.
+- Strengthened Windows CI to run the full offline unittest suite, and Linux push CI to test both Python 3.11 and 3.12; manual release workflow also applies a strict evidence gate.
 - Preserved the current CLI version until release approval, without publishing a tag or package.
 
 

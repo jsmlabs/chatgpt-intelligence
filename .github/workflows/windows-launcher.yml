@@ -17,6 +17,7 @@ on:
       - "tests/test_release_gate.py"
       - "tests/test_release_hardening.py"
       - "scripts/check_release.py"
+      - ".github/workflows/docs-quality.yml"
       - "tests/test_capability_registry.py"
       - "tests/test_lifecycle.py"
       - "tests/test_configuration_setup.py"
