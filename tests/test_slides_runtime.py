@@ -147,7 +147,7 @@ class SlidesTests(unittest.TestCase):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         tools = host.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})["result"]["tools"]
-        self.assertEqual(len(tools), 14)
+        self.assertEqual(len(tools), 15)
         self.assertIn("generate_slides", [x["name"] for x in tools])
         def call(fmt):
             return host.handle({"jsonrpc": "2.0", "id": 3, "method": "tools/call",

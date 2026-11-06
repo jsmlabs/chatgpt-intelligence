@@ -171,7 +171,7 @@ class MotionTests(unittest.TestCase):
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})
         names = [x["name"] for x in host.handle({"jsonrpc": "2.0", "id": 2,
                        "method": "tools/list"})["result"]["tools"]]
-        self.assertEqual(len(names), 14)
+        self.assertEqual(len(names), 15)
         self.assertIn("generate_motion", names)
         def call(fmt):
             return host.handle({"jsonrpc": "2.0", "id": 4, "method": "tools/call",
