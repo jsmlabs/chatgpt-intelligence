@@ -53,6 +53,44 @@ class DocumentationChecks(unittest.TestCase):
         self.assertEqual(self.checker.audit(self.root), (1, 0, []))
 
 
+class ExtractedBrandManifestChecks(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name) / "branding" / "v1.4"
+        self.root.mkdir(parents=True)
+        self.verifier = load_script("verify_branding")
+        self.data = b"verified-brand"
+        self.asset = self.root / "logos" / "mark.svg"
+        self.asset.parent.mkdir()
+        self.asset.write_bytes(self.data)
+        self.manifest = {
+            "file_count": 1,
+            "files": {
+                "logos/mark.svg": {
+                    "size_bytes": len(self.data),
+                    "sha256": hashlib.sha256(self.data).hexdigest(),
+                }
+            },
+        }
+        (self.root / "MANIFEST.json").write_text(json.dumps(self.manifest), encoding="utf-8")
+
+    def test_exact_manifest_passes_strict_mode(self):
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 0)
+
+    def test_extra_file_rejected_in_strict_mode(self):
+        (self.root / "unexpected.txt").write_text("placeholder", encoding="utf-8")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+    def test_extra_file_remains_compatible_in_normal_mode(self):
+        (self.root / "integration-notes.txt").write_text("note", encoding="utf-8")
+        self.assertEqual(self.verifier.verify(self.root), 0)
+
+    def test_modified_declared_file_is_rejected_in_strict_mode(self):
+        self.asset.write_bytes(b"tampered")
+        self.assertEqual(self.verifier.verify(self.root, strict=True), 1)
+
+
 class BrandingArchiveChecks(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
