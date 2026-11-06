@@ -139,6 +139,18 @@ class ThemeTests(unittest.TestCase):
             evidence = json.loads(allowed.stderr)["evidence"]
             self.assertTrue(evidence["contrast_audit"]["aa_passed"])
 
+    def test_cli_default_json_preserves_existing_markdown_defaults(self):
+        generated = subprocess.run(
+            [sys.executable, "-m", "generators", "theme", "--objective", "Tokens",
+             "--authorize-create"], capture_output=True, text=True, timeout=15)
+        self.assertEqual(generated.returncode, 0, generated.stderr)
+        self.assertEqual(json.loads(generated.stdout)["capability"], "theme")
+        legacy = subprocess.run(
+            [sys.executable, "-m", "generators", "design", "--objective", "Layout",
+             "--authorize-create"], capture_output=True, text=True, timeout=15)
+        self.assertEqual(legacy.returncode, 0, legacy.stderr)
+        self.assertTrue(legacy.stdout.startswith("# Design Specification"))
+
     def test_mcp_tool_contract_and_permissions(self):
         host = MCPHost(CREATE)
         host.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize"})

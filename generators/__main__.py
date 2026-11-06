@@ -29,7 +29,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--source", action="append", default=[])
     parser.add_argument("--constraint", action="append", default=[])
     parser.add_argument("--verify", action="append", default=[])
-    parser.add_argument("--format", default="markdown")
+    parser.add_argument("--format", default=None)
     parser.add_argument("--mode", choices=["template", "model"], default="template")
     parser.add_argument("--provider", choices=["template", "ollama-local", "chatgpt-host",
                                                "openai-api"], default=None)
@@ -66,10 +66,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "theme":
         from .theme_runtime import ThemeRuntime
         selected_runtime = ThemeRuntime()
+    fmt = args.format if args.format is not None else ("json" if args.type == "theme" else "markdown")
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
-               "format": args.format}
+               "format": fmt}
     if args.type == "image":
         request.update(aspect_ratio=args.aspect_ratio, palette=args.palette)
     if args.type == "design":
@@ -77,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.component is not None:
             request["components"] = args.component
     if args.type == "theme":
-        request = {"objective": args.objective, "format": args.format, "preset": args.preset}
+        request = {"objective": args.objective, "format": fmt, "preset": args.preset}
         if args.accent is not None:
             request["accent"] = args.accent
     result = selected_runtime.execute(
