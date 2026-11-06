@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Safe [branding v1.4 installer](scripts/install_branding.py) with preflight manifest checks, overwrite refusal, and rollback attempt; four installer regression tests added, execution pending.
 - [Local verifier execution record](quality/local-verifier-execution.md): eight tests passed in a reconstructed environment, original brand ZIP verified, exact GitHub CI still unverified.
 - Eight regression tests for documentation and brand archive verification in [tests/test_quality_scripts.py](tests/test_quality_scripts.py), wired into the CI workflow; execution status pending.
 - Dependency-free [Markdown link/metadata checker](scripts/check_docs.py) and [documentation quality CI workflow](.github/workflows/docs-quality.yml); execution result pending verification.
