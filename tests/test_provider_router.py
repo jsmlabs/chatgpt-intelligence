@@ -121,6 +121,43 @@ class ProviderRoutingTests(unittest.TestCase):
             self.assertEqual(result.provider, "ollama-local")
         self.assertFalse(OllamaLocalHost(model="").configured)
 
+
+    def test_prose_model_output_gets_heading_and_real_provenance(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "Local architecture with a dashboard and component boundaries.",
+            "ollama-local", "test", "")
+        rt = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = rt.execute("/INTEL GENERATE CONCEPT",
+            request={"objective": "Dashboard"}, authorization=LOCAL,
+            provider="ollama-local")
+        self.assertTrue(result["ok"], result)
+        self.assertTrue(result["content"].startswith("# Concept Brief\n\nLocal architecture"))
+        self.assertIn("\n\n## Provenance and limitations\n\n", result["content"])
+        self.assertTrue(all(result["manifest"].validations.values()))
+
+    def test_fenced_model_markdown_is_unwrapped(self):
+        local = Fake()
+        local.generate = lambda kind, brief: ModelOutput(
+            "```markdown\n# Dashboard\n\n## Scope\n\nContent.\n```",
+            "ollama-local", "test", "")
+        rt = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        result = self.run_case(rt, LOCAL, "ollama-local")
+        self.assertTrue(result["ok"], result)
+        self.assertTrue(result["content"].startswith("# Dashboard\n\n## Scope\n"))
+        self.assertNotIn("```", result["content"])
+
+    def test_bad_model_output_still_fails_validation(self):
+        local = Fake()
+        rt = TextRuntime(provider_router=ProviderRouter(ollama_host=local))
+        for content in ("", "# Heading\x00unsafe", "x" * 70000):
+            with self.subTest(length=len(content)):
+                local.generate = lambda kind, brief, value=content: ModelOutput(
+                    value, "ollama-local", "test", "")
+                result = self.run_case(rt, LOCAL, "ollama-local")
+                self.assertEqual(result["error"]["code"], "VALIDATION_FAILED")
+                self.assertEqual(result["manifest"].state.value, "failed")
+
     def test_no_implicit_openai_from_cli(self):
         import os, subprocess, sys
         env = dict(os.environ)
