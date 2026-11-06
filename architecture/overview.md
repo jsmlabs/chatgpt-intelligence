@@ -1,23 +1,38 @@
 ---
 title: Architecture Overview
 status: proposed
-version: 0.1.0
+version: 0.2.0
 updated: 2026-11-06
+classification: proposed-design
 ---
 
 # Architecture Overview
 
-## Purpose
-Describe how the project's seven subjects fit together. This is an **educational reference model**, not an assertion about ChatGPT's private internal architecture.
+## What is this?
+A readable map of how the project's **seven knowledge areas** connect. This is a reference framework, not a claim about ChatGPT's hidden implementation.
 
-## Core areas
-[Research](../research/README.md), [Concepts](../concepts/README.md), [Prompts](../prompts/README.md), [Knowledge](../knowledge/README.md), [Memory](../memory/README.md), [Context Engineering](../context-engineering/README.md), and [Intelligent UI](../intelligent-ui/README.md).
+## Seven core areas
+- [Research](../research/README.md) - investigate and verify.
+- [Concepts](../concepts/README.md) - propose and compare ideas.
+- [Prompts](../prompts/README.md) - design reusable instructions.
+- [Knowledge](../knowledge/README.md) - manage reference facts and sources.
+- [Memory](../memory/README.md) - explore remembered preferences, controls, and limitations.
+- [Context Engineering](../context-engineering/README.md) - select task-relevant information.
+- [Intelligent UI](../intelligent-ui/README.md) - present information effectively.
 
-## Supporting materials
-- [Design principles](design-principles.md) define how we write and reason.
-- [Response lifecycle](response-lifecycle.md) shows a proposed decision flow.
-- [Compatibility](chatgpt-compatibility.md) distinguishes product facts from designs.
-- [Quality standards](../quality/quality-standards.md) explain how work is evaluated.
+## Shared architecture specifications
+1. [Design principles](design-principles.md) - project-wide standards.
+2. [Response lifecycle](response-lifecycle.md) - a conceptual response workflow.
+3. [Instruction and conflict resolution](instruction-and-conflict-resolution.md) - instruction authority and ambiguity.
+4. [Context and information boundaries](context-and-information-boundaries.md) - what is known, remembered, relevant, and authorized.
+5. [Intelligent UI decision model](intelligent-ui-decision-model.md) - choose useful presentation.
+6. [Documentation contracts](documentation-contracts.md) - naming, metadata, and ownership.
+7. [ChatGPT compatibility](chatgpt-compatibility.md) - version and evidence boundaries.
 
-## Scope
-Documentation, research, examples, and reusable methods. No runtime orchestrator, model modifications, plugin deployment, or automatic memory management are implied.
+## Verification and delivery
+- [Quality standards](../quality/quality-standards.md)
+- [Foundation verification](../quality/foundation-verification.md)
+- [Roadmap](../ROADMAP.md)
+
+## Scope and limits
+The repository documents research and design. It does not implement an orchestrator, mutate ChatGPT memory, or grant authority to override product restrictions.
