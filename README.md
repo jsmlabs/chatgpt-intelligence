@@ -41,14 +41,15 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Roadmap](ROADMAP.md) | Delivery phases, current state, and acceptance criteria |
 | [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
 | [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
-| [Branding](branding/README.md) | Original v1.4 package, tokens, and integration status |
+| [Branding](branding/README.md) | Published original v1.4 package, tokens, and integrity verification |
 | [Branding Integration](guides/branding-integration.md) | Safe installer, import and hash verification |
 | [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
 | [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
 | [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
 | [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
 | [Local Verifier Execution](quality/local-verifier-execution.md) | Earlier scoped local tests and limitations |
-| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI: 21 tests, 346 Markdown links, and isolated brand installation |
+| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI and quality regression results |
+| [Branding Publication Verification](quality/branding-publication-verification.md) | 57/57 exact original assets and 56/56 GitHub SHA-256 checks |
 | [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
 | [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
 | [Strict Release Readiness Workflow](.github/workflows/release-readiness.yml) | Manual CI validation of release prerequisites without publishing a release |
@@ -80,7 +81,7 @@ See [ChatGPT Compatibility](architecture/chatgpt-compatibility.md) for how to re
 
 ## What this repository does not do
 
-`/INTEL` is a documented prompt convention, not a native ChatGPT command. The v1.4 branding package is a visual identity, not an installed ChatGPT theme. Some binary assets still require upload to GitHub.
+`/INTEL` is a documented prompt convention, not a native ChatGPT command. The fully published v1.4 branding package is a visual identity, not an installed ChatGPT theme.
 
 It does not control OpenAI model internals, override higher-priority instructions, synchronize ChatGPT Memory, guarantee response quality, or make every UI component available in every client.
 
@@ -88,6 +89,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (21 tests, 346 checked relative links); the strict release gate reports five incomplete conditions. Complete binary brand publication, actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (21 tests, 346 checked relative links); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
