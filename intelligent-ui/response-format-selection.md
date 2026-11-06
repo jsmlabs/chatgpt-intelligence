@@ -34,7 +34,7 @@ The following selection policy is **our proposed design guidance**, not a guaran
 | User-adjustable scenario | Real, supported controls | Buttons that do nothing |
 | Drafting an email | Editable writing format when supported | A chart replacing the message |
 
-## Example
+## Practical example
 **Question:** "What is context engineering?" Use a short explanation.
 
 **Question:** "Compare context engineering, memory, and knowledge by purpose and lifetime." Use a three-row table because it exposes shared dimensions.
@@ -44,7 +44,7 @@ The following selection policy is **our proposed design guidance**, not a guaran
 ## Quality and accessibility
 Keep meaningful text outside visuals, label units, avoid relying on color alone, and allow the explanation to stand on its own. Mobile users should not need to pan through a large collection of decorative cards.
 
-## Failure cases
+## Limitations and failure modes
 - UI is selected before the answer is understood.
 - A chart includes fabricated values.
 - An interactive surface suggests a real action but has no working callback.
