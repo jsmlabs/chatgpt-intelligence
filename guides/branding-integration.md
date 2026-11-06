@@ -17,7 +17,7 @@ Uploaded archive `chatgpt-intelligence-brand-final-v1.4(1).zip`. The verified co
 ## Controlled installation
 1. Inspect current `main` and preserve unrelated changes.
 2. Compare the existing `branding/README.md`, `BRAND-GUIDELINES.md`, and `design-system/` files with the original ZIP. Some were previously edited separately.
-3. Extract `chatgpt-intelligence-brand-v1.4-safe-import.zip` into a temporary directory. The 57 original files belong inside `branding/v1.4/`.
+3. Check the ZIP first with `python scripts/verify_branding_archive.py chatgpt-intelligence-brand-v1.4-safe-import.zip`, then extract into a temporary directory. The 57 original files belong inside `branding/v1.4/`.
 4. Validate all 56 manifest entries by byte length and SHA-256. Reject unsafe paths and unexplained extra or missing files.
 5. Keep the original 57 files intact in `branding/v1.4/`; this avoids collisions with the existing brand overview, guidelines, and tokens.
 6. Copy the complete approved package into `branding/v1.4/`; run `python scripts/verify_branding.py branding/v1.4` against the actual checkout, and check the staged diff for unintended changes.
