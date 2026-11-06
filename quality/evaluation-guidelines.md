@@ -40,3 +40,6 @@ The [source smoke test](intel-source-smoke-test.md) records fetched GitHub paths
 
 ## Automated documentation regression checks
 The [local checker](../scripts/check_docs.py) validates Markdown file targets and supported frontmatter values. The [CI workflow](../.github/workflows/docs-quality.yml) runs it on main and pull requests and verifies the brand manifest only when the original package is present. A missing manifest is an explicit skip, not a successful branding publication. Review CI execution status separately.
+
+## Verifier regression tests
+[Regression tests](../tests/test_quality_scripts.py) cover valid and missing links, invalid frontmatter, fenced-code exclusions, valid branding archives, hash mismatches, extra files, and path traversal. The workflow invokes `python -m unittest discover -s tests -v`. Publishing these tests does not establish a passing CI result.
