@@ -21,7 +21,7 @@ An **internal, limited visual inspection** of the user's supplied `asset-contact
 | Source package README publication claim | historical text, not current | Original `branding/v1.4/README.md` says no files were uploaded; the file is intentionally immutable and [parent branding index](../branding/README.md) clarifies its historical status |
 | Dark banner in actual GitHub renderer | not-run | Contact sheet depicts it, but a live dark-mode GitHub display was not independently captured |
 | Individual small-icon raster quality | not-run | Contact sheet does not establish readability at 16px on every platform |
-| Full HTML preview/accessibility | not-run | No interactive browser/accessibility audit performed |
+| Full HTML preview/accessibility | partial | [Chromium DOM/CSS/JS smoke test](branding-browser-smoke-test.md) exercised theme toggle and responsive layout; full resource loading and accessibility audit remain unverified |
 | Trademark and independent review | blocked | Must be reviewed independently before a formal release |
 
 ## Additional static checks
