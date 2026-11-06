@@ -18,7 +18,9 @@ class IntelE2ERecordTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.file = Path(self.temp.name) / "results.json"
+        folder = Path(self.temp.name) / "quality"
+        folder.mkdir()
+        self.file = folder / "intel-e2e-results.json"
         self.cases = [
             {
                 "case_id": f"E2E-{index:02d}",
@@ -77,7 +79,6 @@ class IntelE2ERecordTests(unittest.TestCase):
 
     def test_local_evidence_is_accepted_when_present(self):
         folder = Path(self.temp.name) / "quality"
-        folder.mkdir()
         (folder / "case01.md").write_text("sanitized observation", encoding="utf-8")
         self.cases[0]["evidence"] = "quality/case01.md"
         self.save()
