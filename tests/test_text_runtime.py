@@ -223,5 +223,45 @@ class LifecycleAndExport(unittest.TestCase):
         self.assertEqual(second["error"]["code"], "INVALID_REVISION")
 
 
+class CommandLineIntegration(unittest.TestCase):
+    def test_cli_requires_explicit_permission(self):
+        result = subprocess.run(
+            [sys.executable, "-m", "generators", "prompt",
+             "--objective", "Review the API"],
+            capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("PERMISSION_DENIED", result.stderr)
+
+    def test_cli_generates_three_markdown_drafts(self):
+        headings = {"prompt": "Prompt Specification",
+                    "concept": "Concept Brief", "document": "Document Draft"}
+        for kind, heading in headings.items():
+            with self.subTest(kind=kind):
+                result = subprocess.run(
+                    [sys.executable, "-m", "generators", kind,
+                     "--objective", "Review the API", "--authorize-create"],
+                    capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(result.stdout.startswith("# " + heading))
+                self.assertIn('"state": "reviewed"', result.stderr)
+
+    def test_cli_export_verifies_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result = subprocess.run(
+                [sys.executable, "-m", "generators", "document",
+                 "--objective", "Document this API", "--authorize-create",
+                 "--export-root", folder, "--filename", "api.md"],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual((Path(folder) / "api.md").read_text(), result.stdout)
+            metadata = json.loads(result.stderr)
+            self.assertEqual(metadata["state"], "exported")
+            self.assertEqual(metadata["output_reference"], "api.md")
+            self.assertEqual(len(metadata["evidence"]["file_sha256"]), 64)
+
+
 if __name__ == "__main__":
     unittest.main()
