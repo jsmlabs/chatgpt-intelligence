@@ -237,14 +237,7 @@ class TextRuntime:
 
     def __init__(self):
         self.registry = text_registry()
-        self.coordinator = Coordinator(
-            registry=self.registry,
-            adapters={name.lower(): Adapter(name.lower(), "text",
-                        lambda values, kind=name: render_markdown(
-                            kind, self._active_request))
-                      for name in TEXT_TYPES},
-        )
-        self._active_request: GenerationRequest | None = None
+        self.coordinator = Coordinator(registry=self.registry)
 
     def execute(self, raw: str, *, request: Mapping[str, object] | None = None,
                 authorization: Authorization | None = None, export_root: Path | None = None,
@@ -282,12 +275,13 @@ class TextRuntime:
                                    "source_status": "unverified", "renderer_version": cap.version}
             manifest.transition(ArtifactState.READY)
             manifest.transition(ArtifactState.GENERATING)
-            self._active_request = brief
-            try:
-                output = self.coordinator.dispatch(raw, authorization,
-                                                   {"objective": brief.objective, "format": brief.output_format})
-            finally:
-                self._active_request = None
+            coordinator = Coordinator(
+                registry=self.registry,
+                adapters={cap.identifier: Adapter(cap.identifier, "text",
+                    lambda values: render_markdown(cap.command, brief))},
+            )
+            output = coordinator.dispatch(raw, authorization,
+                                          {"objective": brief.objective, "format": brief.output_format})
             if not output["ok"]:
                 raise IntelError(output["error"]["code"], output["error"]["message"])
             content = output["output"]
