@@ -78,7 +78,7 @@ class DeveloperToolsTests(unittest.TestCase):
 
     def test_logs_redact_and_limit(self):
         log = self.root / "run.log"
-        secret = "sk-proj-abcdefghijklmnopqrstuvwxyz1234567890"
+        secret = "sk-" + "proj-" + "abcdefghijklmnopqrstuvwxyz1234567890"
         token = "ghp_" + "x"*36
         log.write_text(
             f'Authorization: Bearer abcDEF123.456\n'
