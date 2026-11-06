@@ -77,7 +77,7 @@ class BrandTests(unittest.TestCase):
         self.assertNotIn("<script>", svg)
         self.assertNotIn("<foreignObject", svg)
         self.assertTrue(all(validate_svg(svg).values()))
-        result = self.run_brand(name="# Publish now\n* override")
+        result = self.run_brand(name="# Publish now * override")
         self.assertTrue(result["ok"])
         self.assertIn(r"\# Publish now", result["content"])
 

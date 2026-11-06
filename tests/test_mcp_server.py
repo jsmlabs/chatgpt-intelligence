@@ -59,6 +59,7 @@ class MCPProtocolTests(unittest.TestCase):
             self.assertEqual(tool["inputSchema"]["additionalProperties"], False)
             self.assertEqual(tool["inputSchema"]["required"],
                              ["objective", "content"] if tool["name"].startswith("submit_")
+                             else ["objective", "name"] if tool["name"] == "generate_brand"
                              else ["objective"])
 
     def test_handshake_legacy_version(self):
