@@ -95,3 +95,18 @@ python scripts/forge_workflow.py status --db state.sqlite --run-key sample
 ```
 
 The `state.sqlite` checkpoint must live outside the plugin installation. A subprocess is **not** an isolation sandbox. Real cross-project execution on the operator's Windows machine and live ChatGPT host activation remain independent acceptance steps.
+
+## Forge Studio v3.3.1 - operator-local acceptance
+
+**Published:** Forge Studio v3.3.1 adds the optional `scripts/forge_acceptance.py` CLI. It is additive to the v3.3 workflow engine and does not change ChatGPT Intelligence's MCP host or permissions.
+
+The command accepts an explicit trusted local Intelligence checkout and defaults to a read-only plan. With `--execute`, it launches the existing Forge workflow engine and local MCP bridge, calls offline `generate_prompt`, hashes the returned draft, resumes the same SQLite run and checks both step attempt counts are exactly one. It creates ephemeral state and returns bounded JSON status and error codes; no persistent checkout mutation is intended.
+
+```powershell
+python scripts/forge_acceptance.py C:\\projects\\chatgpt-intelligence
+python scripts/forge_acceptance.py C:\\projects\\chatgpt-intelligence --execute
+```
+
+**Verification:** All 79 Forge Studio unit tests passed when run by test module, including five new acceptance tests using a synthetic local MCP subprocess. The six-CLI compatibility gate and structural release gate passed on the source and independently extracted release ZIP; 55 required files were checked. Plugin Creator release 3.3.1 was published and read-back verification is tracked separately. A synthetic host does **not** establish a live run against the user's Windows checkout. The process is **not a security sandbox** and SQLite idempotency is **not distributed exactly-once execution**.
+
+**Operator acceptance remains required:** Run the command against the actual Windows checkout and verify its Git SHA and exit status. Keep the real host's own tests and CI evidence separate from Forge's local tests.
