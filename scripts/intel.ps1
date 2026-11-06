@@ -82,11 +82,103 @@ function IsHealthy([string]$endpoint,[string]$expected) {
 function KeyScope([scriptblock]$work) {
     $existing=-not [string]::IsNullOrWhiteSpace($env:CONTROL_PLANE_API_KEY)
     if (-not $existing) {
-        $secure=Read-Host 'Tunnel runtime API key' -AsSecureString
-        $ptr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-        try { $env:CONTROL_PLANE_API_KEY=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr) }
-        finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr); $secure.Dispose() }
-        if (-not $env:CONTROL_PLANE_API_KEY) { throw 'Empty runtime key.' }
+        # Explicit operator-approved local plaintext key location, never under the repository.
+        $keyFile = Join-Path $env:USERPROFILE 'Desktop\tunnel-client\key.txt'
+        if (-not (Test-Path -LiteralPath $keyFile -PathType Leaf)) {
+            $desktop = [Environment]::GetFolderPath('DesktopDirectory')
+            if ($desktop) {
+                $alternate = Join-Path $desktop 'tunnel-client\key.txt'
+                if (Test-Path -LiteralPath $alternate -PathType Leaf) { $keyFile = $alternate }
+            }
+        }
+        if (Test-Path -LiteralPath $keyFile -PathType Leaf) {
+            $info = Get-Item -LiteralPath $keyFile -ErrorAction Stop
+            if ($info.Length -gt 4096) { throw 'Runtime key file is unexpectedly large.' }
+            $lines = @(Get-Content -LiteralPath $keyFile -ErrorAction Stop)
+            if ($lines.Count -ne 1) { throw 'Runtime key file must contain exactly one line.' }
+            $key = $lines[0].Trim()
+            if ($key -notmatch '^sk-[A-Za-z0-9_-]{16,}
+    try { & $work }
+    finally {
+        if (-not $existing) { Remove-Item Env:\CONTROL_PLANE_API_KEY -ErrorAction SilentlyContinue }
+    }
+}
+function RequireProfile {
+    if ($Profile -notmatch '^[a-zA-Z0-9_-]+$') { throw 'Invalid profile name.' }
+    $p=Join-Path (Join-Path $env:APPDATA 'tunnel-client') ($Profile+'.yaml')
+    if (-not (Test-Path -LiteralPath $p -PathType Leaf)) { throw "Missing profile '$Profile'. Run tunnel-client init." }
+}
+$prior=Get-Location
+try {
+    Set-Location -LiteralPath $root
+    switch ($Action) {
+        'Locate' {
+            $located = ClientPath
+            Write-Host "Tunnel client: $located"
+            & $located --version
+            if ($LASTEXITCODE -ne 0) { throw "Tunnel executable failed with exit code $LASTEXITCODE" }
+        }
+        'Status' {
+            $live=IsHealthy '/healthz' 'live'
+            $ready=IsHealthy '/readyz' 'ready'
+            Write-Host ("Health: "+$(if($live){'LIVE'}else{'OFFLINE'}))
+            Write-Host ("Ready:  "+$(if($ready){'READY'}else{'NOT READY'}))
+            if($ready){Write-Host 'Dashboard: http://127.0.0.1:8080/ui'}
+            if(-not $ready){exit 1}
+        }
+        'Test' {
+            $python=Get-Command python -ErrorAction SilentlyContinue
+            if(-not $python){throw 'Python not on PATH.'}
+            & $python.Source -m scripts.verify_host_mcp --authorize-local-create
+            if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+        }
+        'Ollama' {
+            $ollama=Get-Command ollama -ErrorAction SilentlyContinue
+            if(-not $ollama){throw 'Ollama not installed (optional for ChatGPT MCP).'}
+            & $ollama.Source list
+            if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+        }
+        'Doctor' {
+            RequireProfile
+            $client=ClientPath
+            KeyScope {
+                & $client doctor --profile $Profile --explain
+                if($LASTEXITCODE -ne 0){throw "Doctor failed: $LASTEXITCODE"}
+            }
+        }
+        'Start' {
+            RequireProfile
+            $client=ClientPath
+            if(-not (Get-Command python -ErrorAction SilentlyContinue)){throw 'Python not on PATH.'}
+            if(IsHealthy '/healthz' 'live'){throw 'Port 8080 is already used by a tunnel health listener; check its profile before starting another.'}
+            Write-Host "INTEL: starting '$Profile' from $root"
+            Write-Host 'Keep terminal open; Ctrl+C stops the tunnel.'
+            KeyScope {
+                & $client doctor --profile $Profile
+                if($LASTEXITCODE -ne 0){throw "Doctor failed: $LASTEXITCODE"}
+                & $client run --profile $Profile
+                if($LASTEXITCODE -ne 0){throw "Tunnel exited: $LASTEXITCODE"}
+            }
+        }
+    }
+} catch {
+    Write-Error $_.Exception.Message
+    exit 1
+} finally { Set-Location -LiteralPath $prior }
+) {
+                throw 'Invalid runtime key file format. Expected one complete sk-... secret.'
+            }
+            $env:CONTROL_PLANE_API_KEY = $key
+            Remove-Variable key
+            Write-Host 'Tunnel runtime key loaded from local key.txt.'
+        }
+        else {
+            $secure=Read-Host 'Tunnel runtime API key' -AsSecureString
+            $ptr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+            try { $env:CONTROL_PLANE_API_KEY=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr) }
+            finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr); $secure.Dispose() }
+            if (-not $env:CONTROL_PLANE_API_KEY) { throw 'Empty runtime key.' }
+        }
     }
     try { & $work }
     finally {
