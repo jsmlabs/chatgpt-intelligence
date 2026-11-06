@@ -22,4 +22,6 @@ Use `passed`, `failed`, `blocked`, or `not-run` for actual checks. A draft that 
 ## Critical failures
 A fabricated citation, a false claim of an implemented feature, an exposed secret, or an unverified claim of successful testing blocks acceptance regardless of formatting quality.
 
+Automated checks include [targeted public text scanning](publication-safety-verification.md). This is limited evidence: independent editorial, privacy, accessibility, and trademark reviews remain separate release criteria.
+
 See [evaluation guidelines](evaluation-guidelines.md).
