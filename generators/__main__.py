@@ -15,9 +15,15 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image", "design", "theme", "brand", "gif"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
+    parser.add_argument("--motion", choices=["pulse", "orbit", "bounce"], default="pulse")
+    parser.add_argument("--width", type=int, default=128)
+    parser.add_argument("--height", type=int, default=128)
+    parser.add_argument("--frames", type=int, default=8)
+    parser.add_argument("--frame-duration-ms", type=int, default=120)
+    parser.add_argument("--loop", type=int, default=0)
     parser.add_argument("--aspect-ratio", default="1:1")
     parser.add_argument("--palette", default="")
     parser.add_argument("--name", default=None, help="Brand display name (required for BRAND)")
@@ -72,7 +78,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.type == "brand":
         from .brand_runtime import BrandRuntime
         selected_runtime = BrandRuntime()
-    fmt = args.format if args.format is not None else ("json" if args.type == "theme" else "markdown")
+    if args.type == "gif":
+        from .motion_runtime import MotionRuntime
+        selected_runtime = MotionRuntime()
+    fmt = args.format if args.format is not None else ("json" if args.type in {"theme", "gif"} else "markdown")
     request = {"objective": args.objective, "audience": args.audience,
                "style": args.style, "sources": args.source,
                "constraints": args.constraint, "verification": args.verify,
@@ -94,6 +103,15 @@ def main(argv: list[str] | None = None) -> int:
                    "direction": args.direction, "format": fmt}
         if args.accent is not None:
             request["accent"] = args.accent
+    if args.type == "gif":
+        request = {"objective": args.objective, "format": fmt, "motion": args.motion,
+                   "width": args.width, "height": args.height, "frames": args.frames,
+                   "frame_duration_ms": args.frame_duration_ms, "loop": args.loop,
+                   "preset": args.preset}
+        if args.accent is not None:
+            request["accent"] = args.accent
+        if fmt == "gif" and (args.export_root is None or args.filename is None):
+            parser.error("GIF binary export requires --export-root and --filename")
     result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
         request=request,
@@ -105,7 +123,12 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(result["error"], sort_keys=True), file=sys.stderr)
         return 2
     manifest = result["manifest"]
-    print(result["content"], end="")
+    if isinstance(result["content"], bytes):
+        print(json.dumps({"artifact_type": "image/gif", "output_reference": manifest.content_reference,
+                          "sha256": result["evidence"].get("file_sha256"),
+                          "frame_count": result["evidence"]["frame_count"]}, sort_keys=True))
+    else:
+        print(result["content"], end="")
     print(json.dumps({"artifact_id": manifest.identifier, "state": manifest.state.value,
                       "version": manifest.version, "source_status": "unverified",
                       "output_reference": manifest.content_reference,
