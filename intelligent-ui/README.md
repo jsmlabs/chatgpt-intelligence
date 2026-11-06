@@ -19,6 +19,9 @@ Use prose for simple answers, tables for precise comparisons, diagrams for relat
 ## Example question
 Would a table materially improve this comparison?
 
+## Practical guide
+- [response format selection](response-format-selection.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
