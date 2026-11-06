@@ -2,6 +2,12 @@
 from __future__ import annotations
 
 EN = {
+"clean":"Clean preview","update":"Update inspection","logs":"Redacted logs",
+"desc.clean":"Preview safe cleanup without deleting files",
+"desc.update":"Inspect local Git state without fetching",
+"desc.logs":"Read explicitly selected local logs with redaction",
+"devtool_clean_blocked":"Cleanup is preview-only; no deletion is authorized.",
+"devtool_error":"Developer tool: {reason}",
 "generators":"Generators","capabilities":"Capabilities",
 "desc.generators":"List implemented generator interfaces",
 "desc.capabilities":"Show generators, providers and permission boundaries",
@@ -74,6 +80,12 @@ EN = {
 "opt_noninteractive":"Never prompt",
 }
 DE = {
+"clean":"Bereinigungsvorschau","update":"Update-Prüfung","logs":"Maskierte Logs",
+"desc.clean":"Bereinigung ohne Dateilöschung prüfen",
+"desc.update":"Lokalen Git-Stand ohne Fetch prüfen",
+"desc.logs":"Lokale Logs auf ausdrückliche Angabe maskiert lesen",
+"devtool_clean_blocked":"Bereinigung bietet nur eine Vorschau; keine Dateilöschung freigegeben.",
+"devtool_error":"Entwicklerwerkzeug: {reason}",
 "generators":"Generatoren","capabilities":"Funktionen",
 "desc.generators":"Implementierte Generator-Schnittstellen anzeigen",
 "desc.capabilities":"Generatoren, Provider und Berechtigungen anzeigen",

@@ -69,7 +69,7 @@ The domains are connected, but each can be explored independently.
 
 ## Unified local CLI
 
-Use [`intel.cmd`](intel.cmd) on Windows or `python intel.py` in a Python terminal for the offline-first command menu, diagnostics, language settings and generator access. Run `python intel.py help` for the command list, `python intel.py setup` for a read-only setup preview, `python intel.py setup --apply` for explicit initialization, and `python intel.py config language de` for German interface messages. Existing Python generator and PowerShell tunnel commands remain available. The CLI is separate from ChatGPT's `/INTEL` convention. See [Local CLI guide](LOCAL_CLI.md) and [safe configuration guide](architecture/local-configuration.md).
+Use [`intel.cmd`](intel.cmd) on Windows or `python intel.py` in a Python terminal for the offline-first command menu, diagnostics, language settings and generator access. Run `python intel.py help` for the command list, `python intel.py setup` for a read-only setup preview, `python intel.py setup --apply` for explicit initialization, and `python intel.py config language de` for German interface messages. Existing Python generator and PowerShell tunnel commands remain available. The CLI is separate from ChatGPT's `/INTEL` convention. See [Local CLI guide](LOCAL_CLI.md), [safe configuration guide](architecture/local-configuration.md) and the developer profiles in the CLI guide.
 
 ---
 

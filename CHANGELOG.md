@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased - phase 06 developer automation toolkit
+
+- Added shared bounded offline doctor/check/verify profiles built on the existing unittest, documentation, safety, MCP and release scripts.
+- Added read-only clean preview, local-only Git update inspection, explicit file-based redacted logs and discoverable developer shortcuts.
+- Added stable JSON diagnostic reports, meaningful exit codes and regression tests for no-deletion, no-network and no-secret-output boundaries.
+
 ## Unreleased - phase 05 capability registry and provider discovery
 
 - Added static runtime capability descriptors for the ten implemented CLI generators, separate from the sixteen-entry planned command registry.

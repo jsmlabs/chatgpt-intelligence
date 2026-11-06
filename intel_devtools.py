@@ -33,6 +33,7 @@ DOCTOR_PROFILES = ("basic", "full")
 # command output from the structured runner.
 REDACTIONS = (
     (re.compile(r"(?i)\b(?:bearer)\s+[a-z0-9._~+/-]+(?:=+)?"), "Bearer [REDACTED]"),
+    (re.compile(r'(?i)("(?:api_key|access_token|token|password|secret|authorization)"\s*:\s*)"[^"\\r\\n]*"'), r'\1"[REDACTED]"'),
     (re.compile(r"\b(?:sk-(?:proj-|test-)?[A-Za-z0-9_-]{12,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{24,}|xoxb-[A-Za-z0-9-]{20,}|AKIA[0-9A-Z]{16})\b"), "[REDACTED]"),
     (re.compile(r'(?i)(\b(?:api[_-]?key|access[_-]?token|secret|password|credential|authorization)\b\s*[:=]\s*)(?:"[^"\r\n]*"|\'[^\'\r\n]*\'|[^\s,;}]+)'), r"\1[REDACTED]"),
 )
@@ -89,10 +90,10 @@ def doctor(profile: str = "basic") -> dict[str, object]:
 
 
 def _run_check(name: str, argv: list[str], *, timeout: int = 90) -> dict[str, object]:
-    # Trusted scripts already in this checkout; capture and redact stdout/stderr.
+    # Existing repository checks are run in a bounded subprocess with no output forwarding.
     try:
-        p = subprocess.run(argv, cwd=str(ROOT), capture_output=True, text=True,
-                           encoding="utf-8", errors="replace", timeout=timeout, check=False)
+        p = subprocess.run(argv, cwd=str(ROOT), stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL, timeout=timeout, check=False)
     except (OSError, subprocess.TimeoutExpired):
         return _item(name, "blocked", "Check could not start or timed out")
     # Never copy raw subprocess data into JSON or console. A diagnostic can
@@ -181,7 +182,7 @@ def logs(path: Path | None) -> dict[str, object]:
         return result("logs", "local", [_item("source", "skipped",
                "No persistent managed runtime log exists; pass --file PATH for a local log")])
     # Explicit user-selected log file only. No link following or implicit search.
-    if path.suffix.lower() not in ALLOWED_LOG_SUFFIXES or path.is_symlink():
+    if path.suffix.lower() not in ALLOWED_LOG_SUFFIXES or any(p.is_symlink() for p in (path, *path.parents)):
         raise ValueError("Select a regular .log or .txt file, not a symbolic link")
     if not path.is_file():
         raise ValueError("Log file is missing or not regular")

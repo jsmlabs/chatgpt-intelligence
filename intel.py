@@ -14,12 +14,13 @@ from intel_console import Console, read_key
 from intel_locales import CATALOGS, tr
 import intel_config as configuration
 import intel_lifecycle as lifecycle
+import intel_devtools as devtools
 
 ROOT = Path(__file__).resolve().parent
 VERSION = "0.1.0"
 COMMANDS = ("help", "version", "generate", "generators", "capabilities", "config", "providers", "doctor", "status",
-            "setup", "start", "stop", "restart", "test", "check", "verify", "dev")
-INSPECTION = frozenset(("help", "version", "config", "providers", "generators", "capabilities", "doctor", "status", "setup"))
+            "setup", "start", "stop", "restart", "test", "check", "verify", "dev", "clean", "update", "logs")
+INSPECTION = frozenset(("help", "version", "config", "providers", "generators", "capabilities", "doctor", "status", "setup", "check", "verify", "dev", "clean", "update", "logs"))
 
 
 def config_path() -> Path:
@@ -264,6 +265,58 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
         console.report({"configured": True, "changed": changed,
                         "schema_version": configuration.SCHEMA_VERSION})
         return 0
+    if command in ("doctor", "check", "verify", "clean", "update", "logs", "dev"):
+        # Legacy doctor, check, verify and test entrypoints keep their prior
+        # behavior without a profile; JSON requests use bounded reports.
+        if command == "doctor" and not args:
+            console.report(inspect("doctor", console.language), console.tr("doctor"))
+            return 0
+        if command == "check" and not args and not console.json_mode:
+            code = run_script("scripts/check_docs.py", console, "--root", ".")
+            return code if code else dispatch("test", [], console)
+        if command == "verify" and not args and not console.json_mode:
+            return run_script("scripts/verify_host_mcp.py", console)
+        if command == "dev" and not args:
+            console.report(devtools.shortcuts(), console.tr("dev"))
+            return 0
+        try:
+            if command == "doctor":
+                if len(args) != 1 or args[0] not in devtools.DOCTOR_PROFILES:
+                    raise ValueError("doctor [basic|full]")
+                report = devtools.doctor(args[0])
+            elif command == "check":
+                profile = args[0] if args else "all"
+                if len(args) > 1 or profile not in devtools.CHECK_PROFILES:
+                    raise ValueError("check [docs|tests|all|safety]")
+                report = devtools.check(profile)
+            elif command == "verify":
+                profile = args[0] if args else "mcp"
+                flags = args[1:] if args else []
+                if profile not in devtools.VERIFY_PROFILES or flags not in ([], ["--authorize-local-create"]) or (flags and profile != "mcp"):
+                    raise ValueError("verify [mcp [--authorize-local-create]|release]")
+                report = devtools.verify(profile, authorize_local_create=bool(flags))
+            elif command == "clean":
+                if args == ["--apply"]:
+                    console.error(console.tr("devtool_clean_blocked"), "blocked")
+                    return 3
+                if args:
+                    raise ValueError("clean (preview only)")
+                report = devtools.clean()
+            elif command == "update":
+                if args:
+                    raise ValueError("update (offline inspection only)")
+                report = devtools.update()
+            elif command == "logs":
+                if args and (len(args) != 2 or args[0] != "--file"):
+                    raise ValueError("logs [--file PATH]")
+                report = devtools.logs(Path(args[1]) if args else None)
+            else:
+                raise ValueError("dev (no arguments)")
+        except (ValueError, OSError, devtools.ConfigError) as exc:
+            console.error(console.tr("devtool_error", reason=str(exc)), "blocked")
+            return 2 if isinstance(exc, ValueError) and not isinstance(exc, devtools.ConfigError) else 3
+        console.report(report, console.tr(command))
+        return int(report["exit_code"])
     if command in ("stop", "restart") or (command == "start" and args == ["--managed"]):
         if command == "start" and args != ["--managed"]:
             return 2
@@ -284,20 +337,12 @@ def dispatch(command: str, args: list[str], console: Console) -> int:
     if args:
         console.error(console.tr("unexpected", command=command, args=" ".join(args)))
         return 2
-    if command in ("version","providers","generators","capabilities","status","doctor"):
+    if command in ("version","providers","generators","capabilities","status"):
         console.report(inspect(command, console.language), console.tr(command))
-        return 0
-    if command == "dev":
-        console.emit(console.tr(command + "_text"))
         return 0
     if command == "test":
         return subprocess.run([sys.executable,"-m","unittest","discover","-s","tests"],
                               cwd=str(ROOT),check=False).returncode
-    if command == "check":
-        code = run_script("scripts/check_docs.py",console,"--root",".")
-        return code if code else dispatch("test",[],console)
-    if command == "verify":
-        return run_script("scripts/verify_host_mcp.py",console)
     if command == "start":
         executable = shutil.which("powershell.exe")
         if os.name != "nt" or not executable:

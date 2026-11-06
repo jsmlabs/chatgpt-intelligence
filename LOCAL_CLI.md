@@ -94,3 +94,29 @@ intel --json providers
 Provider discovery delegates to existing `ProviderRouter.detect()`, making **no network or file-system probes**, model calls or credential reads. It identifies configured/authorized/verified states without claiming that a configured adapter is reachable. The standalone CLI has no injected ChatGPT host or optional provider credentials, so optional integrations remain **not configured** in discovery. User-facing discovery grants no permissions; `Authorization.require` and generator/host boundaries remain authoritative. The default `template` remains deterministic and offline. `ollama-local` still needs CREATE + EXTERNAL, and `openai-api` needs CREATE + EXTERNAL + BILLABLE. No provider is automatically selected as fallback and no pricing/network operations are triggered by these commands.
 
 Machine-readable output keeps English keys and stable schema identifiers regardless of UI language; use `intel --json capabilities` for the full report. Existing `python -m generators` and MCP invocations retain their arguments and permission checks.
+
+## Developer Automation Toolkit (Phase 06)
+
+The CLI reuses existing scripts without adding parallel implementations. The original unprofiled `intel doctor`, `intel check` and `intel verify` behavior remains compatible. Structured profiles:
+
+```text
+intel doctor full
+intel --json doctor full
+intel check docs
+intel check tests
+intel check safety
+intel --json check all
+intel verify mcp --authorize-local-create
+intel --json verify release
+intel --json dev
+intel --json clean
+intel --json update
+intel --json logs
+intel --json logs --file local.log
+```
+
+**Boundaries:** `check all` runs the existing Markdown checker followed by unittests. `check safety` reuses the repository's tracked-text credential-signature scan. `verify mcp` runs the existing synthetic stdio verifier **only** after explicit `--authorize-local-create`; it does not connect a ChatGPT client. `verify release` invokes the blocking release gate; existing unmet conditions remain failures. No command bypasses CREATE, EXTERNAL or BILLABLE permissions.
+
+`clean` is strictly a read-only preview; `clean --apply` is **blocked**, not a deletion shortcut. `update` reads **local** Git metadata without fetching the network and always reports `remote_checked: false` and `update_available: null`. It cannot establish the latest upstream commit. `logs` reports the absence of persistent managed logs unless an explicit `--file` is provided. Explicit log reads accept regular non-symlink `.log` or `.txt` files up to 64 KiB, exposing at most the final 100 lines. Credential patterns are redacted **best-effort**, not a guarantee that arbitrary personal data is removed. Never share raw secret-bearing logs.
+
+Profile results have stable English JSON keys: `schema_version`, `command`, `profile`, `status`, `exit_code`, `checks`. Normal status codes are 0 for passed or safe inspection, 1 for a failed check, 2 for invalid usage or denied synthetic authorization, and 3 for a blocked environment or unsafe operation. Existing unprofiled commands and generators preserve their legacy exit codes. Subprocess stdout/stderr are suppressed for profile runs to avoid accidental credential exposure; inspect underlying tools directly in a trusted environment when detailed failure diagnostics are needed.
