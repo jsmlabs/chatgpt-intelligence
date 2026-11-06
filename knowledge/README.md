@@ -19,6 +19,9 @@ Link authoritative sources, record when facts were checked, avoid duplication, a
 ## Example question
 Which source supports this product capability and when was it checked?
 
+## Practical guide
+- [source quality](source-quality.md) - step-by-step method, example, limitations, and acceptance criteria.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
