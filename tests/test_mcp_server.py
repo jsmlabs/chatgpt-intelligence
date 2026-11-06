@@ -51,10 +51,13 @@ class MCPProtocolTests(unittest.TestCase):
         self.initialize()
         tools = self.host.handle(rpc("tools/list"))["result"]["tools"]
         self.assertEqual([x["name"] for x in tools],
-                         ["generate_prompt", "generate_concept", "generate_document"])
+                         ["generate_prompt", "generate_concept", "generate_document",
+                          "submit_prompt_draft", "submit_concept_draft", "submit_document_draft"])
         for tool in tools:
             self.assertEqual(tool["inputSchema"]["additionalProperties"], False)
-            self.assertEqual(tool["inputSchema"]["required"], ["objective"])
+            self.assertEqual(tool["inputSchema"]["required"],
+                             ["objective", "content"] if tool["name"].startswith("submit_")
+                             else ["objective"])
 
     def test_handshake_legacy_version(self):
         response = self.host.handle(rpc("initialize",
