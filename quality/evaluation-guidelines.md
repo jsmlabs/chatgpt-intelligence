@@ -31,3 +31,6 @@ Develop repeatable scenarios for instruction conflicts, stale source material, m
 
 ## Conversational end-to-end checks
 See the [INTEL End-to-End Test Plan](intel-end-to-end-tests.md). The listed scenarios are **not-run** until observed in the actual ChatGPT client. The repository documentation audit cannot substitute for those results.
+
+## Scoring rubric
+The [pattern evaluation rubric](pattern-evaluation.md) provides comparable scenarios, 0-2 criterion scores, critical failure gates, and a result record template. It is not an executed evaluation.
