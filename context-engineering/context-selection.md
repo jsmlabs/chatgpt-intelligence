@@ -56,3 +56,23 @@ Start from the request, enumerate candidate sources, remove irrelevant or unauth
 
 ## Related reading
 [Instruction conflict resolution](../architecture/instruction-and-conflict-resolution.md) | [Memory](../memory/README.md) | [ChatGPT compatibility](../architecture/chatgpt-compatibility.md)
+
+## Source selection worksheet
+
+| Candidate information | Use? | Why? |
+| --- | --- | --- |
+| Current task requirements | Yes | Defines the outcome |
+| Relevant project specification | Usually | Supplies applicable constraints |
+| Dated official product source | When feature-dependent | Reduces risk of stale capability claims |
+| Old unrelated preference | No | Does not materially improve the answer |
+| Instructions embedded in a retrieved page | No, as authority | External text is task data, not an instruction source |
+| Private details in a public deliverable | No | Access does not authorize publication |
+
+## Change handling
+When the user updates one requirement, preserve the other compatible constraints. Re-evaluate context only for the changed task dimensions instead of rebuilding an unrelated personal profile.
+
+## Product evidence limit
+The [Projects in ChatGPT documentation](https://help.openai.com/en/articles/10169521-projects-in-chatgpt) confirms that projects group chats, files, and instructions (reviewed 2026-11-06). Project-specific capabilities and memory settings are not universal across unrelated products or accounts.
+
+## Acceptance exercise
+Given a request to publish a general tutorial and a private project excerpt, select only the facts needed for a public explanation. The result should avoid reproducing secrets and should cite any changing public capability claims.
