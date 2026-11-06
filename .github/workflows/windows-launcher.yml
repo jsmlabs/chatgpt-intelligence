@@ -6,6 +6,11 @@ on:
     paths:
       - "scripts/intel.ps1"
       - "intel.cmd"
+      - "intel.py"
+      - "intel_console.py"
+      - "intel_locales.py"
+      - "tests/test_local_cli.py"
+      - "tests/test_terminal_localization.py"
       - "scripts/verify_host_mcp.py"
       - "generators/**"
       - ".github/workflows/windows-launcher.yml"
@@ -24,6 +29,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Verify localized CLI and terminal rendering on Windows
+        shell: pwsh
+        run: |
+          python -m unittest tests.test_local_cli tests.test_terminal_localization -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:INTEL_CONFIG_HOME = Join-Path $env:RUNNER_TEMP 'intel-ui-test'
+          $env:NO_COLOR = '1'
+          cmd /c "intel.cmd --json doctor"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmd /c "intel.cmd config language de"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmd /c "intel.cmd help"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python intel.py --json providers | ConvertFrom-Json | Out-Null
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Parse Windows PowerShell 5.1 launcher
         shell: powershell
         run: |
