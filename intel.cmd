@@ -8,6 +8,7 @@ echo [2] Status
 echo [3] Doctor
 echo [4] Local MCP test
 echo [5] Ollama model list (optional)
+echo [6] Locate tunnel-client executable
 echo [0] Exit
 set /p "choice=Select action [1]: "
 if "%choice%"=="" set "choice=1"
@@ -17,6 +18,7 @@ if "%choice%"=="2" set "action=Status"
 if "%choice%"=="3" set "action=Doctor"
 if "%choice%"=="4" set "action=Test"
 if "%choice%"=="5" set "action=Ollama"
+if "%choice%"=="6" set "action=Locate"
 if not defined action (
   echo Invalid choice.
   pause
