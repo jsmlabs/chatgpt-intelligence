@@ -13,7 +13,7 @@ The original package contains 56 manifest-listed payload files, plus its manifes
 - `asset-contact-sheet.png` - design overview
 
 ## Publication status
-**The original package was validated locally, but its 57 original files are not yet fully uploaded to `branding/v1.4/`.** The existing project-authored guidelines and tokens at `branding/` are already published; do not confuse those files with the original ZIP contents. Do not treat listed asset paths as published until directly verified on `main`.
+**Published and verified on `main`: 57/57 original files matched the source archive's exact Git blob hashes.** The original 56 manifest entries also passed SHA-256 and size checks in GitHub Actions. Existing independently authored guidelines and tokens at `branding/` remain separate. See the [publication verification](../quality/branding-publication-verification.md).
 
 The original package `README.md` belongs at `branding/v1.4/README.md`, **never at repository root or over this integration README**. All 57 original files retain exact relative names and bytes under `branding/v1.4/`. The design is intentionally ChatGPT-like, not an official OpenAI interface or official brand.
 
@@ -26,4 +26,4 @@ The name `ChatGPT` is an OpenAI mark. The project's independent identity must no
 [Command reference](../COMMANDS.md) | [Activation guide](../guides/chatgpt-activation.md)
 
 ## Complete installation and checks
-Follow the [branding installation guide](../guides/branding-integration.md) and the [manifest verifier](../scripts/verify_branding.py). The complete asset package is still pending a binary-capable GitHub upload. Do not represent the branding assets as fully published.
+Follow the [branding installation guide](../guides/branding-integration.md) and the [manifest verifier](../scripts/verify_branding.py). The original asset package is fully published and integrity-verified; comprehensive visual approval and native ChatGPT UI integration remain separate matters.
