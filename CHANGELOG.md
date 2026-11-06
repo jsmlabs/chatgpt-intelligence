@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- [Closed all six documentation roadmap phases at explicitly limited scope](quality/project-closeout.md); marked the repository as maintenance-oriented without falsely completing fresh-chat tests, independent reviews or a formal release. Existing strict release checks remain unchanged.
 - Hardened [branding media checks](scripts/check_brand_media.py) to reject external/executable HTML references and SVG event handlers or external resource references; four negative regression cases added. [GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42231231309) passed 65 tests and checked 52 original brand media files.
 - Ran a [scoped Chromium preview interaction smoke test](quality/branding-browser-smoke-test.md) on desktop and mobile, checking theme changes, sidebar response, horizontal overflow and JS runtime errors. The runtime blocked direct page navigation, so this is not a full resource-loading or accessibility audit.
 - Added [brand media format validator](scripts/check_brand_media.py) with PNG CRC, SVG parsing and paired dimensions, plus seven regression cases and CI steps. [Verified GitHub Actions run](https://github.com/jsmlabs/chatgpt-intelligence/actions/runs/42223107435) passed 61 tests and 52 brand media checks. [Accessibility sampling](quality/branding-accessibility-sampling.md) records theme contrast values and a conditional light-accent caution, without asserting WCAG conformance.
