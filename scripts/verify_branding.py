@@ -31,6 +31,7 @@ def verify(directory: pathlib.Path) -> int:
 
     failures: list[str] = []
     expected: set[pathlib.Path] = {manifest_path.resolve()}
+    matching = 0
     for name, spec in sorted(declared.items()):
         path = pathlib.PurePosixPath(name)
         if path.is_absolute() or ".." in path.parts or "\\" in name:
@@ -46,10 +47,14 @@ def verify(directory: pathlib.Path) -> int:
             failures.append(f"missing: {name}")
             continue
         data = target.read_bytes()
-        if len(data) != spec["size_bytes"]:
+        size_ok = len(data) == spec["size_bytes"]
+        hash_ok = hashlib.sha256(data).hexdigest() == spec["sha256"]
+        if not size_ok:
             failures.append(f"size mismatch: {name}")
-        if hashlib.sha256(data).hexdigest() != spec["sha256"]:
+        if not hash_ok:
             failures.append(f"sha256 mismatch: {name}")
+        if size_ok and hash_ok:
+            matching += 1
 
     # A dedicated integration-status document can coexist with the supplied assets,
     # but all manifest-listed assets must preserve their exact bytes.
@@ -62,7 +67,7 @@ def verify(directory: pathlib.Path) -> int:
         print("NOTE: additional files not in manifest: " + ", ".join(extra))
     for issue in failures:
         print("FAIL:", issue)
-    print(f"Verified {len(declared) - len(failures)} declared paths against {len(declared)} manifest entries")
+    print(f"Verified {matching} matching entries against {len(declared)} manifest entries")
     if failures:
         return 1
     print("PASS: all declared sizes and SHA-256 hashes match")
