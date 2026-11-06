@@ -34,3 +34,6 @@ See the [INTEL End-to-End Test Plan](intel-end-to-end-tests.md). The listed scen
 
 ## Scoring rubric
 The [pattern evaluation rubric](pattern-evaluation.md) provides comparable scenarios, 0-2 criterion scores, critical failure gates, and a result record template. It is not an executed evaluation.
+
+## Existing-chat source retrieval evidence
+The [source smoke test](intel-source-smoke-test.md) records fetched GitHub paths and blob SHAs. It is narrower than a fresh-chat `/INTEL` end-to-end test and cannot be substituted for one.
