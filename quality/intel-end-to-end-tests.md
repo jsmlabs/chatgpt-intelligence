@@ -30,6 +30,15 @@ An applicable instruction context contains the [activation contract](../prompts/
 | E2E-11 | Rich UI unavailable | Usable text fallback |
 | E2E-12 | Fresh chat without activation setup | No claim of global native command |
 
+## Executable evidence ledger
+The repository includes [twelve initially not-run case records](intel-e2e-results.json). Execute the scenarios in a genuinely fresh, configured ChatGPT conversation and update **each** case with its actual observed result, client surface, exact source revision, test date and inspectable evidence reference. Do not mark a case passed based solely on planned behavior or a self-generated example. The [record validator](../scripts/verify_intel_e2e.py) checks all 12 cases for structural completeness:
+
+```bash
+python scripts/verify_intel_e2e.py --file quality/intel-e2e-results.json
+```
+
+The [strict release checker](../scripts/check_release.py) additionally enforces these per-case records if the top-level `fresh_chat_intel` release attestation is marked `passed`. Structural validation does not independently prove a ChatGPT client behavior; review the actual evidence.
+
 ## Results record
 ```yaml
 case_id: E2E-03
