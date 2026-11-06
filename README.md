@@ -10,6 +10,8 @@ ChatGPT Intelligence is an open, beginner-friendly knowledge and documentation r
 
 ## Start here
 
+**Use inside ChatGPT:** [Try `/INTEL`](COMMANDS.md) to activate the repository-grounded conversation convention in an appropriately configured chat. Follow the [activation guide](guides/chatgpt-activation.md); a prefix alone does not connect GitHub or install an app.
+
 New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals. View the [Roadmap](ROADMAP.md) for milestones and current work.
 
 ## Explore the seven core areas
@@ -37,6 +39,9 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | Resource | Purpose |
 | --- | --- |
 | [Roadmap](ROADMAP.md) | Delivery phases, current state, and acceptance criteria |
+| [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
+| [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
+| [Branding](branding/README.md) | Original v1.4 package, tokens, and integration status |
 | [Architecture](architecture/overview.md) | How the project's concepts fit together |
 | [Compatibility](architecture/chatgpt-compatibility.md) | Model, client, plan, evidence, and version boundaries |
 | [Design Principles](architecture/design-principles.md) | Core project principles |
@@ -61,6 +66,8 @@ A changing ChatGPT feature is not considered verified just because it appears in
 See [ChatGPT Compatibility](architecture/chatgpt-compatibility.md) for how to record scope, verification dates, sources, and limitations.
 
 ## What this repository does not do
+
+`/INTEL` is a documented prompt convention, not a native ChatGPT command. The v1.4 branding package is a visual identity, not an installed ChatGPT theme. Some binary assets still require upload to GitHub.
 
 It does not control OpenAI model internals, override higher-priority instructions, synchronize ChatGPT Memory, guarantee response quality, or make every UI component available in every client.
 
