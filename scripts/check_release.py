@@ -78,6 +78,23 @@ def check(root: Path) -> list[str]:
         elif not isinstance(item.get("evidence"), str) or not item["evidence"].strip():
             failures.append(f"{gate}: passed but missing supporting evidence reference")
 
+    intel = evidence.get("fresh_chat_intel")
+    if isinstance(intel, dict) and intel.get("status") == "passed":
+        try:
+            import importlib.util
+            verifier = root / "scripts" / "verify_intel_e2e.py"
+            spec = importlib.util.spec_from_file_location("verify_intel_e2e", verifier)
+            if spec is None or spec.loader is None:
+                raise ValueError("E2E verifier not loadable")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            failures.extend(
+                f"fresh_chat_intel case evidence: {issue}"
+                for issue in module.validate(root / "quality/intel-e2e-results.json")
+            )
+        except (OSError, ValueError, ImportError, AttributeError, TypeError) as exc:
+            failures.append(f"fresh_chat_intel per-case verification unavailable: {exc}")
+
     return failures
 
 
