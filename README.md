@@ -67,6 +67,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Foundation verified within documented scope; core architecture in progress.** The documents define an initial framework and navigation. Topic-specific deep dives, source-backed feature inventories, and formal evaluations remain future work.
+**Foundation and core architecture documented; Phase 03 in progress.** All seven knowledge areas now have introductory practical guides. Source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
