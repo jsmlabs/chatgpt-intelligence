@@ -26,3 +26,5 @@ from .provider_router import ProviderRouter, PROVIDERS
 __all__ += ["OllamaLocalHost", "ProviderRouter", "PROVIDERS"]
 from .image_runtime import ImageRuntime, image_capability
 __all__ += ["ImageRuntime", "image_capability"]
+from .comfyui_image import ComfyUIHost, ComfyImage
+__all__ += ["ComfyUIHost", "ComfyImage"]

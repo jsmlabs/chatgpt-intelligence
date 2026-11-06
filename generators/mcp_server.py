@@ -20,6 +20,7 @@ from .text_runtime import TextRuntime
 from .host_drafts import submit_host_draft
 from .image_runtime import ImageRuntime
 from .image_render import render_image
+from .comfyui_image import ComfyUIHost
 
 MAX_INPUT_LINE = 131072
 SUPPORTED_VERSIONS = frozenset({"2025-06-18", "2025-11-25"})
@@ -29,6 +30,7 @@ SUBMIT_TYPES = {"submit_prompt_draft": "PROMPT", "submit_concept_draft": "CONCEP
                 "submit_document_draft": "DOCUMENT"}
 IMAGE_TOOLS = ("generate_image_brief", "submit_image_brief")
 RENDER_TOOL = "render_abstract_image"
+COMFY_TOOL = "generate_image_comfyui"
 DESCRIPTION = {
     "generate_prompt": "Generate an editable Markdown prompt draft.",
     "generate_concept": "Generate an editable Markdown concept brief.",
@@ -39,6 +41,7 @@ DESCRIPTION = {
     "generate_image_brief": "Generate a deterministic IMAGE production brief; no image file or model call.",
     "submit_image_brief": "Validate a client-written IMAGE production brief; no image file or model call.",
     "render_abstract_image": "Render a small, deterministic procedural geometric PNG. No AI prompt-to-image generation, no model API, no semantic subject rendering.",
+    "generate_image_comfyui": "Opt-in local semantic text-to-image generation via installed ComfyUI checkpoint and core nodes. Requires --allow-comfyui-image and CREATE. No cloud or partner nodes.",
 }
 INPUT_SCHEMA = {
     "type": "object",
@@ -101,13 +104,32 @@ RENDER_SCHEMA = {
 }
 
 
+COMFY_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "negative_prompt": {"type": "string", "maxLength": 1024},
+        "width": {"type": "integer", "minimum": 256, "maximum": 1024},
+        "height": {"type": "integer", "minimum": 256, "maximum": 1024},
+        "steps": {"type": "integer", "minimum": 1, "maximum": 40},
+        "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    },
+    "required": ["prompt"],
+    "additionalProperties": False,
+}
+
+
 class MCPHost:
     def __init__(self, authorization: Authorization | None = None,
                  model_host: OpenAIResponsesHost | None = None,
-                 provider_router: ProviderRouter | None = None):
+                 provider_router: ProviderRouter | None = None,
+                 allow_comfyui_image: bool = False,
+                 comfyui_host: ComfyUIHost | None = None):
         self.authorization = authorization or Authorization()
         self.runtime = TextRuntime(model_host=model_host, provider_router=provider_router)
         self.image_runtime = ImageRuntime()
+        self.allow_comfyui_image = bool(allow_comfyui_image)
+        self.comfyui_host = comfyui_host or ComfyUIHost()
         self.initialized = False
 
     def handle(self, message: Any) -> dict | None:
@@ -136,7 +158,7 @@ class MCPHost:
             self.initialized = True
             return self._ok(request_id, {
                 "protocolVersion": version, "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.5.1"},
+                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.5.2"},
             })
         if not self.initialized:
             return self._error(request_id, -32002, "Initialize MCP connection first")
@@ -161,13 +183,52 @@ class MCPHost:
             ] + [{"name": RENDER_TOOL, "description": DESCRIPTION[RENDER_TOOL],
                   "inputSchema": RENDER_SCHEMA,
                   "annotations": {"readOnlyHint": True, "destructiveHint": False,
-                                  "idempotentHint": True, "openWorldHint": False}}]})
+                                  "idempotentHint": True, "openWorldHint": False}}] +
+                 ([{"name": COMFY_TOOL, "description": DESCRIPTION[COMFY_TOOL],
+                    "inputSchema": COMFY_SCHEMA,
+                    "annotations": {"readOnlyHint": True, "destructiveHint": False,
+                                    "idempotentHint": False, "openWorldHint": False}}]
+                  if self.allow_comfyui_image else [])})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
-            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL:
+            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS and name != RENDER_TOOL and not (self.allow_comfyui_image and name == COMFY_TOOL):
                 return self._error(request_id, -32602, "Unknown INTEL tool")
             if not isinstance(arguments, dict):
                 return self._error(request_id, -32602, "Tool arguments must be an object")
+            if name == COMFY_TOOL:
+                if set(arguments) - set(COMFY_SCHEMA["properties"]):
+                    return self._error(request_id, -32602, "Unknown ComfyUI field")
+                try:
+                    self.authorization.require(frozenset({Permission.CREATE}))
+                    # Only trusted server startup can authorize local model inference.
+                    if not self.allow_comfyui_image:
+                        raise IntelError("PERMISSION_DENIED", "Local image inference disabled")
+                    image = self.comfyui_host.generate(
+                        arguments.get("prompt"),
+                        negative_prompt=arguments.get("negative_prompt", ""),
+                        width=arguments.get("width", 512),
+                        height=arguments.get("height", 512),
+                        steps=arguments.get("steps", 20),
+                        seed=arguments.get("seed", 0),
+                        authorization=Authorization(frozenset({Permission.CREATE, Permission.EXTERNAL})),
+                    )
+                except IntelError as exc:
+                    return self._ok(request_id, {
+                        "content": [{"type": "text", "text": json.dumps(
+                            {"code": exc.code, "message": exc.message}, sort_keys=True)}],
+                        "isError": True})
+                return self._ok(request_id, {
+                    "content": [{"type": "image", "data": base64.b64encode(image.png).decode("ascii"),
+                                 "mimeType": image.mime_type}],
+                    "structuredContent": {"capability": "image", "artifact_type": "image/png",
+                                          "width": image.width, "height": image.height,
+                                          "sha256": image.sha256, "image_generated": True,
+                                          "image_verified": True, "model_provider": image.provider,
+                                          "model_checkpoint": image.checkpoint, "prompt_id": image.prompt_id,
+                                          "output_verified": False, "human_review": "not_run",
+                                          "source_verification": "not_run"},
+                    "isError": False,
+                })
             if name == RENDER_TOOL:
                 if set(arguments) - set(RENDER_SCHEMA["properties"]):
                     return self._error(request_id, -32602, "Unknown raster rendering field")
@@ -285,6 +346,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Local MCP stdio host for INTEL")
     parser.add_argument("--model-timeout", type=float, default=60.0)
     parser.add_argument("--model-max-output-tokens", type=int, default=4096)
+    parser.add_argument("--allow-comfyui-image", action="store_true",
+                        help="Operator opt-in to local ComfyUI inference; requires --allow-create and installed checkpoint")
     parser.add_argument("--allow-create", action="store_true",
                         help="Trusted operator grant for draft creation")
     parser.add_argument("--allow-external", action="store_true",
@@ -301,7 +364,10 @@ def main(argv: list[str] | None = None) -> int:
         granted.add(Permission.BILLABLE)
     if not 1 <= args.model_timeout <= 120 or not 128 <= args.model_max_output_tokens <= 8192:
         parser.error("Model timeout must be 1-120 seconds and tokens 128-8192")
+    if args.allow_comfyui_image and not args.allow_create:
+        parser.error("--allow-comfyui-image requires --allow-create")
     host = MCPHost(Authorization(frozenset(granted)),
+                   allow_comfyui_image=args.allow_comfyui_image,
                    provider_router=ProviderRouter(
                        ollama_host=OllamaLocalHost(timeout=args.model_timeout,
                                                    max_output_tokens=args.model_max_output_tokens),
