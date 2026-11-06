@@ -49,3 +49,7 @@ The project contains the ChatGPT trademark in its repository name, but is not en
 
 ## Validation
 The original package had complete raster and vector exports, theme tokens, preview, and a manifest. Exact binary asset publication and final client-side visual review remain separate checks.
+
+
+## Canonical archive placement
+The original ZIP package is retained without altered bytes under the planned `branding/v1.4/` directory. The files in this guideline and the root of `branding/` are project integration documentation and should not be confused with manifest-verified originals. The full archive is not yet published remotely.
