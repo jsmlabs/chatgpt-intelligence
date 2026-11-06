@@ -35,7 +35,7 @@ The tool argument `mode` defaults to `template`, which makes no network requests
 Before claiming any model API integration is operational, explicitly provision API access **outside GitHub**. From a trusted terminal, with `OPENAI_API_KEY` and `INTEL_OPENAI_MODEL` present:
 
 ```bash
-python scripts/verify_model_live.py --authorize-live-billable
+python -m scripts.verify_model_live --authorize-live-billable
 ```
 
 This invokes one potentially billable Responses API request for each of the three generator types, stops on the first failed call and reports only status, output validation and provider response-ID presence. Raw API keys and generated content are never printed. The underlying host sets `store: false`, a request timeout and output size/token budgets. **GitHub CI does not run this script**. Absence of configuration results in `BLOCKED`, not a simulated pass.

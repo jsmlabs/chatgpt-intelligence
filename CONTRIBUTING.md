@@ -47,4 +47,4 @@ Keep model transport in `generators/model_host.py` and deterministic authorizati
 
 ## MCP host verification
 
-Do not claim live-model or ChatGPT client support from synthetic MCP unit tests. A live call uses `scripts/verify_model_live.py --authorize-live-billable` only with credentials provisioned outside source control and with explicit operator authorization. Keep the MCP stdio transport free of additional filesystem, network retrieval or publishing tools unless separately designed and approved. See [MCP host](architecture/mcp-host.md).
+Do not claim live-model or ChatGPT client support from synthetic MCP unit tests. A live call uses `-m scripts.verify_model_live --authorize-live-billable` only with credentials provisioned outside source control and with explicit operator authorization. Keep the MCP stdio transport free of additional filesystem, network retrieval or publishing tools unless separately designed and approved. See [MCP host](architecture/mcp-host.md).

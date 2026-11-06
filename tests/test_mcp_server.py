@@ -182,7 +182,7 @@ class MCPProcessTests(unittest.TestCase):
         ]:
             with self.subTest(args=args):
                 outcome = subprocess.run(
-                    [sys.executable, "scripts/verify_model_live.py", *args],
+                    [sys.executable, "-m", "scripts.verify_model_live", *args],
                     capture_output=True, text=True, timeout=10,
                     check=False, env=env,
                 )

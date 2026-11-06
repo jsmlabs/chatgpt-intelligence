@@ -1,6 +1,6 @@
 """Explicit opt-in authenticated smoke verification of the three text generators.
 
-Never run this from CI. No API key, model, or raw generated content is printed.
+Never run authenticated requests from CI. The no-credentials rejection is tested. No API key, model, or raw generated content is printed.
 Each run requests three potentially billable model responses.
 """
 from __future__ import annotations
