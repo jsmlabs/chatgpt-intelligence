@@ -1,108 +1,164 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="branding/v1.4/banners/readme-hero-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="branding/v1.4/banners/readme-hero-light.png">
+  <img src="branding/v1.4/banners/readme-hero-light.png" alt="ChatGPT Intelligence - Independent research and design" width="1600">
+</picture>
+
 # ChatGPT Intelligence
 
 > Research, concepts, prompts, knowledge, memory, context engineering, and intelligent UI principles for high-quality, personalized ChatGPT experiences.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="branding/v1.4/banners/readme-hero-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="branding/v1.4/banners/readme-hero-light.png">
-  <img alt="ChatGPT Intelligence - Independent research and design" src="branding/v1.4/banners/readme-hero-light.png">
-</picture>
-
 **Understand ChatGPT. Design better interactions. Document what works.**
 
-ChatGPT Intelligence is an open, beginner-friendly knowledge and documentation repository. It explores how to create clearer, more reliable, context-aware, and personalized ChatGPT experiences through research, design principles, reusable prompts, practical examples, and transparent evaluation.
+An independent, open documentation and research library for creating clearer, more reliable, context-aware and visually effective ChatGPT experiences. It brings together **practical methods, reusable prompts, evidence standards, design patterns and implementation boundaries** in one navigable knowledge base.
 
-**Documentation first:** This is not an installed plugin, an API service, an internal description of ChatGPT, or an automatic memory synchronization system.
+**Documentation project · Seven core domains · Six documentation phases complete · Maintenance mode**
+
+[**Get started**](GETTING_STARTED.md) · [**Explore the domains**](#explore-the-seven-core-areas) · [**Use /INTEL**](#use-intel-in-chatgpt) · [**Architecture**](architecture/overview.md) · [**Roadmap**](ROADMAP.md)
+
+---
 
 ## Start here
 
-**Use inside ChatGPT:** [Try `/INTEL`](COMMANDS.md) to activate the repository-grounded conversation convention in an appropriately configured chat. Follow the [activation guide](guides/chatgpt-activation.md); a prefix alone does not connect GitHub or install an app.
+| I want to... | Start with |
+| --- | --- |
+| Understand the project in five minutes | [Getting Started](GETTING_STARTED.md) |
+| Use the documented `/INTEL` conversation workflow | [Activation Guide](guides/chatgpt-activation.md) and [Command Reference](COMMANDS.md) |
+| Improve a prompt or reuse a response structure | [Prompt Pattern Library](prompts/prompt-patterns.md) |
+| Understand memory, knowledge and context boundaries | [Context & Information Boundaries](architecture/context-and-information-boundaries.md) |
+| Design readable answers, tables and interactive responses | [Intelligent UI Response Patterns](intelligent-ui/response-patterns.md) |
+| Evaluate accuracy, evidence and limitations | [Quality Standards](quality/quality-standards.md) |
 
-New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals. View the [Roadmap](ROADMAP.md) for milestones and current work. For immediately useful patterns, see the [Prompt Pattern Library](prompts/prompt-patterns.md) and [Intelligent UI Response Patterns](intelligent-ui/response-patterns.md).
+The material is written to be approachable without hiding technical trade-offs. Start with a domain below, then follow its practical articles and primary-source references.
 
 ## Explore the seven core areas
 
-| Area | What you will find |
+| Domain | Focus | Practical entry point |
+| --- | --- | --- |
+| **[Research](research/README.md)** | Questions, verification, experiments and uncertainty | [Research Method](research/research-method.md) |
+| **[Concepts](concepts/README.md)** | Designing approaches, assessing alternatives and trade-offs | [Concept Development](concepts/concept-development.md) |
+| **[Prompts](prompts/README.md)** | Instruction quality, reusable patterns and output contracts | [Prompt Design](prompts/prompt-design.md) |
+| **[Knowledge](knowledge/README.md)** | Evidence, source quality and maintaining trustworthy information | [Source Quality](knowledge/source-quality.md) |
+| **[Memory](memory/README.md)** | Personalization, remembered context, lifecycle and privacy | [Memory Lifecycle](memory/memory-lifecycle.md) |
+| **[Context Engineering](context-engineering/README.md)** | Selecting relevant information and respecting instruction boundaries | [Context Selection](context-engineering/context-selection.md) |
+| **[Intelligent UI](intelligent-ui/README.md)** | Content-first presentation, visualizations and useful interactions | [Response Format Selection](intelligent-ui/response-format-selection.md) |
+
+Each area has its own overview, applied guidance and explicit limitations. **Proposed design principles are not automatically verified ChatGPT product features.**
+
+---
+
+## Use `/INTEL` in ChatGPT
+
+`/INTEL` is a **documented natural-language command convention** for repository-grounded conversations, not a built-in ChatGPT slash command or an installed plugin.
+
+In a ChatGPT conversation with the [activation instructions](prompts/activation-instructions.md) **and** actual access to this repository, try:
+
+```text
+/INTEL HELP
+/INTEL STATUS
+/INTEL QUERY: Explain context engineering with repository sources.
+/INTEL UI: Compare memory, knowledge and context engineering.
+/INTEL REVIEW: Check this answer for unsupported claims.
+```
+
+| Command | Purpose |
 | --- | --- |
-| [Research](research/README.md) | Investigations, sources, experiments, and product limitations |
-| [Concepts](concepts/README.md) | Ideas, reference models, alternatives, and trade-offs |
-| [Prompts](prompts/README.md) | Reusable instructions, prompt patterns, and clear output contracts |
-| [Knowledge](knowledge/README.md) | Sources, reliable facts, uncertainty, and knowledge organization |
-| [Memory](memory/README.md) | Memory concepts, personalization, consistency, and privacy |
-| [Context Engineering](context-engineering/README.md) | Relevant information, instruction priority, and context selection |
-| [Intelligent UI](intelligent-ui/README.md) | Response design, formatting, visualizations, and useful interactions |
+| `/INTEL HELP` | Available commands and setup requirements |
+| `/INTEL STATUS` | Observed source access and revision, not assumed activation |
+| `/INTEL QUERY` or `SOURCE` | Source-grounded answers and file inspection |
+| `/INTEL RESEARCH` or `DESIGN` | Evidence review or design exploration |
+| `/INTEL UI` or `REVIEW` | Purposeful presentation or quality assessment |
 
-## How the pieces fit together
+**Setup:** [Connect a readable source and apply the activation instructions](guides/chatgpt-activation.md). Without source access, answers must disclose that limitation instead of inventing GitHub retrieval. Commands are read-only unless a separate, specific write is authorized.
 
-Start with a user objective. Resolve applicable instructions, gather relevant and permitted context, verify time-sensitive claims, plan the answer's information structure, select useful presentation elements, and evaluate the result.
+[Full command reference](COMMANDS.md) · [Conversation examples](examples/intel-command-examples.md) · [Source-resolution design](architecture/activation-and-source-resolution.md)
 
-This is a **proposed design workflow**, not a statement about ChatGPT's hidden processing.
+---
 
-Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](architecture/response-lifecycle.md), and [Intelligent UI Decision Model](architecture/intelligent-ui-decision-model.md).
+## From question to high-quality answer
 
-## Documentation and standards
+This repository recommends a transparent, **proposed** decision workflow:
 
-| Resource | Purpose |
+```text
+User objective
+    |
+    v
+Applicable instructions and permissions
+    |
+    v
+Relevant context and trustworthy sources
+    |
+    v
+Evidence, uncertainty and constraints
+    |
+    v
+Answer structure and appropriate UI
+    |
+    v
+Verification, limitations and next action
+```
+
+This is a **design framework**, not a claim about ChatGPT's hidden internal processing. See the [Architecture Overview](architecture/overview.md), [Response Lifecycle](architecture/response-lifecycle.md) and [Intelligent UI Decision Model](architecture/intelligent-ui-decision-model.md).
+
+### Evidence over assumptions
+
+| Classification | Interpretation |
 | --- | --- |
-| [Roadmap](ROADMAP.md) | Six scoped documentation phases and maintenance status |
-| [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
-| [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
-| [Branding](branding/README.md) | Published original v1.4 package, tokens, and integrity verification |
-| [Branding Integration](guides/branding-integration.md) | Safe installer, import and hash verification |
-| [Conversation Examples](examples/intel-command-examples.md) | Expected `/INTEL` user flows |
-| [End-to-End Tests](quality/intel-end-to-end-tests.md) | Fresh-chat test cases and evidence rules |
-| [INTEL Test Results](quality/intel-e2e-results.json) | Per-case evidence ledger, initially not-run |
-| [INTEL Fresh-Chat Runbook](quality/intel-fresh-chat-runbook.md) | Reproducible twelve-case acceptance instructions |
-| [Source Retrieval Smoke Test](quality/intel-source-smoke-test.md) | Existing-chat GitHub read-back results and limitations |
-| [Pattern Evaluation](quality/pattern-evaluation.md) | Phase 05 scoring rubric and critical failures |
-| [Local Verifier Execution](quality/local-verifier-execution.md) | Earlier scoped local tests and limitations |
-| [Phase 05 Verification](quality/phase05-verification.md) | Verified CI and quality regression results |
-| [Branding Publication Verification](quality/branding-publication-verification.md) | 57/57 exact original assets and 56/56 GitHub SHA-256 checks |
-| [Branding Visual Inspection](quality/branding-visual-inspection.md) | Scoped contact-sheet and light-banner inspection, with remaining gaps |
-| [Branding Accessibility Sampling](quality/branding-accessibility-sampling.md) | PNG/SVG/HTML format checks and sampled WCAG contrast ratios |
-| [Branding Browser Smoke Test](quality/branding-browser-smoke-test.md) | Scoped Chromium theme-toggle and responsive-layout observations |
-| [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Formal release deferred; unverified client/review gates |
-| [Project Closeout](quality/project-closeout.md) | Six scoped documentation phases closed; limitations and maintenance handover |
-| [Editorial Source Review](quality/editorial-source-review.md) | Primary-source findings, naming risk and unresolved review requirements |
-| [Publication Safety Verification](quality/publication-safety-verification.md) | Scoped tracked-text credential scan and explicit limitations |
-| [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
-| [Strict Release Readiness Workflow](.github/workflows/release-readiness.yml) | Manual CI validation of release prerequisites without publishing a release |
-| [Automated Quality Checks](.github/workflows/docs-quality.yml) | Documentation CI and regression tests |
-| [Verifier Regression Tests](tests/test_quality_scripts.py) | Deterministic tests for link and archive verification |
-| [Phase 04 Verification](quality/phase04-verification.md) | Scoped documentation checks and pending gates |
-| [Architecture](architecture/overview.md) | How the project's concepts fit together |
-| [Compatibility](architecture/chatgpt-compatibility.md) | Model, client, plan, evidence, and version boundaries |
-| [Design Principles](architecture/design-principles.md) | Core project principles |
-| [Guides](guides/README.md) | Accessible learning paths |
-| [Templates](templates/README.md) | Reusable document structures |
-| [Examples](examples/README.md) | Clear illustrations and comparisons |
-| [Quality](quality/quality-standards.md) | Review and evaluation standards |
-| [Foundation Verification](quality/foundation-verification.md) | Recorded baseline checks and their limits |
-| [Architecture Verification](quality/architecture-verification.md) | Phase 02 verification record |
-| [Knowledge Domain Verification](quality/knowledge-domain-verification.md) | Phase 03 verification record |
-| [Contributing](CONTRIBUTING.md) | How to propose and document improvements |
-| [Changelog](CHANGELOG.md) | Changes to this documentation |
+| `verified-capability` | Supported by a dated, applicable source or reproducible observation |
+| `proposed-design` | A recommended pattern or architecture, not confirmed product behavior |
+| `experimental` | A tentative observation requiring further evaluation |
 
-## Evidence and compatibility
+Consult [ChatGPT Compatibility](architecture/chatgpt-compatibility.md) and [Evidence & Source Quality](knowledge/evidence-and-source-quality.md) before generalizing product behavior across models, plans or clients.
 
-A changing ChatGPT feature is not considered verified just because it appears in this repository.
-
-- `verified-capability`: supported by dated, applicable evidence.
-- `proposed-design`: a recommended design, not a confirmed product behavior.
-- `experimental`: an observation or hypothesis that needs further checking.
-
-See [ChatGPT Compatibility](architecture/chatgpt-compatibility.md) for how to record scope, verification dates, sources, and limitations.
-
-## What this repository does not do
-
-`/INTEL` is a documented prompt convention, not a native ChatGPT command. The fully published v1.4 branding package is a visual identity, not an installed ChatGPT theme.
-
-It does not control OpenAI model internals, override higher-priority instructions, synchronize ChatGPT Memory, guarantee response quality, or make every UI component available in every client.
-
-Public contributions must not include secrets, private chat histories, or personal memory exports.
+---
 
 ## Project status
 
-**All six documentation roadmap phases are complete within their stated scopes; project in maintenance mode.** The seven knowledge domains, proposed architecture and command convention, brand v1.4 package, evaluation framework and scoped editorial review are published. [Closeout record](quality/project-closeout.md) separates completed documentation deliverables from **four unverified formal-release gates**. Fresh-chat `/INTEL` certification, client-side Intelligent UI behavior, independent visual review and editorial/privacy certification remain deferred, not passed. Existing tests and CI remain in place; no GitHub release or tag is implied.
+**Documentation roadmap: 6/6 phases complete within their defined scopes.** The repository is in **maintenance mode**, with a preserved quality framework and published branding.
 
-[Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
+| Delivered | Current state |
+| --- | --- |
+| Foundation and core architecture | Complete within documentation scope |
+| Seven knowledge domains | Complete within documentation scope |
+| Reusable patterns and examples | Complete within documentation scope |
+| Quality framework and repository checks | Complete within evaluation-framework scope |
+| Editorial review and project closeout | Complete within scoped review; formal release deferred |
+| Original branding v1.4 | **57 original files published**, with verified manifest integrity |
+
+**Separate, optional future certification:** The 12 fresh-chat `/INTEL` scenarios, live Intelligent UI behavior, full independent visual/accessibility approval and independent editorial/privacy review are **not certified**. The [strict release gate](quality/phase06-release-readiness.md) preserves those conditions; a closed documentation roadmap is not a tagged software release.
+
+[Project Closeout](quality/project-closeout.md) · [Roadmap](ROADMAP.md) · [Quality & Evaluation](quality/phase05-verification.md) · [Branding Verification](quality/branding-publication-verification.md)
+
+---
+
+## Repository guide
+
+| Area | What's inside |
+| --- | --- |
+| [`architecture/`](architecture/overview.md) | Reference models, design principles and compatibility boundaries |
+| [`guides/`](guides/README.md) | Onboarding, activation and practical workflows |
+| [`prompts/`](prompts/README.md) | Prompt techniques, patterns and activation instructions |
+| [`templates/`](templates/README.md) and [`examples/`](examples/README.md) | Reusable structures and worked illustrations |
+| [`quality/`](quality/quality-standards.md) | Evaluation methods, evidence records and scope limitations |
+| [`branding/`](branding/README.md) | Light/dark identity, artwork, tokens and static preview |
+
+The [v1.4 brand package](branding/README.md) includes original light/dark banners, icons, wordmarks and an [asset contact sheet](branding/v1.4/asset-contact-sheet.png). The visuals identify this independent project; they do not skin or modify the native ChatGPT interface.
+
+## Contributing and project boundaries
+
+Corrections, current primary sources, useful examples and focused documentation improvements are welcome. Start with [Contributing](CONTRIBUTING.md), follow the [documentation contracts](architecture/documentation-contracts.md), and review the [Changelog](CHANGELOG.md).
+
+This project is **not affiliated with or endorsed by OpenAI**. `ChatGPT` is an OpenAI trademark. Product naming and promotional use require appropriate [brand-guideline review](https://openai.com/brand/). The repository does not control models, alter ChatGPT Memory, guarantee output quality or provide a native plugin. **Never commit credentials, personal chat histories or sensitive memory exports.**
+
+---
+
+<p align="center">
+  <strong>Clarity in research. Precision in design. Evidence in every claim.</strong>
+</p>
+
+<p align="center">
+  <a href="GETTING_STARTED.md">Get started</a> ·
+  <a href="ROADMAP.md">Roadmap</a> ·
+  <a href="quality/project-closeout.md">Project closeout</a> ·
+  <a href="CONTRIBUTING.md">Contribute</a>
+</p>
