@@ -22,6 +22,9 @@ How should a reusable prompt define scope and expected output?
 ## Practical guide
 - [prompt design](prompt-design.md) - step-by-step method, example, limitations, and acceptance criteria.
 
+## Ready-to-use activation instructions
+- [ChatGPT Intelligence /INTEL activation](activation-instructions.md) - a pasteable rule for a source-connected conversation.
+
 ## Related reading
 - [Architecture overview](../architecture/overview.md)
 - [Compatibility and evidence](../architecture/chatgpt-compatibility.md)
