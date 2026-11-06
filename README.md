@@ -2,6 +2,12 @@
 
 > Research, concepts, prompts, knowledge, memory, context engineering, and intelligent UI principles for high-quality, personalized ChatGPT experiences.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="branding/v1.4/banners/readme-hero-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="branding/v1.4/banners/readme-hero-light.png">
+  <img alt="ChatGPT Intelligence - Independent research and design" src="branding/v1.4/banners/readme-hero-light.png">
+</picture>
+
 **Understand ChatGPT. Design better interactions. Document what works.**
 
 ChatGPT Intelligence is an open, beginner-friendly knowledge and documentation repository. It explores how to create clearer, more reliable, context-aware, and personalized ChatGPT experiences through research, design principles, reusable prompts, practical examples, and transparent evaluation.
