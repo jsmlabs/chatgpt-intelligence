@@ -22,3 +22,7 @@ This repository is documentation, **not** an installed ChatGPT plugin, an active
 ## Optional local CLI setup
 
 If you are using the offline-first Python generator runtime, begin with `python intel.py setup` for a read-only preview, then run `python intel.py setup --apply` to initialize language preferences. Use `python intel.py config validate` and `python intel.py config show` to diagnose settings. On Windows, `intel.cmd` forwards the same commands. [Configuration and safe import/export](architecture/local-configuration.md).
+
+## Local Python CLI quick start
+
+The local executable tooling is distinct from the ChatGPT conversation convention. From a trusted checkout run python intel.py help, python intel.py --json capabilities, and python intel.py setup (read-only). On Windows use intel.cmd help instead. To save language preferences, explicitly run python intel.py setup --apply. For details see [Local CLI](LOCAL_CLI.md), [Migration Guide](guides/local-cli-migration.md) and [Troubleshooting](guides/local-cli-troubleshooting.md).

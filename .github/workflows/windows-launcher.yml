@@ -13,6 +13,7 @@ on:
       - "intel_lifecycle.py"
       - "intel_devtools.py"
       - "tests/test_devtools.py"
+      - "tests/test_cli_documentation.py"
       - "tests/test_capability_registry.py"
       - "tests/test_lifecycle.py"
       - "tests/test_configuration_setup.py"
@@ -39,7 +40,7 @@ jobs:
       - name: Verify localized CLI and terminal rendering on Windows
         shell: pwsh
         run: |
-          python -m unittest tests.test_local_cli tests.test_terminal_localization tests.test_configuration_setup tests.test_lifecycle tests.test_capability_registry tests.test_devtools -v
+          python -m unittest tests.test_local_cli tests.test_terminal_localization tests.test_configuration_setup tests.test_lifecycle tests.test_capability_registry tests.test_devtools tests.test_cli_documentation -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $env:INTEL_CONFIG_HOME = Join-Path $env:RUNNER_TEMP 'intel-ui-test'
           $env:NO_COLOR = '1'

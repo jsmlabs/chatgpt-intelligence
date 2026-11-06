@@ -40,3 +40,7 @@ A readable map of how the project's **seven knowledge areas** connect. This is a
 
 ## Scope and limits
 The repository documents research and design. It does not implement an orchestrator, mutate ChatGPT memory, or grant authority to override product restrictions.
+
+## Implemented local runtime
+
+This page describes the **reference documentation architecture**, not the entire executable toolchain. The separately implemented local Python CLI is mapped in [Local Runtime Architecture](local-runtime.md), including the Windows launcher, generator and provider routing, managed tunnel ownership, and developer diagnostics. Neither interface provides undocumented access to ChatGPT internals.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - phase 07 architecture cleanup and documentation
+
+- Added implementation-specific architecture, extension, migration and troubleshooting guides without relocating executable modules or renaming published entrypoints.
+- Corrected stale G0/G1 and local CLI claims; documented legacy behavior, read-only discovery, managed tunnel ownership and developer profile limits.
+- Added source-backed command-example regression checks; kept the conceptual /INTEL convention separate from the local executable CLI.
+
+
 ## Unreleased - phase 06 developer automation toolkit
 
 - Added shared bounded offline doctor/check/verify profiles built on the existing unittest, documentation, safety, MCP and release scripts.

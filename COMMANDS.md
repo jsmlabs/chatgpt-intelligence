@@ -65,11 +65,11 @@ The independent `/INTEL` convention concerns this **public documentation and UX 
 
 A Python command parser and contract dispatcher are implemented under [`generators/`](generators/__init__.py). The reference package is **not installed as a ChatGPT-native command**. Existing commands retain their documented purposes; `QUERY`, `RESEARCH`, `DESIGN`, `UI`, `REVIEW`, and `SOURCE` return `HOST_REQUIRED` from the standalone runtime because no ChatGPT host adapter is configured.
 
-`/INTEL GENERATE <TYPE>` recognizes `PROMPT`, `CONCEPT`, `DOCUMENT`, `IMAGE`, `DESIGN`, `THEME`, `BRAND`, `GIF`, `SLIDES`, `DIAGRAM`, `CHART`, `CODE`, `VIDEO`, `AUDIO`, `WORKFLOW`, and `PACK`. All 16 are **planned** and respond `CAPABILITY_UNAVAILABLE`; none produces an artifact yet. Format incompatibilities produce `UNSUPPORTED_FORMAT`. Unknown types produce `UNKNOWN_GENERATOR`. No command grants external actions. See [G0 runtime contracts](architecture/generator-foundation.md).
+`/INTEL GENERATE <TYPE>` recognizes `PROMPT`, `CONCEPT`, `DOCUMENT`, `IMAGE`, `DESIGN`, `THEME`, `BRAND`, `GIF`, `SLIDES`, `DIAGRAM`, `CHART`, `CODE`, `VIDEO`, `AUDIO`, `WORKFLOW`, and `PACK`. At the original **G0 foundation milestone**, all sixteen were planned and responded `CAPABILITY_UNAVAILABLE`. This is a historical contract description, **not current runtime availability**. Format incompatibilities produce `UNSUPPORTED_FORMAT`. Unknown types produce `UNKNOWN_GENERATOR`. No command grants external actions. See [G0 runtime contracts](architecture/generator-foundation.md).
 
 ## G1 local text MVP
 
-The [G1 local runtime](architecture/text-runtime.md) implements `/INTEL GENERATE PROMPT`, `CONCEPT`, and `DOCUMENT` as **deterministic Markdown templates** in Python. These are available from the local Python API and `python -m generators` CLI, not as native ChatGPT slash commands. The other 13 generator categories remain planned. Source references are never fetched automatically and no model-backed generation, PDF/DOCX export, or publishing is advertised.
+The [G1 local runtime](architecture/text-runtime.md) implements `/INTEL GENERATE PROMPT`, `CONCEPT`, and `DOCUMENT` as **deterministic Markdown templates** in Python. These are available from the local Python API and `python -m generators` CLI, not as native ChatGPT slash commands. This paragraph describes the **G1 text MVP**, not the current generator set. Later phases added local image, design, theme, brand, GIF, slides and diagram runtimes, and explicit optional model adapters. Source references are never fetched merely by appearing in a brief, and no publishing is implicit.
 
 Example (no file output):
 
@@ -86,3 +86,16 @@ The Python CLI accepts `--mode model` for `PROMPT`, `CONCEPT` and `DOCUMENT` wit
 ## G1.7 Local MCP host
 
 An **executable local MCP stdio server** provides `generate_prompt`, `generate_concept` and `generate_document` through the existing Python `TextRuntime`. This is not a native ChatGPT slash command or proof of client installation. Start with `python -m generators.mcp_server --allow-create`; model mode also requires explicit external and billable startup permissions and separately configured API credentials. The default mode never calls an external provider. See [MCP host and live verification](architecture/mcp-host.md).
+## Current executable local command reference (Phase 07)
+
+This section is the current **local implementation** reference. The conversational /INTEL convention above remains separate, and historical G0/G1 descriptions describe their original milestone only.
+
+- **Entrypoints:** intel.cmd (Windows launcher), python intel.py (cross-platform Python CLI), python -m generators (legacy generator parser), and scripts/intel.ps1 (Windows legacy actions).
+- **Read-only inspection:** help, version, generators, capabilities, providers, status, doctor, config show, config validate, dev, clean, update, and logs without explicit file.
+- **Explicit preference writes:** setup --apply, config language en|de, config import PATH --apply; config export PATH creates a new allowlisted file and refuses overwrite.
+- **Local execution:** generate TYPE --objective TEXT --authorize-create delegates to existing generator contracts. Optional providers require additional explicit permissions. test runs unittests; check and verify run trusted local scripts.
+- **Lifecycle:** start is legacy foreground Windows tunnel. start --managed opts into a Windows supervisor; stop/restart only affect authenticated CLI-managed tunnels. They do not manage the host-owned MCP server.
+- **Developer profiles:** doctor basic|full, check docs|tests|all|safety, verify mcp --authorize-local-create, verify release. Clean remains preview-only, update never fetches, and logs --file PATH reads bounded, best-effort-redacted local text.
+- **JSON:** put --json before inspection/profile commands (for example python intel.py --json doctor full). For generators use --format json when supported; global JSON is not a generator output switch.
+
+The runtime capability catalog lists **ten implemented generator CLI types**: prompt, concept, document, image, design, theme, brand, gif, slides and diagram. The foundation registry still lists **sixteen conceptual types**; it is not an implementation or live-provider availability assertion. Read [Local CLI](LOCAL_CLI.md) for exact syntax, [Runtime Architecture](architecture/local-runtime.md) for component boundaries, [Migration](guides/local-cli-migration.md) and [Extension](guides/local-cli-extension.md) for change procedures, and [Troubleshooting](guides/local-cli-troubleshooting.md) for failures.
