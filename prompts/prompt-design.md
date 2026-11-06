@@ -34,3 +34,31 @@ This article presents an **original project method**, not a verified description
 
 ## Related reading
 [Instruction and conflict resolution](../architecture/instruction-and-conflict-resolution.md) and [Context selection](../context-engineering/context-selection.md).
+
+## Reusable prompt contract
+
+A helpful prompt separates the user's goal from input material:
+
+```text
+Goal: Compare the supplied options for a specified decision.
+Inputs: [the options and the known facts]
+Constraints: Use only supplied facts; do not infer missing costs.
+Output: A compact comparison table and a reasoned conclusion.
+Uncertainty: Mark missing information "unknown".
+Acceptance: Each criterion is applied consistently to each option.
+```
+
+## Before/after example
+
+**Weak:** "Make this better."
+
+**Better:** "Rewrite the supplied onboarding explanation for a first-time user. Preserve every factual requirement, define unfamiliar terms, use short sections, and do not add unverified claims. Return the revised text."
+
+## Design principles
+- Keep instructions distinct from quoted or retrieved source text.
+- Specify evaluation criteria rather than adding many redundant style rules.
+- Use examples when they resolve a real ambiguity.
+- When tools or external sources are needed, name the requirement but do not pretend the prompt grants access.
+
+## Prompt evaluation
+Test with at least: a normal example, incomplete input, a conflicting constraint, and an untrusted quoted instruction. Score whether the response satisfies the goal without inventing information.
