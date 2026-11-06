@@ -94,3 +94,13 @@ produce and validate Markdown image production briefs. No raster image is
 generated or returned, and no billable model API is invoked. After a
 repository update, restart the local tunnel-client and refresh the installed
 plugin's tool list. See [G2.1 spec](image-generator.md).
+
+## G2.1.2 - Opt-in ComfyUI model inference
+
+A separately installed local ComfyUI server may run the new
+`generate_image_comfyui` image-returning tool when the operator explicitly
+starts MCP with `--allow-create --allow-comfyui-image` and configures
+`INTEL_COMFYUI_CHECKPOINT`. The flag is opt-in and does not grant
+the OpenAI API BILLABLE permission. Without it, the MCP tool is not
+advertised (nine tools remain). The Windows tunnel launcher profile is
+unchanged. See [local image setup and security](image-generator.md).

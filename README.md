@@ -87,6 +87,17 @@ menu, or run `./scripts/intel.ps1 -Action Start` in PowerShell 5.1.
 
 ---
 
+## Local semantic images (G2.1.2, opt-in)
+
+An optional, locally installed ComfyUI checkpoint can render semantic images
+through a fixed core-node workflow. This requires explicit local inference
+authorization and is **not** enabled by the default tunnel profile. It never
+uses a cloud/Partner API node or paid-model fallback. Live installation and
+model execution remain user-environment acceptance gates.
+[ComfyUI local setup](architecture/image-generator.md).
+
+---
+
 ## IMAGE production briefs (G2.1)
 
 The local `IMAGE` command and MCP tools create or validate editable Markdown

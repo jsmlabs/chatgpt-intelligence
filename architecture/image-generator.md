@@ -87,7 +87,97 @@ local validation. `semantic_prompt_followed` is always false.
 This is a limited, explicit zero-cost local rendering capability, not
 a verified connection to the ChatGPT image generator.
 
-## Deferred: semantic AI image rendering
+## G2.1.2 - Local semantic image generation through ComfyUI
+
+**Implemented adapter, live environment not yet verified.** A separately
+installed local [ComfyUI](https://github.com/Comfy-Org/ComfyUI) server with a
+locally available checkpoint is required. The adapter uses the official
+[ComfyUI example workflow](https://github.com/Comfy-Org/ComfyUI/blob/master/script_examples/basic_api_example.py)
+with fixed core nodes `CheckpointLoaderSimple`, `CLIPTextEncode`,
+`EmptyLatentImage`, `KSampler`, `VAEDecode` and `SaveImage`, and
+official `/prompt`, `/history/{prompt_id}`, `/view` HTTP endpoints
+([official example](https://github.com/Comfy-Org/ComfyUI/blob/master/script_examples/websockets_api_example.py)).
+The locally trusted graph is constructed from typed parameters; callers
+cannot inject an arbitrary ComfyUI workflow, custom nodes, Partner API nodes,
+URLs, headers or model credentials.
+
+**Default: disabled.** No additional Python packages, model downloads,
+remote model services or paid API calls are performed. The fixed endpoint is
+`http://127.0.0.1:8188` only; redirects and environment proxies are
+disabled. A locally configured `.safetensors` checkpoint filename must
+match the installed-model list before the workflow is submitted.
+The local inference grant is explicit and separate from the default CREATE
+permission.
+
+### Windows local CLI
+
+Install ComfyUI and a compatible local **checkpoint** independently, using its
+official installation instructions. Ensure that the checkpoint is loaded in
+the local ComfyUI model list, the local server is reachable at
+`127.0.0.1:8188`, and no paid/Partner nodes or remote services are present
+in the trusted workflow. Ollama `gemma3:4b` is not a diffusion checkpoint
+and cannot substitute for an image model.
+
+```powershell
+cd "C:\Users\jsmue\Desktop\Projects\chatgpt-intelligence"
+$env:INTEL_COMFYUI_CHECKPOINT = "your-installed-checkpoint.safetensors"
+
+# Check ComfyUI is running and checkpoint is installed
+Invoke-RestMethod -Uri "http://127.0.0.1:8188/models/checkpoints"
+
+# Single explicit local generation; output folder must exist
+python -m generators.comfyui_image `
+    --prompt "Cinematic mountain landscape at sunrise" `
+    --negative-prompt "text, watermark" `
+    --width 512 --height 512 --steps 20 --seed 7 `
+    --authorize-create --authorize-local-inference `
+    --export-root . --filename "intel-comfyui.png"
+```
+
+The CLI only writes an exclusive new `.png` file after an image passes
+bounded PNG signature/chunk/CRC/dimension checks and file readback. It
+returns the actual checkpoint name and ComfyUI prompt ID, but does not
+claim subjective visual quality, image safety, source verification or human
+approval. The decoder itself is not independently validated pixel-by-pixel;
+do not confuse structural verification with editorial image review.
+
+### Optional ChatGPT MCP tool
+
+When a trusted operator explicitly starts the MCP host with
+`--allow-create --allow-comfyui-image`, a **tenth** tool,
+`generate_image_comfyui`, becomes discoverable. Without the startup flag
+the default remains **nine** tools, and no ComfyUI call is authorized.
+The flag does not grant broad EXTERNAL or BILLABLE permissions to other
+generators. The MCP tool returns image bytes in an `image/png` content
+block and bounded provenance, **not** a local file export. The same
+running tunnel must be restarted and ChatGPT tools refreshed after
+changing the profile's stdio command; do not enable this flag automatically.
+
+The existing Windows `intel.cmd` start profile is intentionally unchanged.
+Use direct CLI local generation until you explicitly opt into altering
+that trusted MCP profile. Never put the runtime API key or model files in
+the repository.
+
+### Verification boundary and operational risks
+
+- Synthetic tests mock the local ComfyUI API; CI cannot attest that your
+  machine has ComfyUI, a checkpoint, sufficient VRAM, or a successfully
+  rendered semantic image.
+- One workflow is queued per authorized request. No automatic retries,
+  model install, queue cancellation or billing fallback; on timeout a
+  workflow may continue running in ComfyUI and should be inspected manually.
+- A hostile or untrusted loopback service can return misleading results.
+  Restrict ComfyUI to `127.0.0.1`, keep installed plugins and models trusted
+  and inspect images, rights, text and privacy before using outputs.
+- Only validated 8-bit RGB/RGBA non-interlaced PNG structures, max 1024x1024
+  and 4 MiB, are accepted. Unsupported output fails with a typed error.
+- No guarantee that an arbitrary semantic prompt follows its intent; the
+  model, prompt, seed and actual image should be independently reviewed.
+
+**Status:** ComfyUI adapter and MCP interface implemented; synthetic
+CI tests required; live local model and ChatGPT E2E **not run**.
+
+## Deferred: other semantic image providers
 
 A future host image adapter must have verified tool capability, explicit
 permission grants where needed, an authorized model/tool runtime,
@@ -106,6 +196,7 @@ and both MCP tools. CI is the source of truth for passing checks; a live
 ChatGPT tool refresh and image-brief tool call remain separate G2.1
 client-acceptance actions.
 
-**Implementation status:** image production briefs implemented;
-raster generation **not implemented**. Do not label the full image
-generation product complete.
+**Implementation status:** image production briefs, procedural abstract PNG
+rendering and an opt-in ComfyUI semantic rendering adapter implemented.
+Actual local checkpoint inference and ChatGPT MCP rendering must be verified
+on a machine with ComfyUI installed. Do not label those live checks passed.

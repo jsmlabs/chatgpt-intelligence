@@ -17,7 +17,7 @@ classification: proposed-design
 | Capability | Actual implemented scope | Native output produced? |
 | --- | --- | --- |
 | PROMPT / CONCEPT / DOCUMENT | Deterministic Markdown; optional local Ollama; client-supplied Markdown via MCP | Markdown drafts only |
-| IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **Procedural abstract PNG renderer only (G2.1.1); no semantic AI image renderer** |
+| IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **Procedural abstract PNG available; optional local ComfyUI semantic adapter implemented, not live-verified** |
 | DESIGN / THEME / BRAND | Registered but planned | No |
 | GIF / SLIDES / DIAGRAM / CHART / CODE | Registered but planned | No |
 | VIDEO / AUDIO / WORKFLOW / PACK | Registered but planned | No |
@@ -309,3 +309,19 @@ and additive MCP image-content tool. It outputs real CRC-checked PNG bytes,
 without a model API or cloud provider. This does not satisfy the broader
 requirement for natural-language semantic image generation; a verified AI
 image provider adapter is a separate open milestone.
+
+## G2.1.2 - Optional local semantic image adapter (2026-11-06)
+
+A dependency-free Python client for locally installed ComfyUI runs a fixed
+core-node text-to-image workflow against loopback, with explicitly authorized
+local inference. It validates the checkpoint list and generated PNG, and
+supports exclusive local export. The additive MCP tool is advertised **only**
+when the operator starts the process with `--allow-comfyui-image`; the default
+nine-tool local MCP host and non-billable routing remain unchanged. Neither
+Ollama text models nor a ChatGPT subscription imply a ComfyUI checkpoint.
+
+**Verification boundary:** Synthetic ComfyUI protocol, permission, image and
+export tests are automated. No ComfyUI installation, model load, actual
+semantic generation or native ChatGPT tool call has been observed on the
+operator's Windows computer. The separate image-model live acceptance and
+editorial/rights checks remain open. [Spec](architecture/image-generator.md).

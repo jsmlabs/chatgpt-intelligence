@@ -4,6 +4,7 @@ This file records meaningful documentation changes. A proposed design or documen
 
 ## Unreleased
 ### Added
+- Added [G2.1.2 explicit local ComfyUI image generation](architecture/image-generator.md), a fixed core-node workflow with checkpoint and PNG verification, optional CLI export, and opt-in MCP image tool. Live ComfyUI generation remains unverified.
 - Added G2.1.1 bounded, dependency-free procedural abstract PNG rendering with verified local file export and the `render_abstract_image` MCP image tool; no semantic AI image generation is claimed.
 - Implemented [G2.1 IMAGE production briefs](architecture/image-generator.md) through the Python CLI and two additive MCP tools, with explicit `image_generated: false` provenance; real raster rendering remains a separate verified-adapter milestone.
 - Consolidated [G1.9 technical handoff acceptance](architecture/chatgpt-host-integration.md) using three directly observed ChatGPT MCP results and preserving independent release/security gates.
