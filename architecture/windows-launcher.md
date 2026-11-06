@@ -9,7 +9,7 @@ classification: experimental
 # Windows launcher
 
 Double-click [intel.cmd](../intel.cmd) from the repository root and choose
-Start, Status, Doctor, Test, or Ollama. From Windows PowerShell 5.1:
+Start, Status, Doctor, Test, Ollama, or Locate. From Windows PowerShell 5.1:
 
 ```powershell
 .\scripts\intel.ps1 -Action Start
@@ -17,10 +17,11 @@ Start, Status, Doctor, Test, or Ollama. From Windows PowerShell 5.1:
 .\scripts\intel.ps1 -Action Doctor
 .\scripts\intel.ps1 -Action Test
 .\scripts\intel.ps1 -Action Ollama
+.\scripts\intel.ps1 -Action Locate
 ```
 
-**Start** discovers `tunnel-client.exe` on PATH or in versioned Windows
-Downloads, validates the existing `chatgpt-intelligence` tunnel profile,
+**Start** discovers `tunnel-client.exe` on PATH, in versioned Windows
+Downloads, or under a desktop tunnel-client folder, validates the existing `chatgpt-intelligence` tunnel profile,
 sets the working directory to the repository root, runs `doctor` and starts
 the foreground tunnel client. Keep the terminal open, and press **Ctrl+C**
 to stop. No background service, scheduled task, or restart policy is created.
