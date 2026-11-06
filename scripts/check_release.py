@@ -121,15 +121,31 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--report-only", action="store_true")
+    parser.add_argument("--json", action="store_true",
+                        help="Emit structured release-gate evidence without granting approval")
     args = parser.parse_args()
     failures = check(args.root)
-    for issue in failures:
-        print("BLOCKED:", issue)
-    if failures:
-        print(f"Release readiness: BLOCKED ({len(failures)} unmet conditions)")
-        return 0 if args.report_only else 1
-    print("Release readiness: structural gates satisfied; human evidence review still required")
-    return 0
+    status = "blocked" if failures else "structurally_ready"
+    report = {
+        "schema_version": 1,
+        "status": status,
+        "release_approved": False,
+        "publication_permitted": False,
+        "human_review_required": True,
+        "required_gates": list(REQUIRED_GATES),
+        "failure_count": len(failures),
+        "failures": failures,
+    }
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+    else:
+        for issue in failures:
+            print("BLOCKED:", issue)
+        if failures:
+            print(f"Release readiness: BLOCKED ({len(failures)} unmet conditions)")
+        else:
+            print("Release readiness: structural gates satisfied; human evidence review still required")
+    return 0 if not failures or args.report_only else 1
 
 
 if __name__ == "__main__":
