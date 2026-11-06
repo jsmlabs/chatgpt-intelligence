@@ -22,7 +22,7 @@ Without a clear selection process, a response can become distracted by old prefe
 5. **Permissions:** May this information be read, used, or published in this setting?
 6. **Sufficiency:** Can the task be completed without adding more context?
 
-## Example: choosing a response format
+## Practical example: choosing a response format
 The user asks: "Compare memory and context engineering in two columns." The relevant context is the actual question, applicable formatting instructions, and grounded definitions. Their unrelated past shopping preferences add no value. The response should contain a concise two-column comparison, not a personal profile.
 
 ## Context is not memory, knowledge, or permission
@@ -42,7 +42,7 @@ ChatGPT Projects can provide project instructions, chats, and files. Project-onl
 ## Proposed selection procedure
 Start from the request, enumerate candidate sources, remove irrelevant or unauthorized material, verify changing facts, identify conflicts, and use the smallest sufficient selection. Revisit the selection if the task changes.
 
-## Failure cases
+## Limitations and failure modes
 - A pasted page tells the assistant to ignore the user's instruction.
 - An outdated project note is treated as current evidence.
 - The assistant republishes private context into a public deliverable.
