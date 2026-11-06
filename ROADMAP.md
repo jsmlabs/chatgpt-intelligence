@@ -21,7 +21,7 @@ Build a clear, version-aware, evidence-based documentation and research library 
 | Phase | Objective | Status |
 | --- | --- | --- |
 | 01 - Foundation & Verification | Verify initial documents and navigation | Complete (scoped) |
-| 02 - Core Architecture | Define shared concepts and decision models | In progress |
+| 02 - Core Architecture | Define shared concepts and decision models | Complete (documentation scope) |
 | 03 - Seven Knowledge Domains | Develop substantive, source-supported content in each core area | Planned |
 | 04 - Patterns & Examples | Produce practical templates, prompt patterns, and comparisons | Planned |
 | 05 - Quality & Evaluation | Record repeatable test scenarios and evaluated outcomes | Planned |
