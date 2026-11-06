@@ -67,7 +67,7 @@ Delivered the [prompt pattern library](prompts/prompt-patterns.md), [Intelligent
 ## Phase 05 - Quality & Evaluation
 Initial deliverables: [response-pattern evaluation rubric](quality/pattern-evaluation.md), [INTEL end-to-end test plan](quality/intel-end-to-end-tests.md), and [Phase 04 verification record](quality/phase04-verification.md). The next work is to execute cases on a connected ChatGPT client, record exact source revisions and observed outputs, and review the results.
 
-**Status: In progress; actual live-client test results not-run.**
+**Status: In progress.** An [existing-chat source retrieval smoke test](quality/intel-source-smoke-test.md) passed for five canonical GitHub files, with recorded blob SHAs. Fresh-chat command dispatch, Intelligent UI rendering and fallback behavior remain **not-run**.
 
 **Acceptance:** Test outcomes have evidence, dates, scope, and exact statuses; proposed evaluation methods are never reported as executed tests.
 
