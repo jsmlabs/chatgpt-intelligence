@@ -59,3 +59,10 @@ Plain `/INTEL <question>` is treated as `QUERY` if its intent is clear. Command 
 The independent `/INTEL` convention concerns this **public documentation and UX research project**. An unrelated `/CTX` workflow, if connected, is not automatically imported, given the same permissions, or made public.
 
 [Activation guide](guides/chatgpt-activation.md) | [Source resolution](architecture/activation-and-source-resolution.md) | [Intelligent UI decision model](architecture/intelligent-ui-decision-model.md)
+
+
+## G0 executable reference boundary
+
+A Python command parser and contract dispatcher are implemented under [`generators/`](generators/__init__.py). The reference package is **not installed as a ChatGPT-native command**. Existing commands retain their documented purposes; `QUERY`, `RESEARCH`, `DESIGN`, `UI`, `REVIEW`, and `SOURCE` return `HOST_REQUIRED` from the standalone runtime because no ChatGPT host adapter is configured.
+
+`/INTEL GENERATE <TYPE>` recognizes `PROMPT`, `CONCEPT`, `DOCUMENT`, `IMAGE`, `DESIGN`, `THEME`, `BRAND`, `GIF`, `SLIDES`, `DIAGRAM`, `CHART`, `CODE`, `VIDEO`, `AUDIO`, `WORKFLOW`, and `PACK`. All 16 are **planned** and respond `CAPABILITY_UNAVAILABLE`; none produces an artifact yet. Format incompatibilities produce `UNSUPPORTED_FORMAT`. Unknown types produce `UNKNOWN_GENERATOR`. No command grants external actions. See [G0 runtime contracts](architecture/generator-foundation.md).

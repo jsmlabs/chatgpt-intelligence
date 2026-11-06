@@ -226,3 +226,8 @@ Re-use existing domains for explanatory guidance:
 **Planning status:** Proposed; not implemented or client-tested as a product. No existing formal-release blockers are silently waived. A GitHub documentation commit proves publication of this proposal only, not generator functionality.
 
 [Current command reference](COMMANDS.md) | [Original roadmap](ROADMAP.md) | [Architecture](architecture/overview.md) | [Quality standards](quality/quality-standards.md)
+
+
+## G0 implementation status (2026-11-06)
+
+The `generators/` Python reference runtime now implements deterministic parsing, the 16-entry planned registry, deny-by-default permission/tool contracts, and guarded artifact state transitions. **No creative generator, real provider adapter, native ChatGPT slash command, persistent artifact writer or external integration is available.** `/INTEL GENERATE <TYPE>` returns `CAPABILITY_UNAVAILABLE` for planned generators; legacy interactive operations still require a host integration. See [architecture](architecture/generator-foundation.md) and [tests](tests/test_generators.py). The original documentation project and its seven domains are unchanged. This implementation is not certification of G1.
