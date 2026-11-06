@@ -54,7 +54,7 @@ def check(root: Path) -> list[str]:
                 raise ValueError("branding verifier not loadable")
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            if module.verify(brand) != 0:
+            if module.verify(brand, strict=True) != 0:
                 failures.append("branding manifest verification failed")
         except (OSError, ValueError, ImportError, AttributeError, KeyError, TypeError) as exc:
             failures.append(f"branding verifier unavailable: {exc}")
