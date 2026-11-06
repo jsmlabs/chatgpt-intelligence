@@ -1,29 +1,36 @@
 ---
 title: Response Lifecycle
 status: proposed
-version: 0.1.0
+version: 0.2.0
 updated: 2026-11-06
 classification: proposed-design
 ---
 
 # Response Lifecycle
 
-## What is this?
-A practical **reference workflow** for designing a useful response, not a claim about hidden model execution.
+## Overview
+A proposed reference workflow for producing useful, trustworthy responses. This is **not** a statement about ChatGPT's hidden model execution.
 
-1. **Understand:** Identify the user's objective, constraints, and task type.
-2. **Resolve:** Respect applicable instructions and identify conflicts.
-3. **Gather:** Select relevant context, knowledge, and permitted memory.
-4. **Verify:** Check facts, current product capabilities, and source reliability where needed.
-5. **Plan:** Determine information hierarchy and appropriate depth.
-6. **Present:** Choose prose, lists, tables, visuals, or interactions only when useful and available.
-7. **Review:** Check correctness, completeness, safety, evidence, and usability.
+## Decision process
+1. **Understand:** Identify the objective, output, constraints, and task type.
+2. **Resolve:** Follow applicable instructions and address conflicts. See [instruction resolution](instruction-and-conflict-resolution.md).
+3. **Gather:** Select relevant, permitted knowledge and memory. See [information boundaries](context-and-information-boundaries.md).
+4. **Verify:** Check consequential or changeable claims against available evidence.
+5. **Plan:** Choose information hierarchy, expected depth, and essential comparisons.
+6. **Present:** Select the simplest useful supported format. See [Intelligent UI decision model](intelligent-ui-decision-model.md).
+7. **Review:** Check correctness, completeness, evidence, privacy, and usability.
 
 ## Example
-For a simple definition, a concise paragraph is usually enough. For a comparison with exact dimensions, a table may be clearer. A conceptual dependency graph can benefit from a diagram, but only when it improves understanding.
+For a definition, a short paragraph is usually sufficient. For an exact comparison, a table often helps. For a branching workflow, a diagram may improve comprehension if supported.
 
-## Limitations
-A good process reduces avoidable errors but does not guarantee accuracy. External access, model behavior, available UI, and memory capabilities vary.
+## Failure modes and limits
+A well-designed process does not guarantee correct model output. Available tools, context sources, memory, UI elements, and product behavior can change. A complicated format may obscure the answer; an overly short response may omit required information.
 
-## Evaluation
-See [quality standards](../quality/quality-standards.md) and [example evaluation](../quality/evaluation-guidelines.md).
+## Acceptance criteria
+- The objective and all critical requirements are addressed.
+- Relevant context is used without exceeding authorization or privacy boundaries.
+- Important factual claims are adequately supported or marked uncertain.
+- The presentation improves readability rather than merely decorating the answer.
+- No internal model process or successful tool operation is claimed without evidence.
+
+[Quality standards](../quality/quality-standards.md) | [Evaluation guidelines](../quality/evaluation-guidelines.md)
