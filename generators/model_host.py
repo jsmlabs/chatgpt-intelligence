@@ -9,6 +9,7 @@ from dataclasses import dataclass
 import json
 import os
 import re
+import socket
 import urllib.error
 import urllib.request
 
@@ -42,14 +43,16 @@ class OpenAIResponsesHost:
     """Bounded Responses API integration; readiness != operational verification."""
 
     def __init__(self, *, api_key: str | None = None, model: str | None = None,
-                 timeout: float = 20.0, max_output_tokens: int = 2048):
+                 timeout: float = 60.0, max_output_tokens: int = 4096):
         # Configuration is supplied by a trusted caller or process environment,
         # never generated from the request or model output.
         self._key = api_key if api_key is not None else os.environ.get("OPENAI_API_KEY", "")
         self.model = model if model is not None else os.environ.get("INTEL_OPENAI_MODEL", "")
         if not isinstance(self._key, str) or not isinstance(self.model, str):
             raise ValueError("Invalid host configuration")
-        if not 1 <= timeout <= 60 or not 128 <= max_output_tokens <= 4096:
+        if (isinstance(timeout, bool) or not isinstance(timeout, (int, float))
+                or isinstance(max_output_tokens, bool) or not isinstance(max_output_tokens, int)
+                or not 1 <= timeout <= 120 or not 128 <= max_output_tokens <= 8192):
             raise ValueError("Invalid resource limits")
         self.timeout = timeout
         self.max_output_tokens = max_output_tokens
@@ -94,13 +97,30 @@ class OpenAIResponsesHost:
                     raise IntelError("MODEL_RESPONSE_INVALID", "Model response exceeded size limit")
         except IntelError:
             raise
-        except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+        except urllib.error.HTTPError as error:
+            raise _safe_http_error(error) from None
+        except (TimeoutError, socket.timeout):
+            raise IntelError("MODEL_TIMEOUT", "Model request timed out") from None
+        except urllib.error.URLError as error:
+            if isinstance(error.reason, (TimeoutError, socket.timeout)):
+                raise IntelError("MODEL_TIMEOUT", "Model request timed out") from None
+            raise IntelError("MODEL_REQUEST_FAILED", "Model provider request failed") from None
+        except (OSError, ValueError):
             # Never include raw HTTP errors, response bodies or credential-bearing URLs.
             raise IntelError("MODEL_REQUEST_FAILED", "Model provider request failed") from None
         try:
             result = json.loads(data)
-            if not isinstance(result, dict) or result.get("status") != "completed":
-                raise ValueError("Incomplete response")
+            if not isinstance(result, dict):
+                raise ValueError("Invalid response")
+            if result.get("status") == "incomplete":
+                details = result.get("incomplete_details")
+                reason = details.get("reason") if isinstance(details, dict) else None
+                if reason == "max_output_tokens":
+                    raise IntelError("MODEL_OUTPUT_INCOMPLETE",
+                                     "Model exhausted max_output_tokens before completion")
+                raise IntelError("MODEL_OUTPUT_INCOMPLETE", "Model did not complete generation")
+            if result.get("status") != "completed":
+                raise ValueError("Model response not completed")
             outputs = result.get("output")
             if not isinstance(outputs, list):
                 raise ValueError("Missing output")
@@ -125,6 +145,35 @@ class OpenAIResponsesHost:
             raise IntelError("MODEL_RESPONSE_INVALID", "Model response failed validation") from None
         return ModelOutput(content=content, provider="openai-responses",
                            model=actual_model, response_id=response_id)
+
+
+
+def _safe_http_error(error: urllib.error.HTTPError) -> IntelError:
+    """Map bounded provider metadata to stable public codes without leaking bodies."""
+    status = error.code
+    if status in (408, 504):
+        return IntelError("MODEL_TIMEOUT", "Model provider request timed out")
+    if status in (401, 403):
+        return IntelError("MODEL_AUTH_FAILED", "Model provider authorization failed")
+    if status == 429:
+        # Only parse provider metadata with a small bounded read; never expose it.
+        try:
+            data = error.read(8193)
+            if len(data) <= 8192:
+                parsed = json.loads(data)
+                details = parsed.get("error", {}) if isinstance(parsed, dict) else {}
+                code = details.get("code") if isinstance(details, dict) else None
+                if code in ("credit_balance_exhausted", "insufficient_quota"):
+                    return IntelError("MODEL_QUOTA_EXHAUSTED",
+                                      "Model provider quota or credit balance exhausted")
+        except (OSError, ValueError, UnicodeError, TypeError):
+            pass
+        return IntelError("MODEL_RATE_LIMITED", "Model provider rate limit or quota reached")
+    if status in (400, 404, 422):
+        return IntelError("MODEL_REQUEST_REJECTED", "Model provider rejected the request")
+    if isinstance(status, int) and 500 <= status <= 599:
+        return IntelError("MODEL_PROVIDER_UNAVAILABLE", "Model provider temporarily unavailable")
+    return IntelError("MODEL_REQUEST_FAILED", "Model provider request failed")
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
