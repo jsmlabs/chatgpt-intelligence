@@ -46,6 +46,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Quality](quality/quality-standards.md) | Review and evaluation standards |
 | [Foundation Verification](quality/foundation-verification.md) | Recorded baseline checks and their limits |
 | [Architecture Verification](quality/architecture-verification.md) | Phase 02 verification record |
+| [Knowledge Domain Verification](quality/knowledge-domain-verification.md) | Phase 03 verification record |
 | [Contributing](CONTRIBUTING.md) | How to propose and document improvements |
 | [Changelog](CHANGELOG.md) | Changes to this documentation |
 
@@ -67,6 +68,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Foundation and core architecture documented; Phase 03 in progress.** All seven knowledge areas now have introductory practical guides. Source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**Phases 01-03 complete within documented review scope.** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Source-backed capability inventories, independent product checks, and formal evaluations remain future work.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
