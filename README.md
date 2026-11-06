@@ -44,7 +44,7 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 
 | Resource | Purpose |
 | --- | --- |
-| [Roadmap](ROADMAP.md) | Delivery phases, current state, and acceptance criteria |
+| [Roadmap](ROADMAP.md) | Six scoped documentation phases and maintenance status |
 | [Command Reference](COMMANDS.md) | Proposed `/INTEL` commands for ChatGPT |
 | [Activation Guide](guides/chatgpt-activation.md) | Setup and source-verification workflow |
 | [Branding](branding/README.md) | Published original v1.4 package, tokens, and integrity verification |
@@ -61,7 +61,8 @@ Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](arc
 | [Branding Visual Inspection](quality/branding-visual-inspection.md) | Scoped contact-sheet and light-banner inspection, with remaining gaps |
 | [Branding Accessibility Sampling](quality/branding-accessibility-sampling.md) | PNG/SVG/HTML format checks and sampled WCAG contrast ratios |
 | [Branding Browser Smoke Test](quality/branding-browser-smoke-test.md) | Scoped Chromium theme-toggle and responsive-layout observations |
-| [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Initial release review and outstanding acceptance gates |
+| [Phase 06 Release Readiness](quality/phase06-release-readiness.md) | Formal release deferred; unverified client/review gates |
+| [Project Closeout](quality/project-closeout.md) | Six scoped documentation phases closed; limitations and maintenance handover |
 | [Editorial Source Review](quality/editorial-source-review.md) | Primary-source findings, naming risk and unresolved review requirements |
 | [Publication Safety Verification](quality/publication-safety-verification.md) | Scoped tracked-text credential scan and explicit limitations |
 | [Release Gate Verification](quality/release-gate-verification.md) | Tested strict release readiness check and five blockers |
@@ -102,6 +103,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Phases 01-04 documented within their respective scopes; Phase 05 in progress, Phase 06 review started (release blocked).** All seven knowledge areas have practical guides, examples, limitations, and initial evaluation criteria. Verified GitHub Actions QA has passed (65 tests, 468 checked relative file/image references); the strict release gate reports four incomplete conditions. Brand v1.4 is fully published and hash-verified; actual `/INTEL` activation tests, broader source-backed capability inventories, independent product checks, and formal evaluations remain future work.
+**All six documentation roadmap phases are complete within their stated scopes; project in maintenance mode.** The seven knowledge domains, proposed architecture and command convention, brand v1.4 package, evaluation framework and scoped editorial review are published. [Closeout record](quality/project-closeout.md) separates completed documentation deliverables from **four unverified formal-release gates**. Fresh-chat `/INTEL` certification, client-side Intelligent UI behavior, independent visual review and editorial/privacy certification remain deferred, not passed. Existing tests and CI remain in place; no GitHub release or tag is implied.
 
 [Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
