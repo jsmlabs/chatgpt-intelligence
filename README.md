@@ -10,7 +10,7 @@ ChatGPT Intelligence is an open, beginner-friendly knowledge and documentation r
 
 ## Start here
 
-New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals.
+New to the project? Read [Getting Started](GETTING_STARTED.md). It explains where to look and how to distinguish evidence from proposals. View the [Roadmap](ROADMAP.md) for milestones and current work.
 
 ## Explore the seven core areas
 
@@ -30,12 +30,13 @@ Start with a user objective. Resolve applicable instructions, gather relevant an
 
 This is a **proposed design workflow**, not a statement about ChatGPT's hidden processing.
 
-Read [Architecture Overview](architecture/overview.md) and [Response Lifecycle](architecture/response-lifecycle.md).
+Read [Architecture Overview](architecture/overview.md), [Response Lifecycle](architecture/response-lifecycle.md), and [Intelligent UI Decision Model](architecture/intelligent-ui-decision-model.md).
 
 ## Documentation and standards
 
 | Resource | Purpose |
 | --- | --- |
+| [Roadmap](ROADMAP.md) | Delivery phases, current state, and acceptance criteria |
 | [Architecture](architecture/overview.md) | How the project's concepts fit together |
 | [Compatibility](architecture/chatgpt-compatibility.md) | Model, client, plan, evidence, and version boundaries |
 | [Design Principles](architecture/design-principles.md) | Core project principles |
@@ -43,6 +44,7 @@ Read [Architecture Overview](architecture/overview.md) and [Response Lifecycle](
 | [Templates](templates/README.md) | Reusable document structures |
 | [Examples](examples/README.md) | Clear illustrations and comparisons |
 | [Quality](quality/quality-standards.md) | Review and evaluation standards |
+| [Foundation Verification](quality/foundation-verification.md) | Recorded checks and their limits |
 | [Contributing](CONTRIBUTING.md) | How to propose and document improvements |
 | [Changelog](CHANGELOG.md) | Changes to this documentation |
 
@@ -64,6 +66,6 @@ Public contributions must not include secrets, private chat histories, or person
 
 ## Project status
 
-**Foundation established.** The documents define an initial framework and navigation. Topic-specific deep dives, source-backed feature inventories, and formal evaluations remain future work.
+**Foundation verified within documented scope; core architecture in progress.** The documents define an initial framework and navigation. Topic-specific deep dives, source-backed feature inventories, and formal evaluations remain future work.
 
-[Get Started](GETTING_STARTED.md) | [Contribute](CONTRIBUTING.md) | [Review quality standards](quality/quality-standards.md)
+[Get Started](GETTING_STARTED.md) | [Roadmap](ROADMAP.md) | [Contribute](CONTRIBUTING.md)
