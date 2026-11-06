@@ -15,9 +15,11 @@ from .provider_router import ProviderRouter
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="INTEL local deterministic text generators")
-    parser.add_argument("type", choices=["prompt", "concept", "document"])
+    parser.add_argument("type", choices=["prompt", "concept", "document", "image"])
     parser.add_argument("--objective", required=True)
     parser.add_argument("--audience", default="General audience")
+    parser.add_argument("--aspect-ratio", default="1:1")
+    parser.add_argument("--palette", default="")
     parser.add_argument("--style", default="")
     parser.add_argument("--source", action="append", default=[])
     parser.add_argument("--constraint", action="append", default=[])
@@ -49,12 +51,19 @@ def main(argv: list[str] | None = None) -> int:
                                     max_output_tokens=args.model_max_output_tokens),
         openai_host=OpenAIResponsesHost(timeout=args.model_timeout,
                                         max_output_tokens=args.model_max_output_tokens)))
-    result = runtime.execute(
+    selected_runtime = runtime
+    if args.type == "image":
+        from .image_runtime import ImageRuntime
+        selected_runtime = ImageRuntime()
+    request = {"objective": args.objective, "audience": args.audience,
+               "style": args.style, "sources": args.source,
+               "constraints": args.constraint, "verification": args.verify,
+               "format": args.format}
+    if args.type == "image":
+        request.update(aspect_ratio=args.aspect_ratio, palette=args.palette)
+    result = selected_runtime.execute(
         "/INTEL GENERATE " + args.type.upper(),
-        request={"objective": args.objective, "audience": args.audience,
-                 "style": args.style, "sources": args.source,
-                 "constraints": args.constraint, "verification": args.verify,
-                 "format": args.format},
+        request=request,
         authorization=Authorization(frozenset(granted)),
         export_root=args.export_root, filename=args.filename, mode=args.mode,
         provider=args.provider,

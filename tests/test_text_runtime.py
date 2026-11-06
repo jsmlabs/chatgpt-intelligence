@@ -25,7 +25,7 @@ class RegistryAndGoldenCases(unittest.TestCase):
         self.assertEqual(len(all_caps), 16)
         self.assertEqual(
             {c.command for c in all_caps if c.implemented},
-            {"PROMPT", "CONCEPT", "DOCUMENT"},
+            {"PROMPT", "CONCEPT", "DOCUMENT", "IMAGE"},
         )
         self.assertTrue(all(c.state.value == "available" for c in all_caps if c.implemented))
         self.assertTrue(all(c.state.value == "planned" for c in all_caps if not c.implemented))
@@ -71,7 +71,7 @@ class RegistryAndGoldenCases(unittest.TestCase):
         self.assertNotEqual(a["manifest"].identifier, b["manifest"].identifier)
 
     def test_generator_type_and_format(self):
-        for kind in ("IMAGE", "DESIGN", "GIF", "VIDEO", "PACK"):
+        for kind in ("DESIGN", "GIF", "VIDEO", "PACK"):
             with self.subTest(kind=kind):
                 self.assertEqual(self.runtime.execute("/INTEL GENERATE " + kind,
                     request={"objective": "Generate output"}, authorization=GRANT

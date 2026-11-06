@@ -17,6 +17,7 @@ from .ollama_host import OllamaLocalHost
 from .provider_router import ProviderRouter
 from .text_runtime import TextRuntime
 from .host_drafts import submit_host_draft
+from .image_runtime import ImageRuntime
 
 MAX_INPUT_LINE = 131072
 SUPPORTED_VERSIONS = frozenset({"2025-06-18", "2025-11-25"})
@@ -24,6 +25,7 @@ TOOL_TYPES = {"generate_prompt": "PROMPT", "generate_concept": "CONCEPT",
               "generate_document": "DOCUMENT"}
 SUBMIT_TYPES = {"submit_prompt_draft": "PROMPT", "submit_concept_draft": "CONCEPT",
                 "submit_document_draft": "DOCUMENT"}
+IMAGE_TOOLS = ("generate_image_brief", "submit_image_brief")
 DESCRIPTION = {
     "generate_prompt": "Generate an editable Markdown prompt draft.",
     "generate_concept": "Generate an editable Markdown concept brief.",
@@ -31,6 +33,8 @@ DESCRIPTION = {
     "submit_prompt_draft": "Validate an already-written prompt draft supplied by the ChatGPT client; no model call.",
     "submit_concept_draft": "Validate an already-written concept draft supplied by the ChatGPT client; no model call.",
     "submit_document_draft": "Validate an already-written document draft supplied by the ChatGPT client; no model call.",
+    "generate_image_brief": "Generate a deterministic IMAGE production brief; no image file or model call.",
+    "submit_image_brief": "Validate a client-written IMAGE production brief; no image file or model call.",
 }
 INPUT_SCHEMA = {
     "type": "object",
@@ -62,12 +66,32 @@ SUBMIT_SCHEMA = {
 }
 
 
+IMAGE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        **{key: value for key, value in INPUT_SCHEMA["properties"].items()
+           if key not in {"provider", "mode"}},
+        "aspect_ratio": {"type": "string", "enum": ["1:1", "3:2", "2:3", "4:3", "3:4", "16:9", "9:16"]},
+        "palette": {"type": "string", "maxLength": 512},
+    },
+    "required": ["objective"],
+    "additionalProperties": False,
+}
+IMAGE_SUBMIT_SCHEMA = {
+    **IMAGE_SCHEMA,
+    "properties": {**IMAGE_SCHEMA["properties"],
+                   "content": {"type": "string", "minLength": 1, "maxLength": 65536}},
+    "required": ["objective", "content"],
+}
+
+
 class MCPHost:
     def __init__(self, authorization: Authorization | None = None,
                  model_host: OpenAIResponsesHost | None = None,
                  provider_router: ProviderRouter | None = None):
         self.authorization = authorization or Authorization()
         self.runtime = TextRuntime(model_host=model_host, provider_router=provider_router)
+        self.image_runtime = ImageRuntime()
         self.initialized = False
 
     def handle(self, message: Any) -> dict | None:
@@ -96,7 +120,7 @@ class MCPHost:
             self.initialized = True
             return self._ok(request_id, {
                 "protocolVersion": version, "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.4.0"},
+                "serverInfo": {"name": "chatgpt-intelligence", "version": "0.5.0"},
             })
         if not self.initialized:
             return self._error(request_id, -32002, "Initialize MCP connection first")
@@ -112,14 +136,29 @@ class MCPHost:
                  "annotations": {"readOnlyHint": False, "destructiveHint": False,
                                  "idempotentHint": False, "openWorldHint": False}}
                 for name in SUBMIT_TYPES
+            ] + [
+                {"name": name, "description": DESCRIPTION[name],
+                 "inputSchema": IMAGE_SUBMIT_SCHEMA if name == "submit_image_brief" else IMAGE_SCHEMA,
+                 "annotations": {"readOnlyHint": False, "destructiveHint": False,
+                                 "idempotentHint": False, "openWorldHint": False}}
+                for name in IMAGE_TOOLS
             ]})
         if method == "tools/call":
             name, arguments = params.get("name"), params.get("arguments", {})
-            if name not in TOOL_TYPES and name not in SUBMIT_TYPES:
+            if name not in TOOL_TYPES and name not in SUBMIT_TYPES and name not in IMAGE_TOOLS:
                 return self._error(request_id, -32602, "Unknown INTEL tool")
             if not isinstance(arguments, dict):
                 return self._error(request_id, -32602, "Tool arguments must be an object")
-            if name in SUBMIT_TYPES:
+            if name in IMAGE_TOOLS:
+                schema = IMAGE_SUBMIT_SCHEMA if name == "submit_image_brief" else IMAGE_SCHEMA
+                if set(arguments) - set(schema["properties"]):
+                    return self._error(request_id, -32602, "Unknown IMAGE field")
+                draft = arguments.get("content") if name == "submit_image_brief" else None
+                brief = {key: value for key, value in arguments.items() if key != "content"}
+                result = self.image_runtime.execute(
+                    "/INTEL GENERATE IMAGE", request=brief,
+                    authorization=self.authorization, draft=draft)
+            elif name in SUBMIT_TYPES:
                 if set(arguments) - set(SUBMIT_SCHEMA["properties"]):
                     return self._error(request_id, -32602, "Unknown submission field")
                 content = arguments.get("content")

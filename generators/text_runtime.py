@@ -36,11 +36,13 @@ def text_registry() -> Registry:
     base = default_registry()
     capabilities = []
     for cap in base.all():
-        if cap.command in TEXT_TYPES:
+        if cap.command in TEXT_TYPES or cap.command == "IMAGE":
             cap = replace(cap, implemented=True, state=State.AVAILABLE,
-                          description="Local deterministic Markdown " + cap.identifier + " template",
-                          version="0.2.0", formats=("markdown",),
-                          required_tools=(), risk="low")
+                          description=("Local IMAGE production brief (not raster generation)"
+                                       if cap.command == "IMAGE" else
+                                       "Local deterministic Markdown " + cap.identifier + " template"),
+                          version="0.1.0" if cap.command == "IMAGE" else "0.2.0",
+                          formats=("markdown",), required_tools=(), risk="low")
         capabilities.append(cap)
     return Registry(capabilities)
 
@@ -330,6 +332,11 @@ class TextRuntime:
             if cmd.name != "GENERATE":
                 return self.coordinator.dispatch(raw, authorization, request)
             cap = self.registry.resolve(cmd.generator or "")
+            if cap.command == "IMAGE":
+                from .image_runtime import ImageRuntime
+                return ImageRuntime().execute(raw, request=request, authorization=authorization,
+                                              export_root=export_root, filename=filename,
+                                              provider=provider, mode=mode)
             if cap.command not in TEXT_TYPES:
                 return self.coordinator.dispatch(raw, authorization, request)
             brief = validate_request(cmd.argument, request)

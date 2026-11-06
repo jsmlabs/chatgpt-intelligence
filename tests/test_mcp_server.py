@@ -52,7 +52,8 @@ class MCPProtocolTests(unittest.TestCase):
         tools = self.host.handle(rpc("tools/list"))["result"]["tools"]
         self.assertEqual([x["name"] for x in tools],
                          ["generate_prompt", "generate_concept", "generate_document",
-                          "submit_prompt_draft", "submit_concept_draft", "submit_document_draft"])
+                          "submit_prompt_draft", "submit_concept_draft", "submit_document_draft",
+                          "generate_image_brief", "submit_image_brief"])
         for tool in tools:
             self.assertEqual(tool["inputSchema"]["additionalProperties"], False)
             self.assertEqual(tool["inputSchema"]["required"],
