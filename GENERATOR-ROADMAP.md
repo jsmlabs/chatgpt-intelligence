@@ -10,7 +10,7 @@ classification: proposed-design
 
 > Extend the existing research and documentation reference project with a modular, evidence-aware workflow for generating, validating, revising, and exporting useful artifacts.
 
-**Status:** Active staged implementation. G0 contracts, G1 text generators, G1.8 local provider routing and G1.9 ChatGPT-client MCP handoff have been implemented. G2.1 has a production brief, procedural PNG renderer and local ComfyUI adapter; G2.2 implements static DESIGN specifications and HTML; G2.3 implements THEME JSON/CSS generation and color-pair contrast auditing. Other creative capabilities and external exports remain planned until individually verified. The original release gates remain in force.
+**Status:** Active staged implementation. G0 contracts, G1 text generators, G1.8 local provider routing and G1.9 ChatGPT-client MCP handoff have been implemented. G2.1 has a production brief, procedural PNG renderer and local ComfyUI adapter; G2.2 implements static DESIGN specifications and HTML; G2.3 implements THEME JSON/CSS generation and color-pair contrast auditing. The current local CLI capability catalog also registers BRAND, GIF, SLIDES and DIAGRAM with bounded offline outputs. CHART, CODE, VIDEO, AUDIO, WORKFLOW and PACK remain planned in that catalog; optional external providers and target-client behavior require separate verification. The original release gates remain in force.
 
 ## Verified implementation matrix (2026-11-06)
 
@@ -18,9 +18,13 @@ classification: proposed-design
 | --- | --- | --- |
 | PROMPT / CONCEPT / DOCUMENT | Deterministic Markdown; optional local Ollama; client-supplied Markdown via MCP | Markdown drafts only |
 | IMAGE (G2.1) | Deterministic image production briefs, creative prompts and client-authored brief intake | **Procedural abstract PNG available; optional local ComfyUI semantic adapter implemented, not live-verified** |
-| DESIGN / THEME / BRAND | Registered but planned | No |
-| GIF / SLIDES / DIAGRAM / CHART / CODE | Registered but planned | No |
-| VIDEO / AUDIO / WORKFLOW / PACK | Registered but planned | No |
+| DESIGN | Local design briefs, JSON specifications and inert HTML/CSS prototypes | **Markdown, JSON, HTML** |
+| THEME | Local design-token generation | **JSON, CSS** |
+| BRAND | Local identity briefs and geometric mark directions | **Markdown, JSON, SVG** |
+| GIF / Motion | Local frame storyboards and procedural animation | **JSON, GIF** |
+| SLIDES | Local slide storyboards and editable presentations | **JSON, PPTX** |
+| DIAGRAM | Local directed graph descriptions and exports | **JSON, Mermaid, SVG** |
+| CHART / CODE / VIDEO / AUDIO / WORKFLOW / PACK | Not present in the ten-entry local CLI generator catalog | **No local CLI generator claimed** |
 
 The G1.9 technical ChatGPT handoff has been observed through real client tool calls (three reviewed responses). Origin is not independently attested, and this observation does not certify full security, content quality or release readiness.
 
