@@ -5,7 +5,6 @@ This checks documented capability availability, not live rendering or provider a
 from __future__ import annotations
 
 from pathlib import Path
-import re
 import unittest
 
 from generators.capabilities import GENERATORS
